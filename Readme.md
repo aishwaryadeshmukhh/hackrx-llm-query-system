@@ -94,22 +94,6 @@ The system performs semantic retrieval and LLM-based reasoning to generate struc
 
 ---
 
-## 👩‍💻 My Contributions
-
-- Backend API development
-- Query processing pipeline
-- Retrieval workflow integration
-- Structured response formatting
-- Semantic search implementation
-
----
-
-## 🤝 Team Project
-
-Developed collaboratively during **HackRx 6.0 Hackathon**.
-
----
-
 ## 📦 Installation
 
 ```bash
