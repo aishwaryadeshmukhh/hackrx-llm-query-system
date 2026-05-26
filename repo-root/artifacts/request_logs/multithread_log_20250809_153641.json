@@ -1,0 +1,1154 @@
+{
+  "timestamp": "2025-08-09T15:37:47.281052",
+  "request": {
+    "pdf_url": "https://hackrx.blob.core.windows.net/assets/policy.pdf?sv=2023-01-03&st=2025-07-04T09%3A11%3A24Z&se=2027-07-05T09%3A11%3A00Z&sr=b&sp=r&sig=N4a9OU0w0QXO6AOIBiu4bpl7AXvEZogeT%2FjUHNO7HzQ%3D",
+    "questions": [
+      "What is the grace period for premium payment under the National Parivar Mediclaim Plus Policy?",
+      "What is the waiting period for pre-existing diseases (PED) to be covered?",
+      "Does this policy cover maternity expenses, and what are the conditions?",
+      "What is the waiting period for cataract surgery?",
+      "Are the medical expenses for an organ donor covered under this policy?",
+      "What is the No Claim Discount (NCD) offered in this policy?",
+      "Is there a benefit for preventive health check-ups?",
+      "How does the policy define a 'Hospital'?",
+      "What is the extent of coverage for AYUSH treatments?",
+      "Are there any sub-limits on room rent and ICU charges for Plan A?"
+    ],
+    "pdf_filename": "input_20250809_153641.pdf",
+    "pdf_stored_path": "stored_pdfs/input_20250809_153641.pdf"
+  },
+  "comprehensive_response": {
+    "answers": [
+      {
+        "query": "What is the grace period for premium payment under the National Parivar Mediclaim Plus Policy?",
+        "search_results": [
+          {
+            "score": 0.880300164,
+            "content": "2.38 Non- Network means any Hospital, Day Care Centre that is not part of the network. National Insurance Co. Ltd. \nPremises No. 18-0374, Plot no. CBD-81, \nNew Town, Kolkata - 700156 \nPage 4 of 25 \nNational Parivar Mediclaim Plus Policy \nUIN: NICHLIP25039V032425 2.39 Notification of Claim means the process of intimating a claim to the Company or TPA through any of the recognized modes \nof communication. 2.40 Out-Patient Treatment means treatment in which the insured person visits a clinic / hospital or associated facility like a \nconsultation room for diagnosis and treatment based on the advise of a medical practitioner and the insured person is not \nadmitted as a day care patient or in-patient. 2.41 Policy Period means period of one policy year/ two policy years/ three policy years as mentioned in the schedule for which \nthe Policy is issued. 2.42 Policy Year means a period of twelve months beginning from the date of commencement of the policy period and ending on \nthe last day of suc",
+            "text": "2.38 Non- Network means any Hospital, Day Care Centre that is not part of the network. National Insurance Co. Ltd. \nPremises No. 18-0374, Plot no. CBD-81, \nNew Town, Kolkata - 700156 \nPage 4 of 25 \nNational Parivar Mediclaim Plus Policy \nUIN: NICHLIP25039V032425 2.39 Notification of Claim means the process of intimating a claim to the Company or TPA through any of the recognized modes \nof communication. 2.40 Out-Patient Treatment means treatment in which the insured person visits a clinic / hospital or associated facility like a \nconsultation room for diagnosis and treatment based on the advise of a medical practitioner and the insured person is not \nadmitted as a day care patient or in-patient. 2.41 Policy Period means period of one policy year/ two policy years/ three policy years as mentioned in the schedule for which \nthe Policy is issued. 2.42 Policy Year means a period of twelve months beginning from the date of commencement of the policy period and ending on \nthe last day of suc",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_11_f80ddeea",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "2.38 Non- Network means any Hospital, Day Care Centre that is not part of the network. National Insurance Co. Ltd. \nPremises No. 18-0374, Plot no. CBD-81, \nNew Town, Kolkata - 700156 \nPage 4 of 25 \nNational Parivar Mediclaim Plus Policy \nUIN: NICHLIP25039V032425 2.39 Notification of Claim means the process of intimating a claim to the Company or TPA through any of the recognized modes \nof communication. 2.40 Out-Patient Treatment means treatment in which the insured person visits a clinic / hospital or associated facility like a \nconsultation room for diagnosis and treatment based on the advise of a medical practitioner and the insured person is not \nadmitted as a day care patient or in-patient. 2.41 Policy Period means period of one policy year/ two policy years/ three policy years as mentioned in the schedule for which \nthe Policy is issued. 2.42 Policy Year means a period of twelve months beginning from the date of commencement of the policy period and ending on \nthe last day of suc"
+            },
+            "id": "input_20250809_153641.pdf_11_f80ddeea",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 1.0
+          },
+          {
+            "score": 0.87661922,
+            "content": "National Insurance Co. Ltd. \nPremises No. 18-0374, Plot no. CBD-81, \nNew Town, Kolkata - 700156 \nPage 21 of 25 \nNational Parivar Mediclaim Plus Policy \nUIN: NICHLIP25039V032425 Claims Procedure \nDocuments as mentioned above, supporting the diagnosis shall be submitted to the Company within sixty days from the date of \ndiagnosis of the critical illness. Documents \nThe claim has to be supported by the following original documents \ni. \nDoctor’s certificate confirming diagnosis of the critical illness along with date of diagnosis. \nii. Pathological/other diagnostic test reports confirming the diagnosis of the critical illness. \niii. Any other documents required by the Company Cessation of Cover \n1 upon payment of the benefit amount on the occurrence of a critical illness the cover shall cease and no further claim shall be paid \nfor any other critical illness during the policy year. \n2 On renewal, no claim shall be paid for a critical illness for which a claim has already been made Enhancem",
+            "text": "National Insurance Co. Ltd. \nPremises No. 18-0374, Plot no. CBD-81, \nNew Town, Kolkata - 700156 \nPage 21 of 25 \nNational Parivar Mediclaim Plus Policy \nUIN: NICHLIP25039V032425 Claims Procedure \nDocuments as mentioned above, supporting the diagnosis shall be submitted to the Company within sixty days from the date of \ndiagnosis of the critical illness. Documents \nThe claim has to be supported by the following original documents \ni. \nDoctor’s certificate confirming diagnosis of the critical illness along with date of diagnosis. \nii. Pathological/other diagnostic test reports confirming the diagnosis of the critical illness. \niii. Any other documents required by the Company Cessation of Cover \n1 upon payment of the benefit amount on the occurrence of a critical illness the cover shall cease and no further claim shall be paid \nfor any other critical illness during the policy year. \n2 On renewal, no claim shall be paid for a critical illness for which a claim has already been made Enhancem",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_70_086ee830",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "National Insurance Co. Ltd. \nPremises No. 18-0374, Plot no. CBD-81, \nNew Town, Kolkata - 700156 \nPage 21 of 25 \nNational Parivar Mediclaim Plus Policy \nUIN: NICHLIP25039V032425 Claims Procedure \nDocuments as mentioned above, supporting the diagnosis shall be submitted to the Company within sixty days from the date of \ndiagnosis of the critical illness. Documents \nThe claim has to be supported by the following original documents \ni. \nDoctor’s certificate confirming diagnosis of the critical illness along with date of diagnosis. \nii. Pathological/other diagnostic test reports confirming the diagnosis of the critical illness. \niii. Any other documents required by the Company Cessation of Cover \n1 upon payment of the benefit amount on the occurrence of a critical illness the cover shall cease and no further claim shall be paid \nfor any other critical illness during the policy year. \n2 On renewal, no claim shall be paid for a critical illness for which a claim has already been made Enhancem"
+            },
+            "id": "input_20250809_153641.pdf_70_086ee830",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 0.9475446100618469
+          },
+          {
+            "score": 0.875972807,
+            "content": "Note \nIn the event of a claim lodged as per condition 5.8 and the original documents having been submitted to the other insurer, the \nCompany may accept the documents listed under condition 5.5.4 and claim settlement advice duly certified by the other insurer \nsubject to satisfaction of the Company. National Insurance Co. Ltd. \nPremises No. 18-0374, Plot no. CBD-81, \nNew Town, Kolkata - 700156 \nPage 14 of 25 \nNational Parivar Mediclaim Plus Policy \nUIN: NICHLIP25039V032425 Type of claim \nTime limit for submission of documents to Company/TPA \nReimbursement of hospitalization, pre hospitalisation \nexpenses and ambulance charges, air ambulance charges and \nmedical emergency reunion charges \nWithin fifteen days from date of discharge from hospital \nReimbursement of post hospitalisation expenses and \ndoctor’s home visit and nursing care during post \nhospitalization \nWithin fifteen days from completion of post hospitalisation \ntreatment \nReimbursement of domiciliary hospitalisation expenses ",
+            "text": "Note \nIn the event of a claim lodged as per condition 5.8 and the original documents having been submitted to the other insurer, the \nCompany may accept the documents listed under condition 5.5.4 and claim settlement advice duly certified by the other insurer \nsubject to satisfaction of the Company. National Insurance Co. Ltd. \nPremises No. 18-0374, Plot no. CBD-81, \nNew Town, Kolkata - 700156 \nPage 14 of 25 \nNational Parivar Mediclaim Plus Policy \nUIN: NICHLIP25039V032425 Type of claim \nTime limit for submission of documents to Company/TPA \nReimbursement of hospitalization, pre hospitalisation \nexpenses and ambulance charges, air ambulance charges and \nmedical emergency reunion charges \nWithin fifteen days from date of discharge from hospital \nReimbursement of post hospitalisation expenses and \ndoctor’s home visit and nursing care during post \nhospitalization \nWithin fifteen days from completion of post hospitalisation \ntreatment \nReimbursement of domiciliary hospitalisation expenses ",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_45_e18e7367",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "Note \nIn the event of a claim lodged as per condition 5.8 and the original documents having been submitted to the other insurer, the \nCompany may accept the documents listed under condition 5.5.4 and claim settlement advice duly certified by the other insurer \nsubject to satisfaction of the Company. National Insurance Co. Ltd. \nPremises No. 18-0374, Plot no. CBD-81, \nNew Town, Kolkata - 700156 \nPage 14 of 25 \nNational Parivar Mediclaim Plus Policy \nUIN: NICHLIP25039V032425 Type of claim \nTime limit for submission of documents to Company/TPA \nReimbursement of hospitalization, pre hospitalisation \nexpenses and ambulance charges, air ambulance charges and \nmedical emergency reunion charges \nWithin fifteen days from date of discharge from hospital \nReimbursement of post hospitalisation expenses and \ndoctor’s home visit and nursing care during post \nhospitalization \nWithin fifteen days from completion of post hospitalisation \ntreatment \nReimbursement of domiciliary hospitalisation expenses "
+            },
+            "id": "input_20250809_153641.pdf_45_e18e7367",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 0.9383328844892513
+          }
+        ],
+        "evaluation": {
+          "answer": "Based on the comprehensive policy context provided, there is no mention of a specific grace period for premium payments under the National Parivar Mediclaim Plus Policy. The provided sections detail definitions, waiting periods, exclusions, benefits, and claims procedures, but do not include information regarding premium payment deadlines or grace periods.",
+          "source_document": "input_20250809_153641.pdf",
+          "relevant_sections": [
+            1,
+            2
+          ],
+          "context_stats": {
+            "total_vectors": 3,
+            "total_context_length": 12539,
+            "chunks_per_vector": 51
+          },
+          "search_method": "optimized_single_stage_search",
+          "reranker_type": "none",
+          "reranker_available": false,
+          "hybrid_search_enabled": true,
+          "reranking_enabled": false,
+          "total_candidates_retrieved": 3,
+          "final_chunks_used": 3,
+          "adjacent_chunks_per_vector": 10,
+          "advanced_search_features": {
+            "context_aware_search": true,
+            "query_expansion": false,
+            "content_type_balancing": true,
+            "result_deduplication": true,
+            "score_normalization": true
+          },
+          "performance_note": "⚡ Using optimized single-stage search with comprehensive adjacent context (5 before + 5 after) for each top vector"
+        },
+        "api_status": {
+          "gemini_available": true,
+          "model_name": "gemini-2.5-flash",
+          "quota_exceeded": false,
+          "fallback_reason": null,
+          "recommendations": [
+            "✅ Using gemini-2.5-flash for optimal results"
+          ]
+        },
+        "status": "success",
+        "success": true
+      },
+      {
+        "query": "What is the waiting period for pre-existing diseases (PED) to be covered?",
+        "search_results": [
+          {
+            "score": 0.896058917,
+            "content": "4.1. Pre-Existing Diseases (Excl 01) \na) Expenses related to the treatment of a Pre-Existing Disease (PED) and its direct complications shall be excluded until the \nexpiry of thirty six (36) months of continuous coverage after the date of inception of the first policy with us. \nb) In case of enhancement of sum insured the exclusion shall apply afresh to the extent of sum insured increase. \nc) If the Insured Person is continuously covered without any break as defined under the portability norms of the extant IRDAI \n(Health Insurance) Regulations then waiting period for the same would be reduced to the extent of prior coverage. \nd) Coverage under the policy after the expiry of thirty six (36) months for any pre-existing disease is subject to the same being \ndeclared at the time of application and accepted by us.",
+            "text": "4.1. Pre-Existing Diseases (Excl 01) \na) Expenses related to the treatment of a Pre-Existing Disease (PED) and its direct complications shall be excluded until the \nexpiry of thirty six (36) months of continuous coverage after the date of inception of the first policy with us. \nb) In case of enhancement of sum insured the exclusion shall apply afresh to the extent of sum insured increase. \nc) If the Insured Person is continuously covered without any break as defined under the portability norms of the extant IRDAI \n(Health Insurance) Regulations then waiting period for the same would be reduced to the extent of prior coverage. \nd) Coverage under the policy after the expiry of thirty six (36) months for any pre-existing disease is subject to the same being \ndeclared at the time of application and accepted by us.",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_30_7c6807a5",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "4.1. Pre-Existing Diseases (Excl 01) \na) Expenses related to the treatment of a Pre-Existing Disease (PED) and its direct complications shall be excluded until the \nexpiry of thirty six (36) months of continuous coverage after the date of inception of the first policy with us. \nb) In case of enhancement of sum insured the exclusion shall apply afresh to the extent of sum insured increase. \nc) If the Insured Person is continuously covered without any break as defined under the portability norms of the extant IRDAI \n(Health Insurance) Regulations then waiting period for the same would be reduced to the extent of prior coverage. \nd) Coverage under the policy after the expiry of thirty six (36) months for any pre-existing disease is subject to the same being \ndeclared at the time of application and accepted by us."
+            },
+            "id": "input_20250809_153641.pdf_30_7c6807a5",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 1.0
+          },
+          {
+            "score": 0.848211646,
+            "content": "4.2. Specified disease/procedure waiting period (Excl 02) \na) Expenses related to the treatment of the listed Conditions, surgeries/treatments shall be excluded until the expiry of 90 days/ \none year/ two year/ three years (as specified against specific disease/ procedure) of continuous coverage after the date of \ninception of the first policy with us. This exclusion shall not be applicable for claims arising due to an accident \nb) In case of enhancement of sum insured the exclusion shall apply afresh to the extent of sum insured increase. \nc) If any of the specified disease/procedure falls under the waiting period specified for Pre-Existing Diseases, then the longer \nof the two waiting periods shall apply. \nd) The waiting period for listed conditions shall apply even if contracted after the policy or declared and accepted without a \nspecific exclusion. \ne) If the Insured Person is continuously covered without any break as defined under the applicable norms on portability \nstipulated b",
+            "text": "4.2. Specified disease/procedure waiting period (Excl 02) \na) Expenses related to the treatment of the listed Conditions, surgeries/treatments shall be excluded until the expiry of 90 days/ \none year/ two year/ three years (as specified against specific disease/ procedure) of continuous coverage after the date of \ninception of the first policy with us. This exclusion shall not be applicable for claims arising due to an accident \nb) In case of enhancement of sum insured the exclusion shall apply afresh to the extent of sum insured increase. \nc) If any of the specified disease/procedure falls under the waiting period specified for Pre-Existing Diseases, then the longer \nof the two waiting periods shall apply. \nd) The waiting period for listed conditions shall apply even if contracted after the policy or declared and accepted without a \nspecific exclusion. \ne) If the Insured Person is continuously covered without any break as defined under the applicable norms on portability \nstipulated b",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_31_ce066590",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "4.2. Specified disease/procedure waiting period (Excl 02) \na) Expenses related to the treatment of the listed Conditions, surgeries/treatments shall be excluded until the expiry of 90 days/ \none year/ two year/ three years (as specified against specific disease/ procedure) of continuous coverage after the date of \ninception of the first policy with us. This exclusion shall not be applicable for claims arising due to an accident \nb) In case of enhancement of sum insured the exclusion shall apply afresh to the extent of sum insured increase. \nc) If any of the specified disease/procedure falls under the waiting period specified for Pre-Existing Diseases, then the longer \nof the two waiting periods shall apply. \nd) The waiting period for listed conditions shall apply even if contracted after the policy or declared and accepted without a \nspecific exclusion. \ne) If the Insured Person is continuously covered without any break as defined under the applicable norms on portability \nstipulated b"
+            },
+            "id": "input_20250809_153641.pdf_31_ce066590",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 0.4421433517556619
+          },
+          {
+            "score": 0.845746279,
+            "content": "2.43 Preferred Provider Network (PPN) means a network of hospitals which have agreed to a cashless packaged pricing for listed \nprocedures for the insured person. The list is available on the website of the Company/TPA and subject to amendment from \ntime to time. For the updated list please visit the website of the Company/TPA. Reimbursement of expenses incurred in PPN \nfor the procedures (as listed under PPN package) shall be subject to the rates applicable to PPN package pricing. 2.44 Pre existing disease means any condition, ailment, injury or disease \na) That is/are diagnosed by a physician within 36 months prior to the effective date of the Policy issued by the Company or \nits reinstatement, or \nb) For which Medical Advice or treatment was recommended by, or received from, a physician within 36 months prior \nto the effective date of the Policy issued by the Company or its reinstatement. 2.45 Portability means a facility provided to the policyholders (including all members under fa",
+            "text": "2.43 Preferred Provider Network (PPN) means a network of hospitals which have agreed to a cashless packaged pricing for listed \nprocedures for the insured person. The list is available on the website of the Company/TPA and subject to amendment from \ntime to time. For the updated list please visit the website of the Company/TPA. Reimbursement of expenses incurred in PPN \nfor the procedures (as listed under PPN package) shall be subject to the rates applicable to PPN package pricing. 2.44 Pre existing disease means any condition, ailment, injury or disease \na) That is/are diagnosed by a physician within 36 months prior to the effective date of the Policy issued by the Company or \nits reinstatement, or \nb) For which Medical Advice or treatment was recommended by, or received from, a physician within 36 months prior \nto the effective date of the Policy issued by the Company or its reinstatement. 2.45 Portability means a facility provided to the policyholders (including all members under fa",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_12_0f814d7b",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "2.43 Preferred Provider Network (PPN) means a network of hospitals which have agreed to a cashless packaged pricing for listed \nprocedures for the insured person. The list is available on the website of the Company/TPA and subject to amendment from \ntime to time. For the updated list please visit the website of the Company/TPA. Reimbursement of expenses incurred in PPN \nfor the procedures (as listed under PPN package) shall be subject to the rates applicable to PPN package pricing. 2.44 Pre existing disease means any condition, ailment, injury or disease \na) That is/are diagnosed by a physician within 36 months prior to the effective date of the Policy issued by the Company or \nits reinstatement, or \nb) For which Medical Advice or treatment was recommended by, or received from, a physician within 36 months prior \nto the effective date of the Policy issued by the Company or its reinstatement. 2.45 Portability means a facility provided to the policyholders (including all members under fa"
+            },
+            "id": "input_20250809_153641.pdf_12_0f814d7b",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 0.41339936400948096
+          }
+        ],
+        "evaluation": {
+          "answer": "Based on the policy documents, I found relevant information about your query: 'What is the waiting period for pre-existing diseases (PED) to be covered?'. However, I'm currently experiencing high demand and cannot provide a detailed analysis. Please refer to the policy documents for specific details.",
+          "source_document": "input_20250809_153641.pdf",
+          "relevant_sections": [
+            1
+          ],
+          "search_method": "optimized_single_stage_search",
+          "reranker_type": "none",
+          "reranker_available": false,
+          "hybrid_search_enabled": true,
+          "reranking_enabled": false,
+          "total_candidates_retrieved": 3,
+          "final_chunks_used": 3,
+          "adjacent_chunks_per_vector": 10,
+          "advanced_search_features": {
+            "context_aware_search": true,
+            "query_expansion": false,
+            "content_type_balancing": true,
+            "result_deduplication": true,
+            "score_normalization": true
+          },
+          "performance_note": "⚡ Using optimized single-stage search with comprehensive adjacent context (5 before + 5 after) for each top vector"
+        },
+        "api_status": {
+          "gemini_available": true,
+          "model_name": "gemini-2.5-flash",
+          "quota_exceeded": false,
+          "fallback_reason": null,
+          "recommendations": [
+            "✅ Using gemini-2.5-flash for optimal results"
+          ]
+        },
+        "status": "success",
+        "success": true
+      },
+      {
+        "query": "Does this policy cover maternity expenses, and what are the conditions?",
+        "search_results": [
+          {
+            "score": 0.864449859,
+            "content": "Exclusions \nThe Company shall not be liable to make any payment under the cover in respect of Maternity Expenses incurred in connection with \nor in respect of: \n1. Covered female Insured Person below eighteen (18) years and above forty-five (45) years of age. \n2. Delivery or termination within a Waiting Period of twenty-four (24) months. However, the Waiting Period may be waived \nonly in the case of delivery, miscarriage or abortion induced by accident. \n3. Delivery or lawful medical termination of pregnancy limited to two deliveries or terminations or either has been paid under \nthe Policy and its Renewals. \n4. More than one delivery or lawful medical termination of pregnancy during a single Policy Period. \n5. Maternity Expenses of Surrogate Mother, unless claim is admitted under Section 3.1.15 (Infertility) \n6. Ectopic pregnancy \n7. Pre and post hospitalisation expenses, other than pre and post natal treatment. 3.1.15 Infertility \nThe Company shall pay to the hospital or reimburse th",
+            "text": "Exclusions \nThe Company shall not be liable to make any payment under the cover in respect of Maternity Expenses incurred in connection with \nor in respect of: \n1. Covered female Insured Person below eighteen (18) years and above forty-five (45) years of age. \n2. Delivery or termination within a Waiting Period of twenty-four (24) months. However, the Waiting Period may be waived \nonly in the case of delivery, miscarriage or abortion induced by accident. \n3. Delivery or lawful medical termination of pregnancy limited to two deliveries or terminations or either has been paid under \nthe Policy and its Renewals. \n4. More than one delivery or lawful medical termination of pregnancy during a single Policy Period. \n5. Maternity Expenses of Surrogate Mother, unless claim is admitted under Section 3.1.15 (Infertility) \n6. Ectopic pregnancy \n7. Pre and post hospitalisation expenses, other than pre and post natal treatment. 3.1.15 Infertility \nThe Company shall pay to the hospital or reimburse th",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_22_605a20c0",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "Exclusions \nThe Company shall not be liable to make any payment under the cover in respect of Maternity Expenses incurred in connection with \nor in respect of: \n1. Covered female Insured Person below eighteen (18) years and above forty-five (45) years of age. \n2. Delivery or termination within a Waiting Period of twenty-four (24) months. However, the Waiting Period may be waived \nonly in the case of delivery, miscarriage or abortion induced by accident. \n3. Delivery or lawful medical termination of pregnancy limited to two deliveries or terminations or either has been paid under \nthe Policy and its Renewals. \n4. More than one delivery or lawful medical termination of pregnancy during a single Policy Period. \n5. Maternity Expenses of Surrogate Mother, unless claim is admitted under Section 3.1.15 (Infertility) \n6. Ectopic pregnancy \n7. Pre and post hospitalisation expenses, other than pre and post natal treatment. 3.1.15 Infertility \nThe Company shall pay to the hospital or reimburse th"
+            },
+            "id": "input_20250809_153641.pdf_22_605a20c0",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 1.0
+          },
+          {
+            "score": 0.850237966,
+            "content": "Exclusions \nThe Company shall not be liable to make any payment in respect of any expenses incurred in connection with or in respect of \n1. Insured and insured persons above forty five years of age. \n2. Diagnostic tests related to infertility \n3. Reversing a tubal ligation or vasectomy \n4. Preserving and storing sperms, eggs and embryos \n5. An egg donor or sperm donor \n6. Experimental treatments \n7. Any disease/ injury, other than traceable to maternity, of the surrogate mother. Conditions \n1. Expenses for advanced procedures, including IVF, GIFT, ZIFT or ICSI, shall be payable only if the Insured person has been \nunable to attain or sustain a successful pregnancy through reasonable, and medically necessary infertility treatment. \n2. Maternity expenses of the surrogate mother shall be payable under Section 3.1.14 (Maternity). Legal affidavit regarding \nintimation of surrogacy shall be submitted to the Company. \n3. Maximum of two claims shall be admissible by the Policy during the lifet",
+            "text": "Exclusions \nThe Company shall not be liable to make any payment in respect of any expenses incurred in connection with or in respect of \n1. Insured and insured persons above forty five years of age. \n2. Diagnostic tests related to infertility \n3. Reversing a tubal ligation or vasectomy \n4. Preserving and storing sperms, eggs and embryos \n5. An egg donor or sperm donor \n6. Experimental treatments \n7. Any disease/ injury, other than traceable to maternity, of the surrogate mother. Conditions \n1. Expenses for advanced procedures, including IVF, GIFT, ZIFT or ICSI, shall be payable only if the Insured person has been \nunable to attain or sustain a successful pregnancy through reasonable, and medically necessary infertility treatment. \n2. Maternity expenses of the surrogate mother shall be payable under Section 3.1.14 (Maternity). Legal affidavit regarding \nintimation of surrogacy shall be submitted to the Company. \n3. Maximum of two claims shall be admissible by the Policy during the lifet",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_23_2935e7de",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "Exclusions \nThe Company shall not be liable to make any payment in respect of any expenses incurred in connection with or in respect of \n1. Insured and insured persons above forty five years of age. \n2. Diagnostic tests related to infertility \n3. Reversing a tubal ligation or vasectomy \n4. Preserving and storing sperms, eggs and embryos \n5. An egg donor or sperm donor \n6. Experimental treatments \n7. Any disease/ injury, other than traceable to maternity, of the surrogate mother. Conditions \n1. Expenses for advanced procedures, including IVF, GIFT, ZIFT or ICSI, shall be payable only if the Insured person has been \nunable to attain or sustain a successful pregnancy through reasonable, and medically necessary infertility treatment. \n2. Maternity expenses of the surrogate mother shall be payable under Section 3.1.14 (Maternity). Legal affidavit regarding \nintimation of surrogacy shall be submitted to the Company. \n3. Maximum of two claims shall be admissible by the Policy during the lifet"
+            },
+            "id": "input_20250809_153641.pdf_23_2935e7de",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 0.7240809503506409
+          },
+          {
+            "score": 0.844680905,
+            "content": "3.1.13 Anti Rabies Vaccination \nThe Company shall reimburse the insured medically necessary expenses incurred for anti-rabies vaccination up to the limit as shown \nin the Table of Benefits. Hospitalisation is not required for vaccination. The Company shall indemnify Maternity Expenses as described below for any female Insured Person, and also Pre-Natal and Post-\nNatal Hospitalisation expenses per delivery, including expenses for necessary vaccination for New Born Baby, subject to the limit National Insurance Co. Ltd. \nPremises No. 18-0374, Plot no. CBD-81, \nNew Town, Kolkata - 700156 \nPage 7 of 25 \nNational Parivar Mediclaim Plus Policy \nUIN: NICHLIP25039V032425 as shown in the Table of Benefits. The female Insured Person should have been continuously covered for at least 24 months before \navailing this benefit. \nThe New Born Baby shall be automatically covered from birth under the Sum Insured available to the mother during the \ncorresponding Policy Period, for up to 3 months of age. O",
+            "text": "3.1.13 Anti Rabies Vaccination \nThe Company shall reimburse the insured medically necessary expenses incurred for anti-rabies vaccination up to the limit as shown \nin the Table of Benefits. Hospitalisation is not required for vaccination. The Company shall indemnify Maternity Expenses as described below for any female Insured Person, and also Pre-Natal and Post-\nNatal Hospitalisation expenses per delivery, including expenses for necessary vaccination for New Born Baby, subject to the limit National Insurance Co. Ltd. \nPremises No. 18-0374, Plot no. CBD-81, \nNew Town, Kolkata - 700156 \nPage 7 of 25 \nNational Parivar Mediclaim Plus Policy \nUIN: NICHLIP25039V032425 as shown in the Table of Benefits. The female Insured Person should have been continuously covered for at least 24 months before \navailing this benefit. \nThe New Born Baby shall be automatically covered from birth under the Sum Insured available to the mother during the \ncorresponding Policy Period, for up to 3 months of age. O",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_21_a995d39c",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "3.1.13 Anti Rabies Vaccination \nThe Company shall reimburse the insured medically necessary expenses incurred for anti-rabies vaccination up to the limit as shown \nin the Table of Benefits. Hospitalisation is not required for vaccination. The Company shall indemnify Maternity Expenses as described below for any female Insured Person, and also Pre-Natal and Post-\nNatal Hospitalisation expenses per delivery, including expenses for necessary vaccination for New Born Baby, subject to the limit National Insurance Co. Ltd. \nPremises No. 18-0374, Plot no. CBD-81, \nNew Town, Kolkata - 700156 \nPage 7 of 25 \nNational Parivar Mediclaim Plus Policy \nUIN: NICHLIP25039V032425 as shown in the Table of Benefits. The female Insured Person should have been continuously covered for at least 24 months before \navailing this benefit. \nThe New Born Baby shall be automatically covered from birth under the Sum Insured available to the mother during the \ncorresponding Policy Period, for up to 3 months of age. O"
+            },
+            "id": "input_20250809_153641.pdf_21_a995d39c",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 0.6161925086093819
+          }
+        ],
+        "evaluation": {
+          "answer": "Yes, this policy covers maternity expenses, subject to certain conditions and exclusions. Coverage is for female insured persons between 18 and 45 years of age, with a 24-month waiting period that may be waived for accident-induced cases. Additionally, it is limited to a maximum of two deliveries or terminations over the policy's lifetime and only one per policy period, excluding ectopic pregnancies and most pre/post-hospitalization expenses other than pre and post-natal treatment.",
+          "source_document": "input_20250809_153641.pdf",
+          "relevant_sections": [
+            1,
+            2
+          ],
+          "context_stats": {
+            "total_vectors": 3,
+            "total_context_length": 12539,
+            "chunks_per_vector": 51
+          },
+          "search_method": "optimized_single_stage_search",
+          "reranker_type": "none",
+          "reranker_available": false,
+          "hybrid_search_enabled": true,
+          "reranking_enabled": false,
+          "total_candidates_retrieved": 3,
+          "final_chunks_used": 3,
+          "adjacent_chunks_per_vector": 10,
+          "advanced_search_features": {
+            "context_aware_search": true,
+            "query_expansion": false,
+            "content_type_balancing": true,
+            "result_deduplication": true,
+            "score_normalization": true
+          },
+          "performance_note": "⚡ Using optimized single-stage search with comprehensive adjacent context (5 before + 5 after) for each top vector"
+        },
+        "api_status": {
+          "gemini_available": true,
+          "model_name": "gemini-2.5-flash",
+          "quota_exceeded": false,
+          "fallback_reason": null,
+          "recommendations": [
+            "✅ Using gemini-2.5-flash for optimal results"
+          ]
+        },
+        "status": "success",
+        "success": true
+      },
+      {
+        "query": "What is the waiting period for cataract surgery?",
+        "search_results": [
+          {
+            "score": 0.85174042,
+            "content": "iii. Two years waiting period \na. \nCataract \nb. Benign prostatic hypertrophy \nc. \nHernia \nd. Hydrocele \ne. \nFissure/Fistula in anus \nf. \nPiles (Haemorrhoids) \ng. Sinusitis and related disorders \nh. Polycystic ovarian disease \ni. \nNon-infective arthritis \nj. \nPilonidal sinus \nk. Gout and Rheumatism \nl. \nCalculus diseases \nm. Surgery of gall bladder and bile duct excluding \nmalignancy \nn. Surgery \nof \ngenito-urinary \nsystem \nexcluding \nmalignancy \no. Surgery for prolapsed intervertebral disc unless \narising from accident \np. Surgery of varicose vein \nq. Hysterectomy \nr. \nRefractive error of the eye more than 7.5 dioptres \ns. \nCongenital Internal Anomaly (not applicable for \nnew born baby) \nAbove diseases/treatments under 4.2.f).i, ii, iii shall be covered after the specified Waiting Period, provided they are not Pre Existing \nDiseases. iv. Three years waiting period \nFollowing diseases shall be covered after three years of continuous cover from the inception of the policy: \na. \nTreatment",
+            "text": "iii. Two years waiting period \na. \nCataract \nb. Benign prostatic hypertrophy \nc. \nHernia \nd. Hydrocele \ne. \nFissure/Fistula in anus \nf. \nPiles (Haemorrhoids) \ng. Sinusitis and related disorders \nh. Polycystic ovarian disease \ni. \nNon-infective arthritis \nj. \nPilonidal sinus \nk. Gout and Rheumatism \nl. \nCalculus diseases \nm. Surgery of gall bladder and bile duct excluding \nmalignancy \nn. Surgery \nof \ngenito-urinary \nsystem \nexcluding \nmalignancy \no. Surgery for prolapsed intervertebral disc unless \narising from accident \np. Surgery of varicose vein \nq. Hysterectomy \nr. \nRefractive error of the eye more than 7.5 dioptres \ns. \nCongenital Internal Anomaly (not applicable for \nnew born baby) \nAbove diseases/treatments under 4.2.f).i, ii, iii shall be covered after the specified Waiting Period, provided they are not Pre Existing \nDiseases. iv. Three years waiting period \nFollowing diseases shall be covered after three years of continuous cover from the inception of the policy: \na. \nTreatment",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_32_bcc66bd5",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "iii. Two years waiting period \na. \nCataract \nb. Benign prostatic hypertrophy \nc. \nHernia \nd. Hydrocele \ne. \nFissure/Fistula in anus \nf. \nPiles (Haemorrhoids) \ng. Sinusitis and related disorders \nh. Polycystic ovarian disease \ni. \nNon-infective arthritis \nj. \nPilonidal sinus \nk. Gout and Rheumatism \nl. \nCalculus diseases \nm. Surgery of gall bladder and bile duct excluding \nmalignancy \nn. Surgery \nof \ngenito-urinary \nsystem \nexcluding \nmalignancy \no. Surgery for prolapsed intervertebral disc unless \narising from accident \np. Surgery of varicose vein \nq. Hysterectomy \nr. \nRefractive error of the eye more than 7.5 dioptres \ns. \nCongenital Internal Anomaly (not applicable for \nnew born baby) \nAbove diseases/treatments under 4.2.f).i, ii, iii shall be covered after the specified Waiting Period, provided they are not Pre Existing \nDiseases. iv. Three years waiting period \nFollowing diseases shall be covered after three years of continuous cover from the inception of the policy: \na. \nTreatment"
+            },
+            "id": "input_20250809_153641.pdf_32_bcc66bd5",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 1.0
+          },
+          {
+            "score": 0.837779164,
+            "content": "Note: \nListed procedures and Preferred Provider Network list are dynamic in nature, and will be updated in the Company’s website from \ntime to time. 3.1.1.2 Limit for Cataract Surgery \nThe Company’s liability for cataract surgery shall be up to the limit as shown in the Table of Benefits, for Plan A only. However, \nthe limit shall not apply if the treatment is undergone for a listed procedure in a Preferred Provider Network (PPN) as a package. 3.1.1.3 Treatment related to participation as a non-professional in hazardous or adventure sports \nExpenses related to treatment necessitated due to participation as a non-professional in hazardous or adventure sports, subject to \nMaximum amount admissible for Any One Illness shall be lower of 25% of Sum Insured. 3.1.2 Pre Hospitalisation \nThe Company shall indemnify the medical expenses incurred up to thirty days immediately before the insured person is hospitalised, \nprovided that: \ni. \nsuch medical expenses are incurred for the same condition ",
+            "text": "Note: \nListed procedures and Preferred Provider Network list are dynamic in nature, and will be updated in the Company’s website from \ntime to time. 3.1.1.2 Limit for Cataract Surgery \nThe Company’s liability for cataract surgery shall be up to the limit as shown in the Table of Benefits, for Plan A only. However, \nthe limit shall not apply if the treatment is undergone for a listed procedure in a Preferred Provider Network (PPN) as a package. 3.1.1.3 Treatment related to participation as a non-professional in hazardous or adventure sports \nExpenses related to treatment necessitated due to participation as a non-professional in hazardous or adventure sports, subject to \nMaximum amount admissible for Any One Illness shall be lower of 25% of Sum Insured. 3.1.2 Pre Hospitalisation \nThe Company shall indemnify the medical expenses incurred up to thirty days immediately before the insured person is hospitalised, \nprovided that: \ni. \nsuch medical expenses are incurred for the same condition ",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_16_7d71fb0a",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "Note: \nListed procedures and Preferred Provider Network list are dynamic in nature, and will be updated in the Company’s website from \ntime to time. 3.1.1.2 Limit for Cataract Surgery \nThe Company’s liability for cataract surgery shall be up to the limit as shown in the Table of Benefits, for Plan A only. However, \nthe limit shall not apply if the treatment is undergone for a listed procedure in a Preferred Provider Network (PPN) as a package. 3.1.1.3 Treatment related to participation as a non-professional in hazardous or adventure sports \nExpenses related to treatment necessitated due to participation as a non-professional in hazardous or adventure sports, subject to \nMaximum amount admissible for Any One Illness shall be lower of 25% of Sum Insured. 3.1.2 Pre Hospitalisation \nThe Company shall indemnify the medical expenses incurred up to thirty days immediately before the insured person is hospitalised, \nprovided that: \ni. \nsuch medical expenses are incurred for the same condition "
+            },
+            "id": "input_20250809_153641.pdf_16_7d71fb0a",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 0.7799885538153705
+          },
+          {
+            "score": 0.829834163,
+            "content": "4.2. Specified disease/procedure waiting period (Excl 02) \na) Expenses related to the treatment of the listed Conditions, surgeries/treatments shall be excluded until the expiry of 90 days/ \none year/ two year/ three years (as specified against specific disease/ procedure) of continuous coverage after the date of \ninception of the first policy with us. This exclusion shall not be applicable for claims arising due to an accident \nb) In case of enhancement of sum insured the exclusion shall apply afresh to the extent of sum insured increase. \nc) If any of the specified disease/procedure falls under the waiting period specified for Pre-Existing Diseases, then the longer \nof the two waiting periods shall apply. \nd) The waiting period for listed conditions shall apply even if contracted after the policy or declared and accepted without a \nspecific exclusion. \ne) If the Insured Person is continuously covered without any break as defined under the applicable norms on portability \nstipulated b",
+            "text": "4.2. Specified disease/procedure waiting period (Excl 02) \na) Expenses related to the treatment of the listed Conditions, surgeries/treatments shall be excluded until the expiry of 90 days/ \none year/ two year/ three years (as specified against specific disease/ procedure) of continuous coverage after the date of \ninception of the first policy with us. This exclusion shall not be applicable for claims arising due to an accident \nb) In case of enhancement of sum insured the exclusion shall apply afresh to the extent of sum insured increase. \nc) If any of the specified disease/procedure falls under the waiting period specified for Pre-Existing Diseases, then the longer \nof the two waiting periods shall apply. \nd) The waiting period for listed conditions shall apply even if contracted after the policy or declared and accepted without a \nspecific exclusion. \ne) If the Insured Person is continuously covered without any break as defined under the applicable norms on portability \nstipulated b",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_31_ce066590",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "4.2. Specified disease/procedure waiting period (Excl 02) \na) Expenses related to the treatment of the listed Conditions, surgeries/treatments shall be excluded until the expiry of 90 days/ \none year/ two year/ three years (as specified against specific disease/ procedure) of continuous coverage after the date of \ninception of the first policy with us. This exclusion shall not be applicable for claims arising due to an accident \nb) In case of enhancement of sum insured the exclusion shall apply afresh to the extent of sum insured increase. \nc) If any of the specified disease/procedure falls under the waiting period specified for Pre-Existing Diseases, then the longer \nof the two waiting periods shall apply. \nd) The waiting period for listed conditions shall apply even if contracted after the policy or declared and accepted without a \nspecific exclusion. \ne) If the Insured Person is continuously covered without any break as defined under the applicable norms on portability \nstipulated b"
+            },
+            "id": "input_20250809_153641.pdf_31_ce066590",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 0.6547855520261112
+          }
+        ],
+        "evaluation": {
+          "answer": "Based on the policy documents, I found relevant information about your query: 'What is the waiting period for cataract surgery?'. However, I'm currently experiencing high demand and cannot provide a detailed analysis. Please refer to the policy documents for specific details.",
+          "source_document": "input_20250809_153641.pdf",
+          "relevant_sections": [
+            1
+          ],
+          "search_method": "optimized_single_stage_search",
+          "reranker_type": "none",
+          "reranker_available": false,
+          "hybrid_search_enabled": true,
+          "reranking_enabled": false,
+          "total_candidates_retrieved": 3,
+          "final_chunks_used": 3,
+          "adjacent_chunks_per_vector": 10,
+          "advanced_search_features": {
+            "context_aware_search": true,
+            "query_expansion": false,
+            "content_type_balancing": true,
+            "result_deduplication": true,
+            "score_normalization": true
+          },
+          "performance_note": "⚡ Using optimized single-stage search with comprehensive adjacent context (5 before + 5 after) for each top vector"
+        },
+        "api_status": {
+          "gemini_available": true,
+          "model_name": "gemini-2.5-flash",
+          "quota_exceeded": false,
+          "fallback_reason": null,
+          "recommendations": [
+            "✅ Using gemini-2.5-flash for optimal results"
+          ]
+        },
+        "status": "success",
+        "success": true
+      },
+      {
+        "query": "Are the medical expenses for an organ donor covered under this policy?",
+        "search_results": [
+          {
+            "score": 0.849810898,
+            "content": "Exclusions \nThe Company shall not be liable to make payment for any claim under this Cover which arises for or in connection with any of the \nfollowing: \ni. Pre-hospitalization Medical Expenses or Post- Hospitalization Medical Expenses of the organ donor. \nii. Costs directly or indirectly associated with the acquisition of the donor’s organ. \niii. Medical Expenses where the organ transplant is experimental or investigational. \niv. Any medical treatment or complication in respect of the donor, consequent to harvesting. \nv. Any expenses related to organ transportation or preservation. 3.1.8 Hospital Cash \nThe Company shall pay the insured a daily hospital cash allowance up to the limit as shown in the Table of Benefits for a maximum \nof five days, provided: \ni. \nthe hospitalisation exceeds three days. \nii. a claim has been admitted under In-patient Treatment Section \nHospital Cash shall be payable for each day from the 4th day of Hospitalisation up to the 8th day of Hospitalisation only.",
+            "text": "Exclusions \nThe Company shall not be liable to make payment for any claim under this Cover which arises for or in connection with any of the \nfollowing: \ni. Pre-hospitalization Medical Expenses or Post- Hospitalization Medical Expenses of the organ donor. \nii. Costs directly or indirectly associated with the acquisition of the donor’s organ. \niii. Medical Expenses where the organ transplant is experimental or investigational. \niv. Any medical treatment or complication in respect of the donor, consequent to harvesting. \nv. Any expenses related to organ transportation or preservation. 3.1.8 Hospital Cash \nThe Company shall pay the insured a daily hospital cash allowance up to the limit as shown in the Table of Benefits for a maximum \nof five days, provided: \ni. \nthe hospitalisation exceeds three days. \nii. a claim has been admitted under In-patient Treatment Section \nHospital Cash shall be payable for each day from the 4th day of Hospitalisation up to the 8th day of Hospitalisation only.",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_19_8dc9e1ed",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "Exclusions \nThe Company shall not be liable to make payment for any claim under this Cover which arises for or in connection with any of the \nfollowing: \ni. Pre-hospitalization Medical Expenses or Post- Hospitalization Medical Expenses of the organ donor. \nii. Costs directly or indirectly associated with the acquisition of the donor’s organ. \niii. Medical Expenses where the organ transplant is experimental or investigational. \niv. Any medical treatment or complication in respect of the donor, consequent to harvesting. \nv. Any expenses related to organ transportation or preservation. 3.1.8 Hospital Cash \nThe Company shall pay the insured a daily hospital cash allowance up to the limit as shown in the Table of Benefits for a maximum \nof five days, provided: \ni. \nthe hospitalisation exceeds three days. \nii. a claim has been admitted under In-patient Treatment Section \nHospital Cash shall be payable for each day from the 4th day of Hospitalisation up to the 8th day of Hospitalisation only."
+            },
+            "id": "input_20250809_153641.pdf_19_8dc9e1ed",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 1.0
+          },
+          {
+            "score": 0.841417313,
+            "content": "3 BENEFITS COVERED UNDER THE POLICY \n3.1COVERAGE \n3.1.1 In-patient Treatment \nThe Company shall indemnify the medical expenses for: \ni. \nRoom charges and intensive care unit charges (including diet charges, nursing care by qualified nurse, RMO charges, \nadministration charges for IV fluids/blood transfusion/injection), subject to limit as per Section 3.1.1.1 \nii. Medical practitioner(s) \niii. Anaesthesia, blood, oxygen, operation theatre charges, surgical appliances \niv. Medicines and drugs \nv. Diagnostic procedures \nvi. Prosthetics and other devices or equipment if implanted internally during a surgical procedure. \nvii. Dental treatment, necessitated due to an injury \nviii. Plastic surgery, necessitated due to disease or injury \nix. Hormone replacement therapy, if medically necessary \nx. Vitamins and tonics, forming part of treatment for disease/injury as certified by the attending medical practitioner \nxi. Circumcision, necessitated for treatment of a disease or injury 3.1.1.1 Limit ",
+            "text": "3 BENEFITS COVERED UNDER THE POLICY \n3.1COVERAGE \n3.1.1 In-patient Treatment \nThe Company shall indemnify the medical expenses for: \ni. \nRoom charges and intensive care unit charges (including diet charges, nursing care by qualified nurse, RMO charges, \nadministration charges for IV fluids/blood transfusion/injection), subject to limit as per Section 3.1.1.1 \nii. Medical practitioner(s) \niii. Anaesthesia, blood, oxygen, operation theatre charges, surgical appliances \niv. Medicines and drugs \nv. Diagnostic procedures \nvi. Prosthetics and other devices or equipment if implanted internally during a surgical procedure. \nvii. Dental treatment, necessitated due to an injury \nviii. Plastic surgery, necessitated due to disease or injury \nix. Hormone replacement therapy, if medically necessary \nx. Vitamins and tonics, forming part of treatment for disease/injury as certified by the attending medical practitioner \nxi. Circumcision, necessitated for treatment of a disease or injury 3.1.1.1 Limit ",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_15_2e0dfa4f",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "3 BENEFITS COVERED UNDER THE POLICY \n3.1COVERAGE \n3.1.1 In-patient Treatment \nThe Company shall indemnify the medical expenses for: \ni. \nRoom charges and intensive care unit charges (including diet charges, nursing care by qualified nurse, RMO charges, \nadministration charges for IV fluids/blood transfusion/injection), subject to limit as per Section 3.1.1.1 \nii. Medical practitioner(s) \niii. Anaesthesia, blood, oxygen, operation theatre charges, surgical appliances \niv. Medicines and drugs \nv. Diagnostic procedures \nvi. Prosthetics and other devices or equipment if implanted internally during a surgical procedure. \nvii. Dental treatment, necessitated due to an injury \nviii. Plastic surgery, necessitated due to disease or injury \nix. Hormone replacement therapy, if medically necessary \nx. Vitamins and tonics, forming part of treatment for disease/injury as certified by the attending medical practitioner \nxi. Circumcision, necessitated for treatment of a disease or injury 3.1.1.1 Limit "
+            },
+            "id": "input_20250809_153641.pdf_15_2e0dfa4f",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 0.8061657443804342
+          },
+          {
+            "score": 0.840000331,
+            "content": "National Insurance Co. Ltd. \nPremises No. 18-0374, Plot no. CBD-81, \nNew Town, Kolkata - 700156 \nPage 6 of 25 \nNational Parivar Mediclaim Plus Policy \nUIN: NICHLIP25039V032425 3.1.5 Day Care Procedure \nThe Company shall indemnify the Medical Expenses (including Pre and Post Hospitalisation Expenses) for Day Care Treatments \nrequiring Hospitalization as an In-Patient for less than 24 hours undergone by the Insured Person in a Hospital/ Day Care Centre, \nbut not in the Outpatient department of a Hospital. \n3.1.6 AYUSH Treatment \nThe Company shall indemnify Medical Expenses incurred for Inpatient Care treatment under Ayurveda, Yoga and Naturopathy, \nUnani, Siddha and Homeopathy systems of medicines during each Policy Period up to the limit of Sum Insured as specified in the \nPolicy Schedule in any AYUSH Hospital. 3.1.7 Organ Donor’s Medical Expenses \nOrgan Donor's Hospitalisation Expenses \nThe Company shall indemnify the Medical Expenses incurred in respect of an organ donor’s Hospitalisa",
+            "text": "National Insurance Co. Ltd. \nPremises No. 18-0374, Plot no. CBD-81, \nNew Town, Kolkata - 700156 \nPage 6 of 25 \nNational Parivar Mediclaim Plus Policy \nUIN: NICHLIP25039V032425 3.1.5 Day Care Procedure \nThe Company shall indemnify the Medical Expenses (including Pre and Post Hospitalisation Expenses) for Day Care Treatments \nrequiring Hospitalization as an In-Patient for less than 24 hours undergone by the Insured Person in a Hospital/ Day Care Centre, \nbut not in the Outpatient department of a Hospital. \n3.1.6 AYUSH Treatment \nThe Company shall indemnify Medical Expenses incurred for Inpatient Care treatment under Ayurveda, Yoga and Naturopathy, \nUnani, Siddha and Homeopathy systems of medicines during each Policy Period up to the limit of Sum Insured as specified in the \nPolicy Schedule in any AYUSH Hospital. 3.1.7 Organ Donor’s Medical Expenses \nOrgan Donor's Hospitalisation Expenses \nThe Company shall indemnify the Medical Expenses incurred in respect of an organ donor’s Hospitalisa",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_18_765c4db3",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "National Insurance Co. Ltd. \nPremises No. 18-0374, Plot no. CBD-81, \nNew Town, Kolkata - 700156 \nPage 6 of 25 \nNational Parivar Mediclaim Plus Policy \nUIN: NICHLIP25039V032425 3.1.5 Day Care Procedure \nThe Company shall indemnify the Medical Expenses (including Pre and Post Hospitalisation Expenses) for Day Care Treatments \nrequiring Hospitalization as an In-Patient for less than 24 hours undergone by the Insured Person in a Hospital/ Day Care Centre, \nbut not in the Outpatient department of a Hospital. \n3.1.6 AYUSH Treatment \nThe Company shall indemnify Medical Expenses incurred for Inpatient Care treatment under Ayurveda, Yoga and Naturopathy, \nUnani, Siddha and Homeopathy systems of medicines during each Policy Period up to the limit of Sum Insured as specified in the \nPolicy Schedule in any AYUSH Hospital. 3.1.7 Organ Donor’s Medical Expenses \nOrgan Donor's Hospitalisation Expenses \nThe Company shall indemnify the Medical Expenses incurred in respect of an organ donor’s Hospitalisa"
+            },
+            "id": "input_20250809_153641.pdf_18_765c4db3",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 0.7734431769439556
+          }
+        ],
+        "evaluation": {
+          "answer": "No, the policy explicitly excludes several medical expenses related to an organ donor. This includes pre-hospitalization and post-hospitalization medical expenses for the donor, costs associated with organ acquisition, and any medical treatment or complications for the donor consequent to harvesting.",
+          "source_document": "input_20250809_153641.pdf",
+          "relevant_sections": [
+            1
+          ],
+          "context_stats": {
+            "total_vectors": 3,
+            "total_context_length": 12539,
+            "chunks_per_vector": 51
+          },
+          "search_method": "optimized_single_stage_search",
+          "reranker_type": "none",
+          "reranker_available": false,
+          "hybrid_search_enabled": true,
+          "reranking_enabled": false,
+          "total_candidates_retrieved": 3,
+          "final_chunks_used": 3,
+          "adjacent_chunks_per_vector": 10,
+          "advanced_search_features": {
+            "context_aware_search": true,
+            "query_expansion": false,
+            "content_type_balancing": true,
+            "result_deduplication": true,
+            "score_normalization": true
+          },
+          "performance_note": "⚡ Using optimized single-stage search with comprehensive adjacent context (5 before + 5 after) for each top vector"
+        },
+        "api_status": {
+          "gemini_available": true,
+          "model_name": "gemini-2.5-flash",
+          "quota_exceeded": false,
+          "fallback_reason": null,
+          "recommendations": [
+            "✅ Using gemini-2.5-flash for optimal results"
+          ]
+        },
+        "status": "success",
+        "success": true
+      },
+      {
+        "query": "What is the No Claim Discount (NCD) offered in this policy?",
+        "search_results": [
+          {
+            "score": 0.852700174,
+            "content": "3.2 GOOD HEALTH INCENTIVES \n3.2.1 No Claim Discount (NCD) \nOn renewal of policies with a term of one year, a NCD of flat 5% shall be allowed on the * base premium, provided claims are not \nreported in the expiring Policy. \nOn renewal of policies with a term exceeding one year, the NCD amount with respect to each claim free policy year shall be \naggregated and allowed on renewal. Aggregate amount of NCD allowed shall not exceed flat 5% of the total base premium for the \nterm of the policy. \n* Base premium depends on the zone and sum insured and is the aggregate of the premium for senior most insured person and other insured \npersons for a year. 3.2.2 Health Check Up \nExpenses of health check up shall be reimbursed (irrespective of past claims) at the end of a block of two continuous policy years, \nprovided the Policy has been continuously renewed with the Company without a break. Expenses payable are subject to the limit \nstated in the Table of Benefits. 4 EXCLUSIONS \nThe Company shall ",
+            "text": "3.2 GOOD HEALTH INCENTIVES \n3.2.1 No Claim Discount (NCD) \nOn renewal of policies with a term of one year, a NCD of flat 5% shall be allowed on the * base premium, provided claims are not \nreported in the expiring Policy. \nOn renewal of policies with a term exceeding one year, the NCD amount with respect to each claim free policy year shall be \naggregated and allowed on renewal. Aggregate amount of NCD allowed shall not exceed flat 5% of the total base premium for the \nterm of the policy. \n* Base premium depends on the zone and sum insured and is the aggregate of the premium for senior most insured person and other insured \npersons for a year. 3.2.2 Health Check Up \nExpenses of health check up shall be reimbursed (irrespective of past claims) at the end of a block of two continuous policy years, \nprovided the Policy has been continuously renewed with the Company without a break. Expenses payable are subject to the limit \nstated in the Table of Benefits. 4 EXCLUSIONS \nThe Company shall ",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_29_e01a88d8",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "3.2 GOOD HEALTH INCENTIVES \n3.2.1 No Claim Discount (NCD) \nOn renewal of policies with a term of one year, a NCD of flat 5% shall be allowed on the * base premium, provided claims are not \nreported in the expiring Policy. \nOn renewal of policies with a term exceeding one year, the NCD amount with respect to each claim free policy year shall be \naggregated and allowed on renewal. Aggregate amount of NCD allowed shall not exceed flat 5% of the total base premium for the \nterm of the policy. \n* Base premium depends on the zone and sum insured and is the aggregate of the premium for senior most insured person and other insured \npersons for a year. 3.2.2 Health Check Up \nExpenses of health check up shall be reimbursed (irrespective of past claims) at the end of a block of two continuous policy years, \nprovided the Policy has been continuously renewed with the Company without a break. Expenses payable are subject to the limit \nstated in the Table of Benefits. 4 EXCLUSIONS \nThe Company shall "
+            },
+            "id": "input_20250809_153641.pdf_29_e01a88d8",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 1.0
+          },
+          {
+            "score": 0.831151843,
+            "content": "2.38 Non- Network means any Hospital, Day Care Centre that is not part of the network. National Insurance Co. Ltd. \nPremises No. 18-0374, Plot no. CBD-81, \nNew Town, Kolkata - 700156 \nPage 4 of 25 \nNational Parivar Mediclaim Plus Policy \nUIN: NICHLIP25039V032425 2.39 Notification of Claim means the process of intimating a claim to the Company or TPA through any of the recognized modes \nof communication. 2.40 Out-Patient Treatment means treatment in which the insured person visits a clinic / hospital or associated facility like a \nconsultation room for diagnosis and treatment based on the advise of a medical practitioner and the insured person is not \nadmitted as a day care patient or in-patient. 2.41 Policy Period means period of one policy year/ two policy years/ three policy years as mentioned in the schedule for which \nthe Policy is issued. 2.42 Policy Year means a period of twelve months beginning from the date of commencement of the policy period and ending on \nthe last day of suc",
+            "text": "2.38 Non- Network means any Hospital, Day Care Centre that is not part of the network. National Insurance Co. Ltd. \nPremises No. 18-0374, Plot no. CBD-81, \nNew Town, Kolkata - 700156 \nPage 4 of 25 \nNational Parivar Mediclaim Plus Policy \nUIN: NICHLIP25039V032425 2.39 Notification of Claim means the process of intimating a claim to the Company or TPA through any of the recognized modes \nof communication. 2.40 Out-Patient Treatment means treatment in which the insured person visits a clinic / hospital or associated facility like a \nconsultation room for diagnosis and treatment based on the advise of a medical practitioner and the insured person is not \nadmitted as a day care patient or in-patient. 2.41 Policy Period means period of one policy year/ two policy years/ three policy years as mentioned in the schedule for which \nthe Policy is issued. 2.42 Policy Year means a period of twelve months beginning from the date of commencement of the policy period and ending on \nthe last day of suc",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_11_f80ddeea",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "2.38 Non- Network means any Hospital, Day Care Centre that is not part of the network. National Insurance Co. Ltd. \nPremises No. 18-0374, Plot no. CBD-81, \nNew Town, Kolkata - 700156 \nPage 4 of 25 \nNational Parivar Mediclaim Plus Policy \nUIN: NICHLIP25039V032425 2.39 Notification of Claim means the process of intimating a claim to the Company or TPA through any of the recognized modes \nof communication. 2.40 Out-Patient Treatment means treatment in which the insured person visits a clinic / hospital or associated facility like a \nconsultation room for diagnosis and treatment based on the advise of a medical practitioner and the insured person is not \nadmitted as a day care patient or in-patient. 2.41 Policy Period means period of one policy year/ two policy years/ three policy years as mentioned in the schedule for which \nthe Policy is issued. 2.42 Policy Year means a period of twelve months beginning from the date of commencement of the policy period and ending on \nthe last day of suc"
+            },
+            "id": "input_20250809_153641.pdf_11_f80ddeea",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 0.6053311528098477
+          },
+          {
+            "score": 0.820263326,
+            "content": "5.11 Cancellation \ni. The Company may cancel the policy at any time, on grounds of misrepresentation, non-disclosure of material facts or \nestablished fraud by the insured person by giving 15 days’ written notice. There would be no refund of premium on \ncancellation on grounds of misrepresentation, non-disclosure of material facts or fraud. National Insurance Co. Ltd. \nPremises No. 18-0374, Plot no. CBD-81, \nNew Town, Kolkata - 700156 \nPage 16 of 25 \nNational Parivar Mediclaim Plus Policy \nUIN: NICHLIP25039V032425 ii. The policyholder may cancel his/her policy at any time during the term, by giving 7 days’ notice in writing. The Insurer shall: \na) refund proportionate premium for unexpired policy period, if the term of policy upto one year and there is no claim (s) \nmade during the policy period. \nb) refund premium for the unexpired policy period, in respect of policies with term more than 1 year and risk coverage for \nsuch policy years has not commenced and refund proportionate premiu",
+            "text": "5.11 Cancellation \ni. The Company may cancel the policy at any time, on grounds of misrepresentation, non-disclosure of material facts or \nestablished fraud by the insured person by giving 15 days’ written notice. There would be no refund of premium on \ncancellation on grounds of misrepresentation, non-disclosure of material facts or fraud. National Insurance Co. Ltd. \nPremises No. 18-0374, Plot no. CBD-81, \nNew Town, Kolkata - 700156 \nPage 16 of 25 \nNational Parivar Mediclaim Plus Policy \nUIN: NICHLIP25039V032425 ii. The policyholder may cancel his/her policy at any time during the term, by giving 7 days’ notice in writing. The Insurer shall: \na) refund proportionate premium for unexpired policy period, if the term of policy upto one year and there is no claim (s) \nmade during the policy period. \nb) refund premium for the unexpired policy period, in respect of policies with term more than 1 year and risk coverage for \nsuch policy years has not commenced and refund proportionate premiu",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_53_ab07beda",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "5.11 Cancellation \ni. The Company may cancel the policy at any time, on grounds of misrepresentation, non-disclosure of material facts or \nestablished fraud by the insured person by giving 15 days’ written notice. There would be no refund of premium on \ncancellation on grounds of misrepresentation, non-disclosure of material facts or fraud. National Insurance Co. Ltd. \nPremises No. 18-0374, Plot no. CBD-81, \nNew Town, Kolkata - 700156 \nPage 16 of 25 \nNational Parivar Mediclaim Plus Policy \nUIN: NICHLIP25039V032425 ii. The policyholder may cancel his/her policy at any time during the term, by giving 7 days’ notice in writing. The Insurer shall: \na) refund proportionate premium for unexpired policy period, if the term of policy upto one year and there is no claim (s) \nmade during the policy period. \nb) refund premium for the unexpired policy period, in respect of policies with term more than 1 year and risk coverage for \nsuch policy years has not commenced and refund proportionate premiu"
+            },
+            "id": "input_20250809_153641.pdf_53_ab07beda",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 0.40590232224285866
+          }
+        ],
+        "evaluation": {
+          "answer": "Based on the policy documents, I found relevant information about your query: 'What is the No Claim Discount (NCD) offered in this policy?'. However, I'm currently experiencing high demand and cannot provide a detailed analysis. Please refer to the policy documents for specific details.",
+          "source_document": "input_20250809_153641.pdf",
+          "relevant_sections": [
+            1
+          ],
+          "search_method": "optimized_single_stage_search",
+          "reranker_type": "none",
+          "reranker_available": false,
+          "hybrid_search_enabled": true,
+          "reranking_enabled": false,
+          "total_candidates_retrieved": 3,
+          "final_chunks_used": 3,
+          "adjacent_chunks_per_vector": 10,
+          "advanced_search_features": {
+            "context_aware_search": true,
+            "query_expansion": false,
+            "content_type_balancing": true,
+            "result_deduplication": true,
+            "score_normalization": true
+          },
+          "performance_note": "⚡ Using optimized single-stage search with comprehensive adjacent context (5 before + 5 after) for each top vector"
+        },
+        "api_status": {
+          "gemini_available": true,
+          "model_name": "gemini-2.5-flash",
+          "quota_exceeded": false,
+          "fallback_reason": null,
+          "recommendations": [
+            "✅ Using gemini-2.5-flash for optimal results"
+          ]
+        },
+        "status": "success",
+        "success": true
+      },
+      {
+        "query": "Is there a benefit for preventive health check-ups?",
+        "search_results": [
+          {
+            "score": 0.823601604,
+            "content": "Reinstatement of sum insured due to road traffic accident \nYes \nYes \nYes \nGood Health Incentives No Claim Discount \n5% discount on base premium, \nHealth Check Up (as Floater) \nEvery 2 yrs., up to INR 5,000 \nEvery 2 yrs., up to INR \n7,500 \nEvery 2 yrs., up to INR \n10,000 \nOptional covers",
+            "text": "Reinstatement of sum insured due to road traffic accident \nYes \nYes \nYes \nGood Health Incentives No Claim Discount \n5% discount on base premium, \nHealth Check Up (as Floater) \nEvery 2 yrs., up to INR 5,000 \nEvery 2 yrs., up to INR \n7,500 \nEvery 2 yrs., up to INR \n10,000 \nOptional covers",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_73_d3d313f7",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "Reinstatement of sum insured due to road traffic accident \nYes \nYes \nYes \nGood Health Incentives No Claim Discount \n5% discount on base premium, \nHealth Check Up (as Floater) \nEvery 2 yrs., up to INR 5,000 \nEvery 2 yrs., up to INR \n7,500 \nEvery 2 yrs., up to INR \n10,000 \nOptional covers"
+            },
+            "id": "input_20250809_153641.pdf_73_d3d313f7",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 1.0
+          },
+          {
+            "score": 0.80266434,
+            "content": "3.2 GOOD HEALTH INCENTIVES \n3.2.1 No Claim Discount (NCD) \nOn renewal of policies with a term of one year, a NCD of flat 5% shall be allowed on the * base premium, provided claims are not \nreported in the expiring Policy. \nOn renewal of policies with a term exceeding one year, the NCD amount with respect to each claim free policy year shall be \naggregated and allowed on renewal. Aggregate amount of NCD allowed shall not exceed flat 5% of the total base premium for the \nterm of the policy. \n* Base premium depends on the zone and sum insured and is the aggregate of the premium for senior most insured person and other insured \npersons for a year. 3.2.2 Health Check Up \nExpenses of health check up shall be reimbursed (irrespective of past claims) at the end of a block of two continuous policy years, \nprovided the Policy has been continuously renewed with the Company without a break. Expenses payable are subject to the limit \nstated in the Table of Benefits. 4 EXCLUSIONS \nThe Company shall ",
+            "text": "3.2 GOOD HEALTH INCENTIVES \n3.2.1 No Claim Discount (NCD) \nOn renewal of policies with a term of one year, a NCD of flat 5% shall be allowed on the * base premium, provided claims are not \nreported in the expiring Policy. \nOn renewal of policies with a term exceeding one year, the NCD amount with respect to each claim free policy year shall be \naggregated and allowed on renewal. Aggregate amount of NCD allowed shall not exceed flat 5% of the total base premium for the \nterm of the policy. \n* Base premium depends on the zone and sum insured and is the aggregate of the premium for senior most insured person and other insured \npersons for a year. 3.2.2 Health Check Up \nExpenses of health check up shall be reimbursed (irrespective of past claims) at the end of a block of two continuous policy years, \nprovided the Policy has been continuously renewed with the Company without a break. Expenses payable are subject to the limit \nstated in the Table of Benefits. 4 EXCLUSIONS \nThe Company shall ",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_29_e01a88d8",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "3.2 GOOD HEALTH INCENTIVES \n3.2.1 No Claim Discount (NCD) \nOn renewal of policies with a term of one year, a NCD of flat 5% shall be allowed on the * base premium, provided claims are not \nreported in the expiring Policy. \nOn renewal of policies with a term exceeding one year, the NCD amount with respect to each claim free policy year shall be \naggregated and allowed on renewal. Aggregate amount of NCD allowed shall not exceed flat 5% of the total base premium for the \nterm of the policy. \n* Base premium depends on the zone and sum insured and is the aggregate of the premium for senior most insured person and other insured \npersons for a year. 3.2.2 Health Check Up \nExpenses of health check up shall be reimbursed (irrespective of past claims) at the end of a block of two continuous policy years, \nprovided the Policy has been continuously renewed with the Company without a break. Expenses payable are subject to the limit \nstated in the Table of Benefits. 4 EXCLUSIONS \nThe Company shall "
+            },
+            "id": "input_20250809_153641.pdf_29_e01a88d8",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 0.6248020007440418
+          },
+          {
+            "score": 0.791815042,
+            "content": "4.1. Pre-Existing Diseases (Excl 01) \na) Expenses related to the treatment of a Pre-Existing Disease (PED) and its direct complications shall be excluded until the \nexpiry of thirty six (36) months of continuous coverage after the date of inception of the first policy with us. \nb) In case of enhancement of sum insured the exclusion shall apply afresh to the extent of sum insured increase. \nc) If the Insured Person is continuously covered without any break as defined under the portability norms of the extant IRDAI \n(Health Insurance) Regulations then waiting period for the same would be reduced to the extent of prior coverage. \nd) Coverage under the policy after the expiry of thirty six (36) months for any pre-existing disease is subject to the same being \ndeclared at the time of application and accepted by us.",
+            "text": "4.1. Pre-Existing Diseases (Excl 01) \na) Expenses related to the treatment of a Pre-Existing Disease (PED) and its direct complications shall be excluded until the \nexpiry of thirty six (36) months of continuous coverage after the date of inception of the first policy with us. \nb) In case of enhancement of sum insured the exclusion shall apply afresh to the extent of sum insured increase. \nc) If the Insured Person is continuously covered without any break as defined under the portability norms of the extant IRDAI \n(Health Insurance) Regulations then waiting period for the same would be reduced to the extent of prior coverage. \nd) Coverage under the policy after the expiry of thirty six (36) months for any pre-existing disease is subject to the same being \ndeclared at the time of application and accepted by us.",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_30_7c6807a5",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "4.1. Pre-Existing Diseases (Excl 01) \na) Expenses related to the treatment of a Pre-Existing Disease (PED) and its direct complications shall be excluded until the \nexpiry of thirty six (36) months of continuous coverage after the date of inception of the first policy with us. \nb) In case of enhancement of sum insured the exclusion shall apply afresh to the extent of sum insured increase. \nc) If the Insured Person is continuously covered without any break as defined under the portability norms of the extant IRDAI \n(Health Insurance) Regulations then waiting period for the same would be reduced to the extent of prior coverage. \nd) Coverage under the policy after the expiry of thirty six (36) months for any pre-existing disease is subject to the same being \ndeclared at the time of application and accepted by us."
+            },
+            "id": "input_20250809_153641.pdf_30_7c6807a5",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 0.4303814258813636
+          }
+        ],
+        "evaluation": {
+          "answer": "Yes, the policy provides a reimbursement for health check-up expenses at the end of every block of two continuous policy years. This benefit is available irrespective of past claims, with limits up to ₹5,000, ₹7,500, or ₹10,000 depending on the specific plan.",
+          "source_document": "input_20250809_153641.pdf",
+          "relevant_sections": [
+            1,
+            2
+          ],
+          "context_stats": {
+            "total_vectors": 3,
+            "total_context_length": 11826,
+            "chunks_per_vector": 51
+          },
+          "search_method": "optimized_single_stage_search",
+          "reranker_type": "none",
+          "reranker_available": false,
+          "hybrid_search_enabled": true,
+          "reranking_enabled": false,
+          "total_candidates_retrieved": 3,
+          "final_chunks_used": 3,
+          "adjacent_chunks_per_vector": 10,
+          "advanced_search_features": {
+            "context_aware_search": true,
+            "query_expansion": false,
+            "content_type_balancing": true,
+            "result_deduplication": true,
+            "score_normalization": true
+          },
+          "performance_note": "⚡ Using optimized single-stage search with comprehensive adjacent context (5 before + 5 after) for each top vector"
+        },
+        "api_status": {
+          "gemini_available": true,
+          "model_name": "gemini-2.5-pro",
+          "quota_exceeded": true,
+          "fallback_reason": "Quota exceeded for gemini-2.5-flash",
+          "recommendations": [
+            "🚨 Gemini API quota exceeded - system is using fallback methods",
+            "💡 Wait for quota reset (usually 24 hours) or upgrade your API plan",
+            "📚 Student tier: Check Google AI Studio for quota details",
+            "⚡ Fallback methods provide ~70% accuracy vs LLM's 95%"
+          ]
+        },
+        "status": "success",
+        "success": true
+      },
+      {
+        "query": "How does the policy define a 'Hospital'?",
+        "search_results": [
+          {
+            "score": 0.833760798,
+            "content": "2.22 Hospital means any institution established for in-patient care and day care treatment of disease/ injuries and which has been \nregistered as a hospital with the local authorities under the Clinical Establishments (Registration and Regulation) Act, 2010 or \nunder the enactments specified under Schedule of Section 56(1) of the said Act, OR complies with all minimum criteria as \nunder: \ni. \nhas qualified nursing staff under its employment round the clock; \nii. has at least ten inpatient beds, in those towns having a population of less than ten lacs and fifteen inpatient beds in \nall other places; \niii. has qualified medical practitioner (s) in charge round the clock; \niv. has a fully equipped operation theatre of its own where surgical procedures are carried out \nv. maintains daily records of patients and shall make these accessible to the Company’s authorized personnel. National Insurance Co. Ltd. \nPremises No. 18-0374, Plot no. CBD-81, \nNew Town, Kolkata - 700156 \nPage 3 of 25 \nNat",
+            "text": "2.22 Hospital means any institution established for in-patient care and day care treatment of disease/ injuries and which has been \nregistered as a hospital with the local authorities under the Clinical Establishments (Registration and Regulation) Act, 2010 or \nunder the enactments specified under Schedule of Section 56(1) of the said Act, OR complies with all minimum criteria as \nunder: \ni. \nhas qualified nursing staff under its employment round the clock; \nii. has at least ten inpatient beds, in those towns having a population of less than ten lacs and fifteen inpatient beds in \nall other places; \niii. has qualified medical practitioner (s) in charge round the clock; \niv. has a fully equipped operation theatre of its own where surgical procedures are carried out \nv. maintains daily records of patients and shall make these accessible to the Company’s authorized personnel. National Insurance Co. Ltd. \nPremises No. 18-0374, Plot no. CBD-81, \nNew Town, Kolkata - 700156 \nPage 3 of 25 \nNat",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_7_e7edbd4d",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "2.22 Hospital means any institution established for in-patient care and day care treatment of disease/ injuries and which has been \nregistered as a hospital with the local authorities under the Clinical Establishments (Registration and Regulation) Act, 2010 or \nunder the enactments specified under Schedule of Section 56(1) of the said Act, OR complies with all minimum criteria as \nunder: \ni. \nhas qualified nursing staff under its employment round the clock; \nii. has at least ten inpatient beds, in those towns having a population of less than ten lacs and fifteen inpatient beds in \nall other places; \niii. has qualified medical practitioner (s) in charge round the clock; \niv. has a fully equipped operation theatre of its own where surgical procedures are carried out \nv. maintains daily records of patients and shall make these accessible to the Company’s authorized personnel. National Insurance Co. Ltd. \nPremises No. 18-0374, Plot no. CBD-81, \nNew Town, Kolkata - 700156 \nPage 3 of 25 \nNat"
+            },
+            "id": "input_20250809_153641.pdf_7_e7edbd4d",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 1.0
+          },
+          {
+            "score": 0.820230484,
+            "content": "1 PREAMBLE \nThe Company undertakes that if during the Policy Period, any Insured Person shall suffer any illness or disease (hereinafter called \nIllness) or sustain any bodily injury due to an Accident (hereinafter called Injury) requiring Hospitalisation of such Insured \nPerson(s) for In-Patient Care at any hospital/nursing home (hereinafter called Hospital) or for Day Care Treatment at any Day \nCare Center or to undergo treatment under Domiciliary Hospitalisation, following the Medical Advice of a duly qualified Medical \nPractitioner, the Company shall indemnify the Hospital or the Insured, Reasonable and Customary Charges incurred for Medically \nNecessary Treatment towards the Coverage mentioned herein. \nProvided further that, the amount payable under the Policy in respect of all such claims during each Policy Year of the Policy \nPeriod shall be subject to the Definitions, Terms, Exclusions, Conditions contained herein and limits as shown in the Table of \nBenefits, and shall not exc",
+            "text": "1 PREAMBLE \nThe Company undertakes that if during the Policy Period, any Insured Person shall suffer any illness or disease (hereinafter called \nIllness) or sustain any bodily injury due to an Accident (hereinafter called Injury) requiring Hospitalisation of such Insured \nPerson(s) for In-Patient Care at any hospital/nursing home (hereinafter called Hospital) or for Day Care Treatment at any Day \nCare Center or to undergo treatment under Domiciliary Hospitalisation, following the Medical Advice of a duly qualified Medical \nPractitioner, the Company shall indemnify the Hospital or the Insured, Reasonable and Customary Charges incurred for Medically \nNecessary Treatment towards the Coverage mentioned herein. \nProvided further that, the amount payable under the Policy in respect of all such claims during each Policy Year of the Policy \nPeriod shall be subject to the Definitions, Terms, Exclusions, Conditions contained herein and limits as shown in the Table of \nBenefits, and shall not exc",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_1_f69f4bdf",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "1 PREAMBLE \nThe Company undertakes that if during the Policy Period, any Insured Person shall suffer any illness or disease (hereinafter called \nIllness) or sustain any bodily injury due to an Accident (hereinafter called Injury) requiring Hospitalisation of such Insured \nPerson(s) for In-Patient Care at any hospital/nursing home (hereinafter called Hospital) or for Day Care Treatment at any Day \nCare Center or to undergo treatment under Domiciliary Hospitalisation, following the Medical Advice of a duly qualified Medical \nPractitioner, the Company shall indemnify the Hospital or the Insured, Reasonable and Customary Charges incurred for Medically \nNecessary Treatment towards the Coverage mentioned herein. \nProvided further that, the amount payable under the Policy in respect of all such claims during each Policy Year of the Policy \nPeriod shall be subject to the Definitions, Terms, Exclusions, Conditions contained herein and limits as shown in the Table of \nBenefits, and shall not exc"
+            },
+            "id": "input_20250809_153641.pdf_1_f69f4bdf",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 0.7589270897338066
+          },
+          {
+            "score": 0.813757539,
+            "content": "2.6 AYUSH Treatment refers to the medical and / or Hospitalisation treatments given Ayurveda, Yoga and Naturopathy, Unani, \nSiddha and Homeopathy systems. 2.7 AYUSH Hospital is a healthcare facility wherein medical/surgical/para-surgical treatment procedures and interventions are \ncarried out by AYUSH Medical Practitioner(s) comprising of any of the following: \na. Central or State Government AYUSH Hospital or \nb. Teaching hospital attached to AYUSH College recognized by the Central Government/ Central Council of Indian \nMedicine/ Central Council for Homeopathy; or \nc. AYUSH Hospital, standalone or co-located with in-patient healthcare facility of any recognized system of medicine, \nregistered with the local authorities, wherever applicable, and is under the supervision of a qualified registered \nAYUSH Medical Practitioner and must comply with all the following criterion: \ni. Having at least 5 in-patient beds; \nii. Having qualified AYUSH Medical Practitioner in charge round the clock; \n",
+            "text": "2.6 AYUSH Treatment refers to the medical and / or Hospitalisation treatments given Ayurveda, Yoga and Naturopathy, Unani, \nSiddha and Homeopathy systems. 2.7 AYUSH Hospital is a healthcare facility wherein medical/surgical/para-surgical treatment procedures and interventions are \ncarried out by AYUSH Medical Practitioner(s) comprising of any of the following: \na. Central or State Government AYUSH Hospital or \nb. Teaching hospital attached to AYUSH College recognized by the Central Government/ Central Council of Indian \nMedicine/ Central Council for Homeopathy; or \nc. AYUSH Hospital, standalone or co-located with in-patient healthcare facility of any recognized system of medicine, \nregistered with the local authorities, wherever applicable, and is under the supervision of a qualified registered \nAYUSH Medical Practitioner and must comply with all the following criterion: \ni. Having at least 5 in-patient beds; \nii. Having qualified AYUSH Medical Practitioner in charge round the clock; \n",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_3_720c5797",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "2.6 AYUSH Treatment refers to the medical and / or Hospitalisation treatments given Ayurveda, Yoga and Naturopathy, Unani, \nSiddha and Homeopathy systems. 2.7 AYUSH Hospital is a healthcare facility wherein medical/surgical/para-surgical treatment procedures and interventions are \ncarried out by AYUSH Medical Practitioner(s) comprising of any of the following: \na. Central or State Government AYUSH Hospital or \nb. Teaching hospital attached to AYUSH College recognized by the Central Government/ Central Council of Indian \nMedicine/ Central Council for Homeopathy; or \nc. AYUSH Hospital, standalone or co-located with in-patient healthcare facility of any recognized system of medicine, \nregistered with the local authorities, wherever applicable, and is under the supervision of a qualified registered \nAYUSH Medical Practitioner and must comply with all the following criterion: \ni. Having at least 5 in-patient beds; \nii. Having qualified AYUSH Medical Practitioner in charge round the clock; \n"
+            },
+            "id": "input_20250809_153641.pdf_3_720c5797",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 0.6435970471979875
+          }
+        ],
+        "evaluation": {
+          "answer": "Based on the policy documents, I found relevant information about your query: 'How does the policy define a 'Hospital'?'. However, I'm currently experiencing high demand and cannot provide a detailed analysis. Please refer to the policy documents for specific details.",
+          "source_document": "input_20250809_153641.pdf",
+          "relevant_sections": [
+            1
+          ],
+          "search_method": "optimized_single_stage_search",
+          "reranker_type": "none",
+          "reranker_available": false,
+          "hybrid_search_enabled": true,
+          "reranking_enabled": false,
+          "total_candidates_retrieved": 3,
+          "final_chunks_used": 3,
+          "adjacent_chunks_per_vector": 10,
+          "advanced_search_features": {
+            "context_aware_search": true,
+            "query_expansion": false,
+            "content_type_balancing": true,
+            "result_deduplication": true,
+            "score_normalization": true
+          },
+          "performance_note": "⚡ Using optimized single-stage search with comprehensive adjacent context (5 before + 5 after) for each top vector"
+        },
+        "api_status": {
+          "gemini_available": true,
+          "model_name": "gemini-2.5-flash",
+          "quota_exceeded": false,
+          "fallback_reason": null,
+          "recommendations": [
+            "✅ Using gemini-2.5-flash for optimal results"
+          ]
+        },
+        "status": "success",
+        "success": true
+      },
+      {
+        "query": "What is the extent of coverage for AYUSH treatments?",
+        "search_results": [
+          {
+            "score": 0.871503115,
+            "content": "2.6 AYUSH Treatment refers to the medical and / or Hospitalisation treatments given Ayurveda, Yoga and Naturopathy, Unani, \nSiddha and Homeopathy systems. 2.7 AYUSH Hospital is a healthcare facility wherein medical/surgical/para-surgical treatment procedures and interventions are \ncarried out by AYUSH Medical Practitioner(s) comprising of any of the following: \na. Central or State Government AYUSH Hospital or \nb. Teaching hospital attached to AYUSH College recognized by the Central Government/ Central Council of Indian \nMedicine/ Central Council for Homeopathy; or \nc. AYUSH Hospital, standalone or co-located with in-patient healthcare facility of any recognized system of medicine, \nregistered with the local authorities, wherever applicable, and is under the supervision of a qualified registered \nAYUSH Medical Practitioner and must comply with all the following criterion: \ni. Having at least 5 in-patient beds; \nii. Having qualified AYUSH Medical Practitioner in charge round the clock; \n",
+            "text": "2.6 AYUSH Treatment refers to the medical and / or Hospitalisation treatments given Ayurveda, Yoga and Naturopathy, Unani, \nSiddha and Homeopathy systems. 2.7 AYUSH Hospital is a healthcare facility wherein medical/surgical/para-surgical treatment procedures and interventions are \ncarried out by AYUSH Medical Practitioner(s) comprising of any of the following: \na. Central or State Government AYUSH Hospital or \nb. Teaching hospital attached to AYUSH College recognized by the Central Government/ Central Council of Indian \nMedicine/ Central Council for Homeopathy; or \nc. AYUSH Hospital, standalone or co-located with in-patient healthcare facility of any recognized system of medicine, \nregistered with the local authorities, wherever applicable, and is under the supervision of a qualified registered \nAYUSH Medical Practitioner and must comply with all the following criterion: \ni. Having at least 5 in-patient beds; \nii. Having qualified AYUSH Medical Practitioner in charge round the clock; \n",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_3_720c5797",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "2.6 AYUSH Treatment refers to the medical and / or Hospitalisation treatments given Ayurveda, Yoga and Naturopathy, Unani, \nSiddha and Homeopathy systems. 2.7 AYUSH Hospital is a healthcare facility wherein medical/surgical/para-surgical treatment procedures and interventions are \ncarried out by AYUSH Medical Practitioner(s) comprising of any of the following: \na. Central or State Government AYUSH Hospital or \nb. Teaching hospital attached to AYUSH College recognized by the Central Government/ Central Council of Indian \nMedicine/ Central Council for Homeopathy; or \nc. AYUSH Hospital, standalone or co-located with in-patient healthcare facility of any recognized system of medicine, \nregistered with the local authorities, wherever applicable, and is under the supervision of a qualified registered \nAYUSH Medical Practitioner and must comply with all the following criterion: \ni. Having at least 5 in-patient beds; \nii. Having qualified AYUSH Medical Practitioner in charge round the clock; \n"
+            },
+            "id": "input_20250809_153641.pdf_3_720c5797",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 1.0
+          },
+          {
+            "score": 0.846186101,
+            "content": "2.2 Age / Aged means completed years on last birthday as on Policy commencement date. 2.3 AIDS means Acquired Immune Deficiency Syndrome, a condition characterised by a combination of signs and symptoms, \ncaused by Human Immunodeficiency Virus (HIV), which attacks and weakens the body’s immune system making the HIV-\npositive person susceptible to life threatening conditions or other conditions, as may be specified from time to time. 2.4 Any One Illness means continuous period of illness and it includes relapse within forty five days from the date of last \nconsultation with the hospital where treatment has been taken. 2.5 AYUSH Day Care Centre means and includes Community Health Centre (CHC), Primary Health Centre (PHC), Dispensary, \nClinic, Polyclinic or any such health centre which is registered with the local authorities, wherever applicable and having \nfacilities for carrying out treatment procedures and medical or surgical / para-surgical interventions or both under the \nsupervisio",
+            "text": "2.2 Age / Aged means completed years on last birthday as on Policy commencement date. 2.3 AIDS means Acquired Immune Deficiency Syndrome, a condition characterised by a combination of signs and symptoms, \ncaused by Human Immunodeficiency Virus (HIV), which attacks and weakens the body’s immune system making the HIV-\npositive person susceptible to life threatening conditions or other conditions, as may be specified from time to time. 2.4 Any One Illness means continuous period of illness and it includes relapse within forty five days from the date of last \nconsultation with the hospital where treatment has been taken. 2.5 AYUSH Day Care Centre means and includes Community Health Centre (CHC), Primary Health Centre (PHC), Dispensary, \nClinic, Polyclinic or any such health centre which is registered with the local authorities, wherever applicable and having \nfacilities for carrying out treatment procedures and medical or surgical / para-surgical interventions or both under the \nsupervisio",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_2_55ea860a",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "2.2 Age / Aged means completed years on last birthday as on Policy commencement date. 2.3 AIDS means Acquired Immune Deficiency Syndrome, a condition characterised by a combination of signs and symptoms, \ncaused by Human Immunodeficiency Virus (HIV), which attacks and weakens the body’s immune system making the HIV-\npositive person susceptible to life threatening conditions or other conditions, as may be specified from time to time. 2.4 Any One Illness means continuous period of illness and it includes relapse within forty five days from the date of last \nconsultation with the hospital where treatment has been taken. 2.5 AYUSH Day Care Centre means and includes Community Health Centre (CHC), Primary Health Centre (PHC), Dispensary, \nClinic, Polyclinic or any such health centre which is registered with the local authorities, wherever applicable and having \nfacilities for carrying out treatment procedures and medical or surgical / para-surgical interventions or both under the \nsupervisio"
+            },
+            "id": "input_20250809_153641.pdf_2_55ea860a",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 0.7006874797028405
+          },
+          {
+            "score": 0.841741383,
+            "content": "Table of Benefits: \nFeatures \nPlans PLAN A \nPLAN B \nPLAN C \nSum insured (SI) (as Floater) \nINR 6/ 7/ 8/ 9 /10 Lac \nINR 15/ 20 /25 Lac \nINR 30/ 40/ 50 Lac \nTreatment \nAllopathy, AYUSH \nIn built Covers (subject to the SI)",
+            "text": "Table of Benefits: \nFeatures \nPlans PLAN A \nPLAN B \nPLAN C \nSum insured (SI) (as Floater) \nINR 6/ 7/ 8/ 9 /10 Lac \nINR 15/ 20 /25 Lac \nINR 30/ 40/ 50 Lac \nTreatment \nAllopathy, AYUSH \nIn built Covers (subject to the SI)",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_71_c18c1fa0",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "Table of Benefits: \nFeatures \nPlans PLAN A \nPLAN B \nPLAN C \nSum insured (SI) (as Floater) \nINR 6/ 7/ 8/ 9 /10 Lac \nINR 15/ 20 /25 Lac \nINR 30/ 40/ 50 Lac \nTreatment \nAllopathy, AYUSH \nIn built Covers (subject to the SI)"
+            },
+            "id": "input_20250809_153641.pdf_71_c18c1fa0",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 0.6481394285547014
+          }
+        ],
+        "evaluation": {
+          "answer": "The policy covers medical and hospitalization expenses for treatments under Ayurveda, Yoga, Naturopathy, Unani, Siddha, and Homeopathy. These treatments are only covered if they are administered in a qualified AYUSH Hospital or AYUSH Day Care Centre that meets the specific criteria outlined in the policy terms.",
+          "source_document": "input_20250809_153641.pdf",
+          "relevant_sections": [
+            1,
+            2
+          ],
+          "context_stats": {
+            "total_vectors": 3,
+            "total_context_length": 12539,
+            "chunks_per_vector": 51
+          },
+          "search_method": "optimized_single_stage_search",
+          "reranker_type": "none",
+          "reranker_available": false,
+          "hybrid_search_enabled": true,
+          "reranking_enabled": false,
+          "total_candidates_retrieved": 3,
+          "final_chunks_used": 3,
+          "adjacent_chunks_per_vector": 10,
+          "advanced_search_features": {
+            "context_aware_search": true,
+            "query_expansion": false,
+            "content_type_balancing": true,
+            "result_deduplication": true,
+            "score_normalization": true
+          },
+          "performance_note": "⚡ Using optimized single-stage search with comprehensive adjacent context (5 before + 5 after) for each top vector"
+        },
+        "api_status": {
+          "gemini_available": true,
+          "model_name": "gemini-2.5-pro",
+          "quota_exceeded": true,
+          "fallback_reason": "Quota exceeded for gemini-2.5-flash",
+          "recommendations": [
+            "🚨 Gemini API quota exceeded - system is using fallback methods",
+            "💡 Wait for quota reset (usually 24 hours) or upgrade your API plan",
+            "📚 Student tier: Check Google AI Studio for quota details",
+            "⚡ Fallback methods provide ~70% accuracy vs LLM's 95%"
+          ]
+        },
+        "status": "success",
+        "success": true
+      },
+      {
+        "query": "Are there any sub-limits on room rent and ICU charges for Plan A?",
+        "search_results": [
+          {
+            "score": 0.850962,
+            "content": "3 BENEFITS COVERED UNDER THE POLICY \n3.1COVERAGE \n3.1.1 In-patient Treatment \nThe Company shall indemnify the medical expenses for: \ni. \nRoom charges and intensive care unit charges (including diet charges, nursing care by qualified nurse, RMO charges, \nadministration charges for IV fluids/blood transfusion/injection), subject to limit as per Section 3.1.1.1 \nii. Medical practitioner(s) \niii. Anaesthesia, blood, oxygen, operation theatre charges, surgical appliances \niv. Medicines and drugs \nv. Diagnostic procedures \nvi. Prosthetics and other devices or equipment if implanted internally during a surgical procedure. \nvii. Dental treatment, necessitated due to an injury \nviii. Plastic surgery, necessitated due to disease or injury \nix. Hormone replacement therapy, if medically necessary \nx. Vitamins and tonics, forming part of treatment for disease/injury as certified by the attending medical practitioner \nxi. Circumcision, necessitated for treatment of a disease or injury 3.1.1.1 Limit ",
+            "text": "3 BENEFITS COVERED UNDER THE POLICY \n3.1COVERAGE \n3.1.1 In-patient Treatment \nThe Company shall indemnify the medical expenses for: \ni. \nRoom charges and intensive care unit charges (including diet charges, nursing care by qualified nurse, RMO charges, \nadministration charges for IV fluids/blood transfusion/injection), subject to limit as per Section 3.1.1.1 \nii. Medical practitioner(s) \niii. Anaesthesia, blood, oxygen, operation theatre charges, surgical appliances \niv. Medicines and drugs \nv. Diagnostic procedures \nvi. Prosthetics and other devices or equipment if implanted internally during a surgical procedure. \nvii. Dental treatment, necessitated due to an injury \nviii. Plastic surgery, necessitated due to disease or injury \nix. Hormone replacement therapy, if medically necessary \nx. Vitamins and tonics, forming part of treatment for disease/injury as certified by the attending medical practitioner \nxi. Circumcision, necessitated for treatment of a disease or injury 3.1.1.1 Limit ",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_15_2e0dfa4f",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "3 BENEFITS COVERED UNDER THE POLICY \n3.1COVERAGE \n3.1.1 In-patient Treatment \nThe Company shall indemnify the medical expenses for: \ni. \nRoom charges and intensive care unit charges (including diet charges, nursing care by qualified nurse, RMO charges, \nadministration charges for IV fluids/blood transfusion/injection), subject to limit as per Section 3.1.1.1 \nii. Medical practitioner(s) \niii. Anaesthesia, blood, oxygen, operation theatre charges, surgical appliances \niv. Medicines and drugs \nv. Diagnostic procedures \nvi. Prosthetics and other devices or equipment if implanted internally during a surgical procedure. \nvii. Dental treatment, necessitated due to an injury \nviii. Plastic surgery, necessitated due to disease or injury \nix. Hormone replacement therapy, if medically necessary \nx. Vitamins and tonics, forming part of treatment for disease/injury as certified by the attending medical practitioner \nxi. Circumcision, necessitated for treatment of a disease or injury 3.1.1.1 Limit "
+            },
+            "id": "input_20250809_153641.pdf_15_2e0dfa4f",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 1.0
+          },
+          {
+            "score": 0.842935264,
+            "content": "Exclusions \nAny kind of Psychological counselling, cognitive/ family/ group/ behavior/ palliative therapy or other kinds of psychotherapy for \nwhich Hospitalisation is not necessary shall not be covered. 3.1.19 Modern Treatment \nThe Company shall indemnify the Medical Expenses for In-Patient Care, Domiciliary Hospitalisation or Day Care Procedure along \nwith Pre Hospitalisation expenses and Post Hospitalisation expenses incurred for following Modern Treatments (wherever \nmedically indicated), subject to the limit of 25% of the Sum Insured for the related modern procedure/ component/ medicine of each \nModern Treatment during the Policy Period. Modern Treatment \nCoverage \nUAE & HIFU \nLimit is for Procedure cost only \nBalloon Sinuplasty \nLimit is for Balloon cost only \nDeep Brain Stimulation \nLimit is for implants including batteries only \nOral Chemotherapy \nOnly cost of medicines payable under this limit, other incidental charges like investigations and consultation \ncharges not payable.",
+            "text": "Exclusions \nAny kind of Psychological counselling, cognitive/ family/ group/ behavior/ palliative therapy or other kinds of psychotherapy for \nwhich Hospitalisation is not necessary shall not be covered. 3.1.19 Modern Treatment \nThe Company shall indemnify the Medical Expenses for In-Patient Care, Domiciliary Hospitalisation or Day Care Procedure along \nwith Pre Hospitalisation expenses and Post Hospitalisation expenses incurred for following Modern Treatments (wherever \nmedically indicated), subject to the limit of 25% of the Sum Insured for the related modern procedure/ component/ medicine of each \nModern Treatment during the Policy Period. Modern Treatment \nCoverage \nUAE & HIFU \nLimit is for Procedure cost only \nBalloon Sinuplasty \nLimit is for Balloon cost only \nDeep Brain Stimulation \nLimit is for implants including batteries only \nOral Chemotherapy \nOnly cost of medicines payable under this limit, other incidental charges like investigations and consultation \ncharges not payable.",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_26_b1784101",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "Exclusions \nAny kind of Psychological counselling, cognitive/ family/ group/ behavior/ palliative therapy or other kinds of psychotherapy for \nwhich Hospitalisation is not necessary shall not be covered. 3.1.19 Modern Treatment \nThe Company shall indemnify the Medical Expenses for In-Patient Care, Domiciliary Hospitalisation or Day Care Procedure along \nwith Pre Hospitalisation expenses and Post Hospitalisation expenses incurred for following Modern Treatments (wherever \nmedically indicated), subject to the limit of 25% of the Sum Insured for the related modern procedure/ component/ medicine of each \nModern Treatment during the Policy Period. Modern Treatment \nCoverage \nUAE & HIFU \nLimit is for Procedure cost only \nBalloon Sinuplasty \nLimit is for Balloon cost only \nDeep Brain Stimulation \nLimit is for implants including batteries only \nOral Chemotherapy \nOnly cost of medicines payable under this limit, other incidental charges like investigations and consultation \ncharges not payable."
+            },
+            "id": "input_20250809_153641.pdf_26_b1784101",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 0.8018713957186366
+          },
+          {
+            "score": 0.834117353,
+            "content": "Note: The expenses that are not covered in this policy are placed under List-l of Annexure-II of the Policy. The list of expenses that \nare to be subsumed into room charges, or procedure charges or costs of treatment are placed under List-II, List-III and List-IV of \nAnnexure-II of the Policy respectively \nAggregate of all the benefits under 3.1.1 to 3.1.21 are subject to the Floater Sum Insured opted. 3.1.22 Reinstatement of Sum Insured due to Road Traffic Accident \nIn the event of the sum insured being exhausted on account of claims arising out of any injury due to road traffic accident during a \npolicy year, if the Insured and/or Insured Person (s) has to subsequently incur any expenses on hospitalisation due to any other \ndisease/ injury, the Company shall reinstate the sum insured as mentioned in the schedule. Reinstatement shall be allowed only once \nduring the policy year and the maximum amount payable under a single claim shall not exceed the sum insured as mentioned in the \nsc",
+            "text": "Note: The expenses that are not covered in this policy are placed under List-l of Annexure-II of the Policy. The list of expenses that \nare to be subsumed into room charges, or procedure charges or costs of treatment are placed under List-II, List-III and List-IV of \nAnnexure-II of the Policy respectively \nAggregate of all the benefits under 3.1.1 to 3.1.21 are subject to the Floater Sum Insured opted. 3.1.22 Reinstatement of Sum Insured due to Road Traffic Accident \nIn the event of the sum insured being exhausted on account of claims arising out of any injury due to road traffic accident during a \npolicy year, if the Insured and/or Insured Person (s) has to subsequently incur any expenses on hospitalisation due to any other \ndisease/ injury, the Company shall reinstate the sum insured as mentioned in the schedule. Reinstatement shall be allowed only once \nduring the policy year and the maximum amount payable under a single claim shall not exceed the sum insured as mentioned in the \nsc",
+            "content_type": "text",
+            "metadata": {
+              "chunk_id": "input_20250809_153641.pdf_28_fa6c00b9",
+              "document_name": "input_20250809_153641.pdf",
+              "page_number": 0.0,
+              "text": "Note: The expenses that are not covered in this policy are placed under List-l of Annexure-II of the Policy. The list of expenses that \nare to be subsumed into room charges, or procedure charges or costs of treatment are placed under List-II, List-III and List-IV of \nAnnexure-II of the Policy respectively \nAggregate of all the benefits under 3.1.1 to 3.1.21 are subject to the Floater Sum Insured opted. 3.1.22 Reinstatement of Sum Insured due to Road Traffic Accident \nIn the event of the sum insured being exhausted on account of claims arising out of any injury due to road traffic accident during a \npolicy year, if the Insured and/or Insured Person (s) has to subsequently incur any expenses on hospitalisation due to any other \ndisease/ injury, the Company shall reinstate the sum insured as mentioned in the schedule. Reinstatement shall be allowed only once \nduring the policy year and the maximum amount payable under a single claim shall not exceed the sum insured as mentioned in the \nsc"
+            },
+            "id": "input_20250809_153641.pdf_28_fa6c00b9",
+            "document_name": "input_20250809_153641.pdf",
+            "page_number": 0.0,
+            "chunk_index": 0,
+            "normalized_score": 0.5842137576566319
+          }
+        ],
+        "evaluation": {
+          "answer": "Yes, room charges and intensive care unit charges are subject to a limit as per Section 3.1.1.1 of the policy. However, the provided policy context pertains to the \"National Parivar Mediclaim Plus Policy\" and does not contain any information specifically for a \"Plan A.\"",
+          "source_document": "input_20250809_153641.pdf",
+          "relevant_sections": [
+            1,
+            2
+          ],
+          "context_stats": {
+            "total_vectors": 3,
+            "total_context_length": 12539,
+            "chunks_per_vector": 51
+          },
+          "search_method": "optimized_single_stage_search",
+          "reranker_type": "none",
+          "reranker_available": false,
+          "hybrid_search_enabled": true,
+          "reranking_enabled": false,
+          "total_candidates_retrieved": 3,
+          "final_chunks_used": 3,
+          "adjacent_chunks_per_vector": 10,
+          "advanced_search_features": {
+            "context_aware_search": true,
+            "query_expansion": false,
+            "content_type_balancing": true,
+            "result_deduplication": true,
+            "score_normalization": true
+          },
+          "performance_note": "⚡ Using optimized single-stage search with comprehensive adjacent context (5 before + 5 after) for each top vector"
+        },
+        "api_status": {
+          "gemini_available": true,
+          "model_name": "gemini-2.5-flash",
+          "quota_exceeded": false,
+          "fallback_reason": null,
+          "recommendations": [
+            "✅ Using gemini-2.5-flash for optimal results"
+          ]
+        },
+        "status": "success",
+        "success": true
+      }
+    ],
+    "timings": {
+      "download_pdf": 0.25657176971435547,
+      "query_embedding": {
+        "total": 0.762984037399292,
+        "individual": [
+          0.7088487148284912,
+          0.7587511539459229,
+          0.7528889179229736,
+          0.7587590217590332,
+          0.7157108783721924,
+          0.7056338787078857,
+          0.6939330101013184,
+          0.757979154586792,
+          0.7030658721923828,
+          0.7485270500183105
+        ],
+        "thread_assignments": [
+          "Query 1: Thread 6201847808",
+          "Query 2: Thread 6218674176",
+          "Query 3: Thread 6235500544",
+          "Query 4: Thread 6252326912",
+          "Query 5: Thread 6269153280",
+          "Query 6: Thread 6285979648",
+          "Query 7: Thread 6302806016",
+          "Query 8: Thread 6319632384",
+          "Query 9: Thread 6336458752",
+          "Query 10: Thread 6353285120"
+        ]
+      },
+      "pdf_processing_and_indexing": 10.515581130981445,
+      "query_processor_initialization": 3.544137954711914,
+      "query_processing": {
+        "total": 173.76294660568237,
+        "parallel_execution_time": 49.273144245147705,
+        "average": 17.376294660568238,
+        "individual": [
+          8.310972929000854,
+          21.865057945251465,
+          9.414170026779175,
+          23.387909173965454,
+          8.065041065216064,
+          21.662062883377075,
+          22.911556005477905,
+          21.15604567527771,
+          27.40728187561035,
+          9.582849025726318
+        ],
+        "thread_assignments": [
+          "Query 1: Thread 6224408576",
+          "Query 2: Thread 6241234944",
+          "Query 3: Thread 6258061312",
+          "Query 4: Thread 6274887680",
+          "Query 5: Thread 6291714048",
+          "Query 6: Thread 12901707776",
+          "Query 7: Thread 12918534144",
+          "Query 8: Thread 12935360512",
+          "Query 9: Thread 12952186880",
+          "Query 10: Thread 12969013248"
+        ]
+      },
+      "cleanup_index": 0.9331231117248535,
+      "total_execution_time": 65.55667996406555
+    },
+    "cleanup_status": "Vectors deleted from Pinecone index",
+    "temp_directory": "/var/folders/l1/wb80156n0wzb8c13hthtbgkr0000gn/T/tmppe0bg19_",
+    "api_version": "2.2",
+    "model_info": {
+      "embedding_model": "multilingual-e5-large",
+      "temperature": 0.7,
+      "multithreading": true,
+      "max_embedding_workers": 10,
+      "max_query_workers": 5
+    }
+  },
+  "processing_summary": {
+    "total_questions": 10,
+    "total_time_seconds": 65.55667996406555,
+    "pdf_processing_time": 10.515581130981445,
+    "embedding_time": 0.762984037399292,
+    "query_processing_time": 173.76294660568237,
+    "parallel_execution_time": 49.273144245147705,
+    "max_individual_query_time": 27.40728187561035
+  },
+  "multithreading_metrics": {
+    "queries_processed": 10,
+    "embedding_workers": 10,
+    "query_workers": 5,
+    "embedding_speedup_ratio": 9.573067448870956,
+    "query_speedup_ratio": 3.526524423551357,
+    "individual_embedding_times": [
+      0.7088487148284912,
+      0.7587511539459229,
+      0.7528889179229736,
+      0.7587590217590332,
+      0.7157108783721924,
+      0.7056338787078857,
+      0.6939330101013184,
+      0.757979154586792,
+      0.7030658721923828,
+      0.7485270500183105
+    ],
+    "individual_query_times": [
+      8.310972929000854,
+      21.865057945251465,
+      9.414170026779175,
+      23.387909173965454,
+      8.065041065216064,
+      21.662062883377075,
+      22.911556005477905,
+      21.15604567527771,
+      27.40728187561035,
+      9.582849025726318
+    ],
+    "embedding_thread_assignments": [
+      "Query 1: Thread 6201847808",
+      "Query 2: Thread 6218674176",
+      "Query 3: Thread 6235500544",
+      "Query 4: Thread 6252326912",
+      "Query 5: Thread 6269153280",
+      "Query 6: Thread 6285979648",
+      "Query 7: Thread 6302806016",
+      "Query 8: Thread 6319632384",
+      "Query 9: Thread 6336458752",
+      "Query 10: Thread 6353285120"
+    ],
+    "query_thread_assignments": [
+      "Query 1: Thread 6224408576",
+      "Query 2: Thread 6241234944",
+      "Query 3: Thread 6258061312",
+      "Query 4: Thread 6274887680",
+      "Query 5: Thread 6291714048",
+      "Query 6: Thread 12901707776",
+      "Query 7: Thread 12918534144",
+      "Query 8: Thread 12935360512",
+      "Query 9: Thread 12952186880",
+      "Query 10: Thread 12969013248"
+    ],
+    "query_timing_details": [
+      {
+        "query_index": 0,
+        "query": "What is the grace period for premium payment under...",
+        "time_seconds": 8.310972929000854
+      },
+      {
+        "query_index": 1,
+        "query": "What is the waiting period for pre-existing diseas...",
+        "time_seconds": 21.865057945251465
+      },
+      {
+        "query_index": 2,
+        "query": "Does this policy cover maternity expenses, and wha...",
+        "time_seconds": 9.414170026779175
+      },
+      {
+        "query_index": 3,
+        "query": "What is the waiting period for cataract surgery?",
+        "time_seconds": 23.387909173965454
+      },
+      {
+        "query_index": 4,
+        "query": "Are the medical expenses for an organ donor covere...",
+        "time_seconds": 8.065041065216064
+      },
+      {
+        "query_index": 5,
+        "query": "What is the No Claim Discount (NCD) offered in thi...",
+        "time_seconds": 21.662062883377075
+      },
+      {
+        "query_index": 6,
+        "query": "Is there a benefit for preventive health check-ups...",
+        "time_seconds": 22.911556005477905
+      },
+      {
+        "query_index": 7,
+        "query": "How does the policy define a 'Hospital'?",
+        "time_seconds": 21.15604567527771
+      },
+      {
+        "query_index": 8,
+        "query": "What is the extent of coverage for AYUSH treatment...",
+        "time_seconds": 27.40728187561035
+      },
+      {
+        "query_index": 9,
+        "query": "Are there any sub-limits on room rent and ICU char...",
+        "time_seconds": 9.582849025726318
+      }
+    ]
+  }
+}

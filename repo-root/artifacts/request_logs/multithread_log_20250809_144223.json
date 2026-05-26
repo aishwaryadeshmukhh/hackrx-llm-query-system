@@ -1,0 +1,456 @@
+{
+  "timestamp": "2025-08-09T14:43:14.577077",
+  "request": {
+    "pdf_url": "https://hackrx.blob.core.windows.net/assets/policy.pdf?sv=2023-01-03&st=2025-07-04T09%3A11%3A24Z&se=2027-07-05T09%3A11%3A00Z&sr=b&sp=r&sig=N4a9OU0w0QXO6AOIBiu4bpl7AXvEZogeT%2FjUHNO7HzQ%3D",
+    "questions": [
+      "What is the grace period for premium payment under the National Parivar Mediclaim Plus Policy?",
+      "What is the waiting period for pre-existing diseases (PED) to be covered?",
+      "Does this policy cover maternity expenses, and what are the conditions?",
+      "What is the waiting period for cataract surgery?",
+      "Are the medical expenses for an organ donor covered under this policy?",
+      "What is the No Claim Discount (NCD) offered in this policy?",
+      "Is there a benefit for preventive health check-ups?",
+      "How does the policy define a 'Hospital'?",
+      "What is the extent of coverage for AYUSH treatments?",
+      "Are there any sub-limits on room rent and ICU charges for Plan A?"
+    ],
+    "pdf_filename": "input_20250809_144223.pdf",
+    "pdf_stored_path": "stored_pdfs/input_20250809_144223.pdf"
+  },
+  "comprehensive_response": {
+    "answers": [
+      {
+        "query": "What is the grace period for premium payment under the National Parivar Mediclaim Plus Policy?",
+        "search_results": [],
+        "evaluation": {
+          "decision": "error",
+          "amount": null,
+          "confidence": 0.0,
+          "justification": "Processing error: 'score'",
+          "relevant_clauses": [],
+          "reasoning": "System error occurred"
+        },
+        "api_status": {
+          "gemini_available": true,
+          "model_name": "gemini-2.5-flash",
+          "quota_exceeded": false,
+          "fallback_reason": null,
+          "recommendations": [
+            "✅ Using gemini-2.5-flash for optimal results"
+          ]
+        },
+        "status": "error",
+        "error": "'score'",
+        "success": false
+      },
+      {
+        "query": "What is the waiting period for pre-existing diseases (PED) to be covered?",
+        "search_results": [],
+        "evaluation": {
+          "decision": "error",
+          "amount": null,
+          "confidence": 0.0,
+          "justification": "Processing error: 'score'",
+          "relevant_clauses": [],
+          "reasoning": "System error occurred"
+        },
+        "api_status": {
+          "gemini_available": true,
+          "model_name": "gemini-2.5-flash",
+          "quota_exceeded": false,
+          "fallback_reason": null,
+          "recommendations": [
+            "✅ Using gemini-2.5-flash for optimal results"
+          ]
+        },
+        "status": "error",
+        "error": "'score'",
+        "success": false
+      },
+      {
+        "query": "Does this policy cover maternity expenses, and what are the conditions?",
+        "search_results": [],
+        "evaluation": {
+          "decision": "error",
+          "amount": null,
+          "confidence": 0.0,
+          "justification": "Processing error: 'score'",
+          "relevant_clauses": [],
+          "reasoning": "System error occurred"
+        },
+        "api_status": {
+          "gemini_available": true,
+          "model_name": "gemini-2.5-flash",
+          "quota_exceeded": false,
+          "fallback_reason": null,
+          "recommendations": [
+            "✅ Using gemini-2.5-flash for optimal results"
+          ]
+        },
+        "status": "error",
+        "error": "'score'",
+        "success": false
+      },
+      {
+        "query": "What is the waiting period for cataract surgery?",
+        "search_results": [],
+        "evaluation": {
+          "decision": "error",
+          "amount": null,
+          "confidence": 0.0,
+          "justification": "Processing error: 'score'",
+          "relevant_clauses": [],
+          "reasoning": "System error occurred"
+        },
+        "api_status": {
+          "gemini_available": true,
+          "model_name": "gemini-2.5-flash",
+          "quota_exceeded": false,
+          "fallback_reason": null,
+          "recommendations": [
+            "✅ Using gemini-2.5-flash for optimal results"
+          ]
+        },
+        "status": "error",
+        "error": "'score'",
+        "success": false
+      },
+      {
+        "query": "Are the medical expenses for an organ donor covered under this policy?",
+        "search_results": [],
+        "evaluation": {
+          "decision": "error",
+          "amount": null,
+          "confidence": 0.0,
+          "justification": "Processing error: 'score'",
+          "relevant_clauses": [],
+          "reasoning": "System error occurred"
+        },
+        "api_status": {
+          "gemini_available": true,
+          "model_name": "gemini-2.5-flash",
+          "quota_exceeded": false,
+          "fallback_reason": null,
+          "recommendations": [
+            "✅ Using gemini-2.5-flash for optimal results"
+          ]
+        },
+        "status": "error",
+        "error": "'score'",
+        "success": false
+      },
+      {
+        "query": "What is the No Claim Discount (NCD) offered in this policy?",
+        "search_results": [],
+        "evaluation": {
+          "decision": "error",
+          "amount": null,
+          "confidence": 0.0,
+          "justification": "Processing error: 'score'",
+          "relevant_clauses": [],
+          "reasoning": "System error occurred"
+        },
+        "api_status": {
+          "gemini_available": true,
+          "model_name": "gemini-2.5-flash",
+          "quota_exceeded": false,
+          "fallback_reason": null,
+          "recommendations": [
+            "✅ Using gemini-2.5-flash for optimal results"
+          ]
+        },
+        "status": "error",
+        "error": "'score'",
+        "success": false
+      },
+      {
+        "query": "Is there a benefit for preventive health check-ups?",
+        "search_results": [],
+        "evaluation": {
+          "decision": "error",
+          "amount": null,
+          "confidence": 0.0,
+          "justification": "Processing error: 'score'",
+          "relevant_clauses": [],
+          "reasoning": "System error occurred"
+        },
+        "api_status": {
+          "gemini_available": true,
+          "model_name": "gemini-2.5-flash",
+          "quota_exceeded": false,
+          "fallback_reason": null,
+          "recommendations": [
+            "✅ Using gemini-2.5-flash for optimal results"
+          ]
+        },
+        "status": "error",
+        "error": "'score'",
+        "success": false
+      },
+      {
+        "query": "How does the policy define a 'Hospital'?",
+        "search_results": [],
+        "evaluation": {
+          "decision": "error",
+          "amount": null,
+          "confidence": 0.0,
+          "justification": "Processing error: 'score'",
+          "relevant_clauses": [],
+          "reasoning": "System error occurred"
+        },
+        "api_status": {
+          "gemini_available": true,
+          "model_name": "gemini-2.5-flash",
+          "quota_exceeded": false,
+          "fallback_reason": null,
+          "recommendations": [
+            "✅ Using gemini-2.5-flash for optimal results"
+          ]
+        },
+        "status": "error",
+        "error": "'score'",
+        "success": false
+      },
+      {
+        "query": "What is the extent of coverage for AYUSH treatments?",
+        "search_results": [],
+        "evaluation": {
+          "decision": "error",
+          "amount": null,
+          "confidence": 0.0,
+          "justification": "Processing error: 'score'",
+          "relevant_clauses": [],
+          "reasoning": "System error occurred"
+        },
+        "api_status": {
+          "gemini_available": true,
+          "model_name": "gemini-2.5-flash",
+          "quota_exceeded": false,
+          "fallback_reason": null,
+          "recommendations": [
+            "✅ Using gemini-2.5-flash for optimal results"
+          ]
+        },
+        "status": "error",
+        "error": "'score'",
+        "success": false
+      },
+      {
+        "query": "Are there any sub-limits on room rent and ICU charges for Plan A?",
+        "search_results": [],
+        "evaluation": {
+          "decision": "error",
+          "amount": null,
+          "confidence": 0.0,
+          "justification": "Processing error: 'score'",
+          "relevant_clauses": [],
+          "reasoning": "System error occurred"
+        },
+        "api_status": {
+          "gemini_available": true,
+          "model_name": "gemini-2.5-pro",
+          "quota_exceeded": true,
+          "fallback_reason": "Quota exceeded for gemini-2.5-flash",
+          "recommendations": [
+            "🚨 Gemini API quota exceeded - system is using fallback methods",
+            "💡 Wait for quota reset (usually 24 hours) or upgrade your API plan",
+            "📚 Student tier: Check Google AI Studio for quota details",
+            "⚡ Fallback methods provide ~70% accuracy vs LLM's 95%"
+          ]
+        },
+        "status": "error",
+        "error": "'score'",
+        "success": false
+      }
+    ],
+    "timings": {
+      "download_pdf": 0.26485705375671387,
+      "query_embedding": {
+        "total": 0.6216459274291992,
+        "individual": [
+          0.6117570400238037,
+          0.6142578125,
+          0.5839581489562988,
+          0.587515115737915,
+          0.5694100856781006,
+          0.5720388889312744,
+          0.6192009449005127,
+          0.5833151340484619,
+          0.6052751541137695,
+          0.5849363803863525
+        ],
+        "thread_assignments": [
+          "Query 1: Thread 6135181312",
+          "Query 2: Thread 6152007680",
+          "Query 3: Thread 6168834048",
+          "Query 4: Thread 6185660416",
+          "Query 5: Thread 6202486784",
+          "Query 6: Thread 6219313152",
+          "Query 7: Thread 6236139520",
+          "Query 8: Thread 6252965888",
+          "Query 9: Thread 6269792256",
+          "Query 10: Thread 6286618624"
+        ]
+      },
+      "pdf_processing_and_indexing": 8.1788969039917,
+      "query_processor_initialization": 3.949997901916504,
+      "query_processing": {
+        "total": 134.75409626960754,
+        "parallel_execution_time": 36.92491006851196,
+        "average": 13.475409626960754,
+        "individual": [
+          18.553822994232178,
+          10.080631017684937,
+          12.863661289215088,
+          10.853954076766968,
+          13.64062786102295,
+          12.110499858856201,
+          12.72499418258667,
+          11.118502140045166,
+          14.436560869216919,
+          18.37084197998047
+        ],
+        "thread_assignments": [
+          "Query 1: Thread 6157742080",
+          "Query 2: Thread 6174568448",
+          "Query 3: Thread 6191394816",
+          "Query 4: Thread 6208221184",
+          "Query 5: Thread 6225047552",
+          "Query 6: Thread 6241873920",
+          "Query 7: Thread 6258700288",
+          "Query 8: Thread 6275526656",
+          "Query 9: Thread 6292353024",
+          "Query 10: Thread 6309179392"
+        ]
+      },
+      "cleanup_index": 1.0815417766571045,
+      "total_execution_time": 51.337469816207886
+    },
+    "cleanup_status": "Vectors deleted from Pinecone index",
+    "temp_directory": "/var/folders/l1/wb80156n0wzb8c13hthtbgkr0000gn/T/tmp99e8ztic",
+    "api_version": "2.2",
+    "model_info": {
+      "embedding_model": "multilingual-e5-large",
+      "temperature": 0.7,
+      "multithreading": true,
+      "max_embedding_workers": 10,
+      "max_query_workers": 5
+    }
+  },
+  "processing_summary": {
+    "total_questions": 10,
+    "total_time_seconds": 51.337469816207886,
+    "pdf_processing_time": 8.1788969039917,
+    "embedding_time": 0.6216459274291992,
+    "query_processing_time": 134.75409626960754,
+    "parallel_execution_time": 36.92491006851196,
+    "max_individual_query_time": 18.553822994232178
+  },
+  "multithreading_metrics": {
+    "queries_processed": 10,
+    "embedding_workers": 10,
+    "query_workers": 5,
+    "embedding_speedup_ratio": 9.5418701282364,
+    "query_speedup_ratio": 3.649408922583139,
+    "individual_embedding_times": [
+      0.6117570400238037,
+      0.6142578125,
+      0.5839581489562988,
+      0.587515115737915,
+      0.5694100856781006,
+      0.5720388889312744,
+      0.6192009449005127,
+      0.5833151340484619,
+      0.6052751541137695,
+      0.5849363803863525
+    ],
+    "individual_query_times": [
+      18.553822994232178,
+      10.080631017684937,
+      12.863661289215088,
+      10.853954076766968,
+      13.64062786102295,
+      12.110499858856201,
+      12.72499418258667,
+      11.118502140045166,
+      14.436560869216919,
+      18.37084197998047
+    ],
+    "embedding_thread_assignments": [
+      "Query 1: Thread 6135181312",
+      "Query 2: Thread 6152007680",
+      "Query 3: Thread 6168834048",
+      "Query 4: Thread 6185660416",
+      "Query 5: Thread 6202486784",
+      "Query 6: Thread 6219313152",
+      "Query 7: Thread 6236139520",
+      "Query 8: Thread 6252965888",
+      "Query 9: Thread 6269792256",
+      "Query 10: Thread 6286618624"
+    ],
+    "query_thread_assignments": [
+      "Query 1: Thread 6157742080",
+      "Query 2: Thread 6174568448",
+      "Query 3: Thread 6191394816",
+      "Query 4: Thread 6208221184",
+      "Query 5: Thread 6225047552",
+      "Query 6: Thread 6241873920",
+      "Query 7: Thread 6258700288",
+      "Query 8: Thread 6275526656",
+      "Query 9: Thread 6292353024",
+      "Query 10: Thread 6309179392"
+    ],
+    "query_timing_details": [
+      {
+        "query_index": 0,
+        "query": "What is the grace period for premium payment under...",
+        "time_seconds": 18.553822994232178
+      },
+      {
+        "query_index": 1,
+        "query": "What is the waiting period for pre-existing diseas...",
+        "time_seconds": 10.080631017684937
+      },
+      {
+        "query_index": 2,
+        "query": "Does this policy cover maternity expenses, and wha...",
+        "time_seconds": 12.863661289215088
+      },
+      {
+        "query_index": 3,
+        "query": "What is the waiting period for cataract surgery?",
+        "time_seconds": 10.853954076766968
+      },
+      {
+        "query_index": 4,
+        "query": "Are the medical expenses for an organ donor covere...",
+        "time_seconds": 13.64062786102295
+      },
+      {
+        "query_index": 5,
+        "query": "What is the No Claim Discount (NCD) offered in thi...",
+        "time_seconds": 12.110499858856201
+      },
+      {
+        "query_index": 6,
+        "query": "Is there a benefit for preventive health check-ups...",
+        "time_seconds": 12.72499418258667
+      },
+      {
+        "query_index": 7,
+        "query": "How does the policy define a 'Hospital'?",
+        "time_seconds": 11.118502140045166
+      },
+      {
+        "query_index": 8,
+        "query": "What is the extent of coverage for AYUSH treatment...",
+        "time_seconds": 14.436560869216919
+      },
+      {
+        "query_index": 9,
+        "query": "Are there any sub-limits on room rent and ICU char...",
+        "time_seconds": 18.37084197998047
+      }
+    ]
+  }
+}
