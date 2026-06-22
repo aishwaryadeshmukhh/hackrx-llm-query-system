@@ -1,0 +1,113 @@
+{
+  "run_id": "BAJHLIP23020V012223_20260622_185449",
+  "timestamp": "2026-06-22T18:54:49.669560",
+  "file": "BAJHLIP23020V012223.pdf",
+  "questions": [
+    "Is dental treatment covered under this policy? What is the waiting period for maternity benefits? Is a 45 year old male covered for knee replacement surgery done 2 months after policy inception?"
+  ],
+  "answers": [
+    {
+      "decision": "unclear",
+      "confidence": 0.4,
+      "answer": "The policy's coverage for dental treatment, maternity benefits waiting period, and knee replacement surgery is not explicitly stated or is unclear based on the information retrieved.",
+      "justification": "The searches provided some relevant information but did not directly answer the questions. Exclusion clauses and waiting periods were found, but they did not explicitly address the specific benefits in question. Definitions for related terms were also retrieved, which might imply some level of coverage but lack clarity.",
+      "relevant_clauses": [
+        {
+          "section": "Page 18",
+          "content": "Alternate/Complementary Treatment Expenses",
+          "page": 18
+        },
+        {
+          "section": "Page 28",
+          "content": "Out-patient Treatment",
+          "page": 28
+        },
+        {
+          "section": "Page 6",
+          "content": "Dental surgery outside India",
+          "page": 6
+        },
+        {
+          "section": "Page 30",
+          "content": "Waiting period for certain conditions",
+          "page": 30
+        },
+        {
+          "section": "Page 5",
+          "content": "Surgery or Surgical Procedure",
+          "page": 5
+        }
+      ],
+      "reasoning_trace": [
+        {
+          "step": 1,
+          "thought": "To answer the questions about coverage for dental treatment, maternity benefits waiting period, and knee replacement surgery, we first need to understand the general scope of the policy and what it covers. This will guide us on where to look for specific details on each of these benefits.",
+          "action": "search_policy",
+          "args": {
+            "query": "policy scope and benefits",
+            "policy_name": null,
+            "top_k": 5
+          },
+          "observation": "[1] BAJHLIP23020V012223.pdf p.10.0 (score=0.831)\n    53. We, Us, Our, Ours:- \nmeans the Bajaj Allianz General Insurance Company Limited. SECTION C) BENEFITS COVERED UNDER THE POLICY Type of Policy: Individual Tenure of Policy: 1 year Scope of cover: \nThe Company hereby agrees to pay Reasonable and Customary expenses in respect of an admissible claim, \n\n[2] BAJHLIP23020V012223.pdf p.28.0 (score=0.827)\n    C. Applicable to Part B-II (OUT-PATIENT BENEFITS FOR INTERNATIONAL COVER) 1. Out-patient Treatment \na. During the first year of Global Health Care Policy with Us, 30 days waiting period would be applicable for all \nclaims under out-patient except those arising out of Accidental Injury, however the w\n\n[3] BAJHLIP23020V012223.pdf p.18.0 (score=0.826)\n    2. Physiotherapy Benefit \nWe will pay the expenses incurred towards Prescribed Physiotherapy taken on Out-patient basis for Illness/Injury \ncontracted during the Policy Period, maximum up to the limit specified in the Policy Schedule, provided that, \na. The treatment is referred by a Doctor or presc\n\n[4] BAJHLIP23020V012223.pdf p.35.0 (score=0.822)\n    37. Territorial Limits & Governing Law (for Domestic Cover only): \ni. We cover medical expenses for treatment availed within India only. Our liability to make any payment shall be to \nmake payment within India and in Indian Rupees only. \nii. The Policy constitutes the complete contract of insurance.\n\n[5] BAJHLIP23020V012223.pdf p.17.0 (score=0.820)\n    15. In-patient cash benefit (Applicable to Imperial Plus Plan only) \nWe will pay Daily Cash Benefit as specified in the Policy Schedule for maximum 25 nights when You receive \nInpatient treatment free of charge for a medical condition that is covered by Us. \nThis benefit is payable after You are dis"
+        },
+        {
+          "step": 2,
+          "thought": "The initial search results provide a broad overview of the policy's scope, benefits, and some specific coverage details, but they do not directly address the questions about dental treatment, maternity benefits waiting period, or knee replacement surgery. To proceed, we need to specifically look for information on dental treatment coverage, as this will help us understand if there are any exclusions or specific waiting periods for this type of benefit.",
+          "action": "search_policy",
+          "args": {
+            "query": "dental treatment coverage",
+            "policy_name": null,
+            "top_k": 5
+          },
+          "observation": "[1] BAJHLIP23020V012223.pdf p.18.0 (score=0.871)\n    3. Alternate/Complementary Treatment Expenses \nIf You consult a therapist on Outpatient basis for the Illness/ Injury contracted during the Policy Period, We will pay \nYou Out Patient expenses up to the limits specified in the Policy Schedule for Alternate treatment methods namely \nchiropractic trea\n\n[2] BAJHLIP23020V012223.pdf p.28.0 (score=0.869)\n    C. Applicable to Part B-II (OUT-PATIENT BENEFITS FOR INTERNATIONAL COVER) 1. Out-patient Treatment \na. During the first year of Global Health Care Policy with Us, 30 days waiting period would be applicable for all \nclaims under out-patient except those arising out of Accidental Injury, however the w\n\n[3] BAJHLIP23020V012223.pdf p.6.0 (score=0.868)\n    8. Dental surgery outside India:- \nDental surgery outside India includes the surgical extraction of teeth, as well as other tooth-related surgical \nprocedures such as apicoectomy and dental prescription drugs. All investigative procedures that establish the \nneed for dental surgery such as laborator\n\n[4] BAJHLIP23020V012223.pdf p.19.0 (score=0.857)\n    UIN- BAJHLIP23020V012223 \n Global Health Care/ Policy Wordings/Page 19 Bajaj Allianz General Insurance Co. Ltd. \nBajaj Allianz House, Airport Road, Yerawada, Pune - 411 006. Reg. No.: 113 \nFor more details, log on to: www.bajajallianz.com | E-mail: bagichelp@bajajallianz.co.in or \nCall at: Sales - 1\n\n[5] BAJHLIP23020V012223.pdf p.2.0 (score=0.857)\n    12. Deductible:- \nDeductible means a cost sharing requirement under a health insurance Policy that provides that the insurer will \nnot be liable for a specified amount in case of indemnity policies and for a specified number of days/hours in case \nof Hospital cash policies which will apply before an"
+        },
+        {
+          "step": 3,
+          "thought": "The search results for dental treatment coverage provide some insights into what might be covered, particularly mentioning dental surgery outside India, but they do not explicitly state the coverage for general dental treatment within the policy's scope. Moreover, the results hint at the existence of waiting periods and specific conditions for out-patient treatments, which could be relevant for dental treatment as well. To clarify the coverage for dental treatment, we should check for any exclusion clauses related to dental care, as these could directly impact whether dental treatment is covered under the policy.",
+          "action": "lookup_exclusions",
+          "args": {
+            "procedure_or_condition": "dental treatment"
+          },
+          "observation": "[1] BAJHLIP23020V012223.pdf p.18.0 (score=0.867)\n    3. Alternate/Complementary Treatment Expenses \nIf You consult a therapist on Outpatient basis for the Illness/ Injury contracted during the Policy Period, We will pay \nYou Out Patient expenses up to the limits specified in the Policy Schedule for Alternate treatment methods namely \nchiropractic trea\n\n[2] BAJHLIP23020V012223.pdf p.26.0 (score=0.863)\n    18) Maternity (Code-Excl18): \na. Medical Treatment Expenses traceable to childbirth (including complicated deliveries and caesarean sections \nincurred during Hospitalization) except ectopic pregnancy. \nb. Expenses towards miscarriage (unless due to an Accident) and lawful medical termination of preg\n\n[3] BAJHLIP23020V012223.pdf p.22.0 (score=0.853)\n    10) Breach of law (Code -Excl10) \nExpenses for treatment directly arising from or consequent upon any Insured committing or attempting to commit \na breach of law with criminal intent. 11) Excluded Providers (Code -Excl11) \nExpenses incurred towards treatment in any Hospital or by any Medical Practit\n\n[4] BAJHLIP23020V012223.pdf p.15.0 (score=0.861)\n    Exclusions: Mental Illness Treatment does not cover: \na. Any expenses for Mental Illness Treatment related to Alcoholism, drug or substance abuse or any addictive \ncondition and consequences thereof. .\n\n[5] BAJHLIP23020V012223.pdf p.6.0 (score=0.865)\n    8. Dental surgery outside India:- \nDental surgery outside India includes the surgical extraction of teeth, as well as other tooth-related surgical \nprocedures such as apicoectomy and dental prescription drugs. All investigative procedures that establish the \nneed for dental surgery such as laborator"
+        },
+        {
+          "step": 4,
+          "thought": "The exclusion clauses found do not explicitly mention dental treatment as an excluded condition, but they do provide information on various other exclusions and conditions that are not covered under the policy. Given that dental surgery outside India is mentioned, it suggests that there might be some level of dental coverage, but the specifics for general dental treatment within the country or the waiting periods for such treatments are still unclear. To further clarify the coverage for dental treatment and to address the question about the waiting period for maternity benefits, we should check the waiting periods for different benefits under the policy, starting with maternity benefits, as this will provide direct information on what we are looking for.",
+          "action": "check_waiting_period",
+          "args": {
+            "benefit_type": "maternity benefits"
+          },
+          "observation": "[1] BAJHLIP23020V012223.pdf p.30.0 (score=0.855)\n    % of: Monthly\n% of: Premium\n: Up to 15 days from 1st Instalment Date | % of: As per Free Look Period Condition\n: Exceeding 15 days but less than or equal to 3 | : No Refund | % of Half Yearly\nPremium: 30%\n: months\n: Exceeding 3 months but less than or equal to 6 | % of Half Yearly\nPremium: 0%\n: mont\n\n[2] BAJHLIP23020V012223.pdf p.28.0 (score=0.855)\n    C. Applicable to Part B-II (OUT-PATIENT BENEFITS FOR INTERNATIONAL COVER) 1. Out-patient Treatment \na. During the first year of Global Health Care Policy with Us, 30 days waiting period would be applicable for all \nclaims under out-patient except those arising out of Accidental Injury, however the w\n\n[3] BAJHLIP23020V012223.pdf p.4.0 (score=0.849)\n    32. New Born Baby:- \nNew Born Baby means baby born during the Policy Period and is aged up to 90 days. 33. Non- Network Provider:- \nNon-Network Provider means any Hospital, Day Care Centre or other provider that is not part of the Network. 34. Notification of Claim:- \nNotification of claim means the\n\n[4] BAJHLIP23020V012223.pdf p.25.0 (score=0.847)\n    3) 30-day waiting period (Code-Excl03) \na. Expenses related to the treatment of any Illness within 30 days from the first Policy commencement date shall \nbe excluded except claims arising due to an Accident, provided the same are covered. \nb. This exclusion shall not, however apply if the Insured ha\n\n[5] BAJHLIP23020V012223.pdf p.31.0 (score=0.844)\n    13. Premium Payment in Instalments (Wherever applicable) \nIf the Insured has opted for Payment of Premium on an instalment basis i.e., Half Yearly, Quarterly or Monthly, as \nmentioned in the Policy Schedule, the following Conditions shall apply (notwithstanding any terms contrary \nelsewhere in the P"
+        },
+        {
+          "step": 5,
+          "thought": "The waiting period for maternity benefits is not explicitly stated in the results from the previous step, but there is a mention of a 30-day waiting period for certain conditions and a specific exclusion related to maternity (Code-Excl18) that was found in the exclusion clauses search. This suggests that there might be a waiting period for maternity benefits, but the exact duration is not clear from the information provided. To proceed, we need to directly address the question about knee replacement surgery coverage for a 45-year-old male done 2 months after policy inception, considering the waiting periods and exclusions we've found so far. Since we have some information on waiting periods and exclusions, checking the policy's definitions for terms related to knee replacement surgery or similar medical procedures could provide insight into how the policy treats such surgeries, especially in relation to waiting periods and pre-existing conditions.",
+          "action": "get_definitions",
+          "args": {
+            "term": "knee replacement surgery"
+          },
+          "observation": "[1] BAJHLIP23020V012223.pdf p.5.0 (score=0.845)\n    44. Surgery or Surgical Procedure:- \nSurgery or Surgical Procedure means manual and / or operative procedure (s) required for treatment of an Illness \nor Injury, correction of deformities and defects, diagnosis and cure of diseases, relief from suffering and \nprolongation of life, performed in a Hos\n\n[2] BAJHLIP23020V012223.pdf p.8.0 (score=0.837)\n    32. Organ transplant:- \nOrgan transplant refers to the following organ or tissue transplants: heart, heart/valve, heart/lung, liver, pancreas, \npancreas/kidney, kidney, bone marrow, parathyroid, muscular/skeletal and cornea. 33. Periodontics (for international practice):- \nPeriodontics refers to Den\n\n[3] BAJHLIP23020V012223.pdf p.16.0 (score=0.826)\n    This cover is subject to the Sum Insured, sub-limits, terms, conditions and definitions, exclusions contained or \notherwise expressed in this Policy. 10. Rehabilitation \nRehabilitation is defined as a set of interventions designed to optimize functioning and reduce disability in \nindividuals with he"
+        },
+        {
+          "step": 6,
+          "thought": "Max steps reached — forcing final answer",
+          "action": "final_answer",
+          "args": {},
+          "observation": null
+        }
+      ],
+      "steps_taken": 5,
+      "agent_status": "max_steps_reached"
+    }
+  ],
+  "timing": {
+    "total_seconds": 201.21,
+    "index_seconds": 64.32,
+    "embed_seconds": 0.48,
+    "query_seconds": 99.9,
+    "cache_hit": false,
+    "per_query_seconds": [
+      99.9
+    ]
+  }
+}

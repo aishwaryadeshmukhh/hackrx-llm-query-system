@@ -28,16 +28,16 @@ except ImportError:
     PINECONE_AVAILABLE = False
 
 try:
-    import google.generativeai as genai
-    GENAI_AVAILABLE = True
+    from groq import Groq as GroqClient
+    GROQ_AVAILABLE = True
 except ImportError:
-    GENAI_AVAILABLE = False
+    GROQ_AVAILABLE = False
 
 # Pinecone embeddings integration
 from .embed_and_index import generate_query_embedding_pinecone
 
 class QueryProcessor:
-    def __init__(self, pinecone_api_key: str, gemini_api_key: str, index_name: str = 'policy-index'):
+    def __init__(self, pinecone_api_key: str, gemini_api_key: str = "", index_name: str = 'policy-index', groq_api_key: str = ""):
         self.pinecone_api_key = pinecone_api_key
         self.gemini_api_key = gemini_api_key
         self.index_name = index_name
@@ -79,71 +79,27 @@ class QueryProcessor:
         self.reranker = None
         self.reranker_type = "none"
         
-        # Initialize Gemini
-        if GENAI_AVAILABLE and gemini_api_key and gemini_api_key != 'dummy':
+        # Initialize Groq
+        _groq_key = (groq_api_key or "").strip().strip('"').strip("'")
+        if GROQ_AVAILABLE and _groq_key and _groq_key != 'dummy':
             try:
-                genai.configure(api_key=gemini_api_key)
-                # Try different models based on availability
-                model_options = [
-                    'gemini-2.5-flash',  # More available for students
-                    'gemini-2.5-pro',        # Standard model
-                    'gemini-2.5-pro'     # Premium model (might be limited)
-                ]
-                
-                self.llm = None
-                self.model_name = None
-                
-                # Try each model until one works
-                for model_name in model_options:
-                    try:
-                        # Set generation config with temperature 0.7
-                        # Gemini temperature ranges from 0-2, where 0 is deterministic and 2 is highly random
-                        generation_config = {
-                            #"temperature": 0.3,  # Medium-high creative temperature (default is 0.9)
-                            "top_p": 0.95,
-                            "top_k": 40
-                        }
-                        
-                        test_model = genai.GenerativeModel(
-                            model_name=model_name,
-                            generation_config=generation_config
-                        )
-                        
-                        # Test with a simple query to verify access
-                        test_response = test_model.generate_content("Hello")
-                        if test_response:
-                            self.llm = test_model
-                            self.model_name = model_name
-                            print(f"Successfully initialized Gemini model: {model_name} with temperature=0.7")
-                            break
-                    except Exception as e:
-                        print(f"Failed to initialize {model_name}: {str(e)}")
-                        if 'quota' in str(e).lower() or 'limit' in str(e).lower():
-                            self.quota_exceeded = True
-                            self.fallback_reason = f"Quota exceeded for {model_name}"
-                        continue
-                
-                if not self.llm:
-                    print("Warning: No Gemini models available, using fallback methods")
-                    if not self.quota_exceeded:
-                        self.fallback_reason = "No models accessible"
-                    
+                self.llm = GroqClient(api_key=_groq_key)
+                self.model_name = "llama-3.3-70b-versatile"
+                print(f"✅ Groq initialised: {self.model_name}")
             except Exception as e:
-                print(f"Gemini initialization error: {e}")
+                print(f"❌ Groq init error: {e}")
                 self.llm = None
                 self.model_name = None
-                if 'quota' in str(e).lower() or 'limit' in str(e).lower():
+                if 'quota' in str(e).lower() or 'limit' in str(e).lower() or 'rate' in str(e).lower():
                     self.quota_exceeded = True
-                    self.fallback_reason = "API quota exceeded"
+                    self.fallback_reason = f"Groq rate limit: {e}"
                 else:
-                    self.fallback_reason = f"Initialization error: {str(e)}"
+                    self.fallback_reason = f"Groq init error: {e}"
         else:
             self.llm = None
             self.model_name = None
-            if gemini_api_key == 'dummy':
-                self.fallback_reason = "Using dummy API key for testing"
-            else:
-                self.fallback_reason = "API key not provided"
+            self.fallback_reason = "GROQ_API_KEY not provided"
+            print("⚠️ Groq not initialised — set GROQ_API_KEY in .env")
     
     def _encode_query(self, query: str) -> List[float]:
         """Encode query using Pinecone's embedding service."""
@@ -214,50 +170,45 @@ class QueryProcessor:
         return None
     
     def _make_llm_request_with_retry(self, prompt: str, max_retries: int = 2) -> Optional[str]:
-        """Make LLM request with retry logic and quota detection."""
+        """Make LLM request via Groq with retry logic."""
         if not self.llm:
             return None
-            
+
         for attempt in range(max_retries + 1):
             try:
-                response = self.llm.generate_content(prompt)
-                if response and response.text:
-                    # Reset quota exceeded flag on successful request
+                response = self.llm.chat.completions.create(
+                    model=self.model_name,
+                    messages=[{"role": "user", "content": prompt}],
+                    max_tokens=2048,
+                    temperature=0.3,
+                )
+                text = response.choices[0].message.content
+                if text:
                     if self.quota_exceeded:
-                        print("✅ Quota exceeded flag reset - LLM is working again")
                         self.quota_exceeded = False
-                    return response.text.strip()
+                    return text.strip()
                 else:
-                    print(f"🔍 Empty response on attempt {attempt + 1}")
                     if attempt < max_retries:
-                        time.sleep(1)  # Brief pause before retry
+                        time.sleep(1)
                         continue
                     return None
-                    
+
             except Exception as e:
                 error_msg = str(e).lower()
-                if 'quota' in error_msg or 'limit' in error_msg or 'exceeded' in error_msg:
-                    print(f"⚠️ Gemini API quota exceeded: {e}")
-                    # Set quota exceeded flag but don't return None immediately
+                if 'rate' in error_msg or 'quota' in error_msg or 'limit' in error_msg:
                     self.quota_exceeded = True
-                    if attempt < max_retries:
-                        # Wait longer for quota errors before retrying
-                        wait_time = min(5 * (attempt + 1), 15)  # Wait 5s, 10s, 15s
-                        print(f"🔄 Waiting {wait_time}s before retry due to quota error...")
-                        time.sleep(wait_time)
-                        continue
-                    else:
-                        print("❌ All retries exhausted due to quota error")
-                        # Don't return None for quota errors - let the caller handle it
-                        return None
+                    wait_time = min(5 * (attempt + 1), 15)
+                    print(f"⚠️ Groq rate limit, waiting {wait_time}s: {e}")
+                    time.sleep(wait_time)
+                    continue
                 elif attempt < max_retries:
-                    print(f"🔄 Retry {attempt + 1} after error: {str(e)[:50]}...")
+                    print(f"🔄 Retry {attempt + 1}: {str(e)[:60]}")
                     time.sleep(1)
                     continue
                 else:
-                    print(f"🔍 Final attempt failed: {e}")
+                    print(f"❌ Groq request failed: {e}")
                     return None
-        
+
         return None
 
     def extract_entities(self, query: str) -> Dict[str, Any]:
@@ -918,70 +869,49 @@ class QueryProcessor:
             print(f"⚠️ Adjacent chunk lookup failed: {e}")
             return []
     
-    def _create_comprehensive_context(self, top_vectors: List[Dict]) -> str:
-        """Create comprehensive context from top 5 vectors with their adjacent chunks."""
+    def _create_comprehensive_context(self, top_vectors: List[Dict], adjacent: int = 2) -> str:
+        """
+        Build context from top vectors with a small window of adjacent chunks.
+
+        adjacent=2 (default): 2 before + main + 2 after = 5 chunks per vector.
+        At top_k=5 vectors that's 25 chunks total (~5-6k tokens) — safe for Groq free tier.
+        The old value of 25 produced 255 chunks (~74k tokens) per query.
+        """
         context_sections = []
-        
+
         for i, vector in enumerate(top_vectors, 1):
             doc_name = vector["document_name"]
             chunk_index = vector.get("chunk_index", 0)
             main_text = vector["text"]
             similarity_score = vector.get("score", 0.0)
-            
+
             print(f"📄 Processing Vector {i}: Getting adjacent context for chunk {chunk_index} from {doc_name}")
-            
-            # Get 25 chunks before and 25 chunks after
-            adjacent_chunks = self._get_adjacent_chunks_extended(doc_name, chunk_index, 25, 25)
-            
-            # Organize chunks
-            before_chunks = [c for c in adjacent_chunks if c["position"] == "before"]
-            after_chunks = [c for c in adjacent_chunks if c["position"] == "after"]
-            
-            # Sort by distance from main chunk
-            before_chunks.sort(key=lambda x: x["distance"], reverse=True)  # Closest first
-            after_chunks.sort(key=lambda x: x["distance"])  # Closest first
-            
-            # Build the section
-            section_parts = []
-            
-            # Add header for this vector
-            section_parts.append(f"=== VECTOR {i} (Similarity: {similarity_score:.3f}) ===")
-            section_parts.append(f"Document: {doc_name}")
-            section_parts.append(f"Main Chunk Index: {chunk_index}")
+
+            adjacent_chunks = self._get_adjacent_chunks_extended(doc_name, chunk_index, adjacent, adjacent)
+
+            before_chunks = sorted(
+                [c for c in adjacent_chunks if c["position"] == "before"],
+                key=lambda x: x["distance"], reverse=True
+            )
+            after_chunks = sorted(
+                [c for c in adjacent_chunks if c["position"] == "after"],
+                key=lambda x: x["distance"]
+            )
+
+            section_parts = [
+                f"=== RESULT {i} (score: {similarity_score:.3f}, doc: {doc_name}) ===",
+            ]
+            for chunk in before_chunks:
+                section_parts.append(f"[Chunk {chunk['chunk_index']}] {chunk['text']}")
+            section_parts.append(f"[Chunk {chunk_index}] *** {main_text} ***")
+            for chunk in after_chunks:
+                section_parts.append(f"[Chunk {chunk['chunk_index']}] {chunk['text']}")
             section_parts.append("")
-            
-            # Add before context
-            if before_chunks:
-                section_parts.append(f"--- CONTEXT BEFORE (25 chunks) ---")
-                for chunk in before_chunks:
-                    section_parts.append(f"[Chunk {chunk['chunk_index']}] {chunk['text']}")
-                section_parts.append("")
-            
-            # Add main chunk
-            section_parts.append(f"--- MAIN CHUNK (Most Relevant) ---")
-            section_parts.append(f"[Chunk {chunk_index}] {main_text}")
-            section_parts.append("")
-            
-            # Add after context
-            if after_chunks:
-                section_parts.append(f"--- CONTEXT AFTER (25 chunks) ---")
-                for chunk in after_chunks:
-                    section_parts.append(f"[Chunk {chunk['chunk_index']}] {chunk['text']}")
-                section_parts.append("")
-            
-            # Add summary for this vector
-            total_context = len(before_chunks) + 1 + len(after_chunks)
-            section_parts.append(f"--- END VECTOR {i} (Total chunks: {total_context}) ---")
-            section_parts.append("")
-            
+
             context_sections.append("\n".join(section_parts))
-        
-        # Combine all sections
+
         full_context = "\n".join(context_sections)
-        
-        print(f"📊 Created comprehensive context with {len(top_vectors)} vectors and their adjacent chunks")
-        print(f"📊 Total context length: {len(full_context)} characters")
-        
+        print(f"📊 Context: {len(top_vectors)} vectors × {adjacent*2+1} chunks = {len(full_context)} chars")
         return full_context
     
     def _print_ranking_summary(self, query: str, results: List[Dict]):
@@ -1131,20 +1061,38 @@ class QueryProcessor:
         evaluation = self._extract_json_from_response(response_text, "comprehensive evaluation")
         if evaluation:
             print("✅ Successfully completed comprehensive evaluation using LLM")
-            # Ensure all fields app.py expects are present
             evaluation.setdefault('decision', 'unclear')
-            evaluation.setdefault('confidence', 0.5)
             evaluation.setdefault('justification', evaluation.get('answer', 'No justification available'))
             evaluation.setdefault('relevant_clauses', [])
+            evaluation['confidence'] = self._calibrate_confidence(
+                float(evaluation.get('confidence', 0.5)), top_vectors
+            )
             evaluation['context_stats'] = {
                 'total_vectors': len(top_vectors),
                 'total_context_length': len(comprehensive_context),
-                'chunks_per_vector': 51
+                'chunks_per_vector': 5
             }
             return evaluation
         else:
             print("❌ JSON extraction failed from LLM comprehensive evaluation response - using fallback")
             return self._generate_fallback_response(query, top_vectors, comprehensive_context)
+
+    def _calibrate_confidence(self, llm_confidence: float, top_vectors: List[Dict]) -> float:
+        """
+        Blend LLM self-reported confidence with retrieval similarity scores.
+
+        retrieval_score = mean of top-3 chunk cosine scores (already 0-1 from Pinecone)
+        blended        = 0.4 * retrieval_score + 0.6 * llm_confidence
+
+        This prevents the LLM from self-reporting 0.95 when the best matching
+        chunk scored 0.55, and rewards strong retrieval evidence.
+        """
+        if not top_vectors:
+            return round(min(llm_confidence, 0.5), 2)
+        scores = [v.get("score", 0.0) for v in top_vectors[:3]]
+        retrieval_score = sum(scores) / len(scores)
+        blended = 0.4 * retrieval_score + 0.6 * llm_confidence
+        return round(min(max(blended, 0.0), 1.0), 2)
 
     def _generate_fallback_response(self, query: str, top_vectors: List[Dict], comprehensive_context: str) -> Dict[str, Any]:
         """Generate a fallback response when LLM is unavailable."""
@@ -1228,32 +1176,21 @@ class QueryProcessor:
             # Get API status for debugging
             api_status = self.get_api_status()
             
-            # Step 1: Use advanced search for better results
-            print("🔍 Step 1: Using advanced multi-stage search...")
+            # Step 1: Direct semantic search (simple path — no query expansion)
+            print("🔍 Step 1: Direct semantic search...")
             try:
-                # Use provided query_embedding if available, else encode
-                if query_embedding is not None:
-                    print("🔍 Using precomputed query embedding for search...")
-                    embedding = query_embedding
-                else:
-                    embedding = self._encode_query(query)
-                
-                # Use advanced search for better results
-                search_results = await self.advanced_search_pinecone(query, top_k=15, min_score=0.05)
-                
+                embedding = query_embedding if query_embedding is not None else self._encode_query(query)
+                search_results = self.semantic_search_with_similarity(query, top_k=5, query_embedding=embedding)
+
                 if not search_results:
-                    print("⚠️ Advanced search returned no results, falling back to basic search...")
-                    # Fallback to basic search
-                    search_results = self.semantic_search_with_similarity(query, top_k=5, query_embedding=embedding)
-                
-                # Take top 5 results for comprehensive context
+                    print("⚠️ Direct search returned no results")
+
                 top_vectors = search_results[:5]
+                print(f"✅ Retrieved {len(top_vectors)} top vectors")
                 
-                print(f"✅ Retrieved {len(top_vectors)} top vectors using advanced search")
-                
-                # Step 2: Create comprehensive context with adjacent chunks for each vector
-                print("🔍 Step 2: Creating comprehensive context with 25 before + 25 after chunks for each vector...")
-                comprehensive_context = self._create_comprehensive_context(top_vectors)
+                # Step 2: Create context — 2 chunks either side of each top result
+                print("🔍 Step 2: Creating context (2 before + main + 2 after per vector)...")
+                comprehensive_context = self._create_comprehensive_context(top_vectors, adjacent=2)
                 
             except Exception as e:
                 print(f"❌ Advanced search error: {e}")
@@ -1261,7 +1198,7 @@ class QueryProcessor:
                 try:
                     search_results = self.semantic_search_with_similarity(query, top_k=5, query_embedding=query_embedding)
                     top_vectors = search_results[:5]
-                    comprehensive_context = self._create_comprehensive_context(top_vectors)
+                    comprehensive_context = self._create_comprehensive_context(top_vectors, adjacent=2)
                 except Exception as fallback_error:
                     print(f"❌ Fallback search also failed: {fallback_error}")
                     top_vectors = []
@@ -1273,21 +1210,10 @@ class QueryProcessor:
             evaluation = self._llm_evaluation_with_comprehensive_context(query, {}, comprehensive_context, top_vectors)
             
             # Add search method information
-            evaluation['search_method'] = 'advanced_multi_stage_search'
-            evaluation['reranker_type'] = 'none'
-            evaluation['reranker_available'] = False
-            evaluation['hybrid_search_enabled'] = True
-            evaluation['reranking_enabled'] = False
+            evaluation['search_method'] = 'direct_semantic_search'
             evaluation['total_candidates_retrieved'] = len(search_results)
             evaluation['final_chunks_used'] = len(top_vectors)
-            evaluation['adjacent_chunks_per_vector'] = 50  # 25 before + 25 after
-            evaluation['advanced_search_features'] = {
-                'context_aware_search': True,
-                'query_expansion': True,
-                'content_type_balancing': True,
-                'result_deduplication': True,
-                'score_normalization': True
-            }
+            evaluation['adjacent_chunks_per_vector'] = 4  # 2 before + 2 after
             
             # Add performance notes
             if not self.llm:
@@ -1364,6 +1290,95 @@ class QueryProcessor:
                 "error": str(e)
             }
     
+    def process_query_routed_sync(self, query: str) -> Dict[str, Any]:
+        """
+        Route the query to either the simple path or the ReAct path based on complexity.
+
+        Simple  → process_query_sync  (single retrieval + one LLM call, ~2-4s)
+        Complex → process_query_react_sync (ReAct loop with tools, ~10-20s)
+
+        The result always includes a 'query_type' field so the caller knows which
+        path was taken, and 'reasoning_trace' is an empty list for simple queries.
+        """
+        from .query_router import route_query
+
+        if not self.llm:
+            # No LLM at all — fall back to simple path
+            result = self.process_query_sync(query)
+            result["query_type"] = "simple"
+            result.setdefault("reasoning_trace", [])
+            return result
+
+        query_type = route_query(query, self.llm)
+
+        if query_type == "complex":
+            result = self.process_query_react_sync(query)
+        else:
+            result = self.process_query_sync(query)
+            result.setdefault("reasoning_trace", [])
+            result.setdefault("steps_taken", 0)
+            result.setdefault("agent_status", "simple_path")
+
+        result["query_type"] = query_type
+        return result
+
+    def process_query_react_sync(self, query: str) -> Dict[str, Any]:
+        """
+        Run the ReAct agent loop for one query (synchronous).
+
+        Returns the same shape as process_query_sync() but with an added
+        'reasoning_trace' list and 'steps_taken' / 'agent_status' fields.
+        """
+        if not self.llm:
+            return {
+                "query": query,
+                "evaluation": {
+                    "decision": "error",
+                    "confidence": 0.0,
+                    "answer": "LLM not available for ReAct agent.",
+                    "justification": "Gemini not initialised.",
+                    "relevant_clauses": [],
+                },
+                "reasoning_trace": [],
+                "steps_taken": 0,
+                "agent_status": "error",
+                "status": "error",
+            }
+
+        from .react_agent import run_react_loop
+        from .agent_tools import ToolExecutor
+        import re as _re
+
+        executor = ToolExecutor(self)
+        result = run_react_loop(
+            question=query,
+            llm=self.llm,
+            tool_executor=executor,
+        )
+
+        # Calibrate confidence using retrieval scores embedded in the trace observations
+        answer = result["answer"]
+        raw_scores = _re.findall(
+            r"score=([\d.]+)",
+            " ".join(
+                step.get("observation", "") or ""
+                for step in result["reasoning_trace"]
+            ),
+        )
+        pseudo_vectors = [{"score": float(s)} for s in raw_scores[:5]] if raw_scores else []
+        answer["confidence"] = self._calibrate_confidence(
+            float(answer.get("confidence", 0.5)), pseudo_vectors
+        )
+
+        return {
+            "query": query,
+            "evaluation": answer,
+            "reasoning_trace": result["reasoning_trace"],
+            "steps_taken": result["steps_taken"],
+            "agent_status": result["status"],
+            "status": "success" if result["status"] != "error" else "error",
+        }
+
     async def process_queries_batch(self, queries: List[str], query_embeddings: Optional[List[List[float]]] = None) -> List[Dict[str, Any]]:
         """
         Process multiple queries in parallel using asyncio.

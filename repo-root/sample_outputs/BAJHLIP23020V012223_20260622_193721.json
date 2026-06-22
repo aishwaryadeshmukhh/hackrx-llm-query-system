@@ -1,0 +1,42 @@
+{
+  "run_id": "BAJHLIP23020V012223_20260622_193721",
+  "timestamp": "2026-06-22T19:37:21.470148",
+  "file": "BAJHLIP23020V012223.pdf",
+  "questions": [
+    "Is dental surgery covered?"
+  ],
+  "answers": [
+    {
+      "decision": "partial",
+      "confidence": 0.8,
+      "answer": "Dental surgery is covered under certain conditions, such as accidental bodily injury to natural teeth requiring hospitalization. However, cosmetic surgery, dentures, dental prosthesis, dental implants, orthodontics, and surgery of any kind are excluded unless specified.",
+      "justification": "The policy excludes dental treatment that comprises of cosmetic surgery, dentures, dental prosthesis, dental implants, orthodontics, surgery of any kind unless as a result of Accidental Bodily Injury to natural teeth and also requiring Hospitalization unless specified.",
+      "relevant_clauses": [
+        {
+          "section": "SECTION D) EXCLUSIONS– SPECIFIC EXCLUSIONS APPLICABLE TO PART A- DOMESTIC COVER UNDER SECTION C) BENEFITS COVERED UNDER THE POLICY",
+          "content": "*** We do not cover the following expenses unless indicated otherwise in the Table of Benefits or in any written Policy endorsement 1) Any Dental Treatment that comprises of cosmetic surgery, dentures, dental prosthesis, dental implants, orthodontics, surgery of any kind unless as a result of Accidental Bodily Injury to natural teeth and also requiring Hospitalization unless specified .",
+          "page": 23
+        },
+        {
+          "section": "III. DENTAL PLAN BENEFITS (Optional)",
+          "content": "We will pay Customary and Reasonable expenses up to the limits specified in the Policy Schedule incurred for Dental Surgery which includes the surgical extraction of teeth, as well as other tooth-related surgical procedures such as apicoectomy, Surgical removal of cysts, Orthognathic surgeries for the correction of malocclusion and",
+          "page": 19
+        }
+      ],
+      "query_type": "simple",
+      "reasoning_trace": [],
+      "steps_taken": 0,
+      "agent_status": "simple_path"
+    }
+  ],
+  "timing": {
+    "total_seconds": 61.24,
+    "index_seconds": 50.1,
+    "embed_seconds": 0.77,
+    "query_seconds": 5.1,
+    "cache_hit": false,
+    "per_query_seconds": [
+      5.1
+    ]
+  }
+}

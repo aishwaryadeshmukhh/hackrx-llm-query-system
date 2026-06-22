@@ -1,0 +1,74 @@
+{
+  "run_id": "BAJHLIP23020V012223_20260622_190312",
+  "timestamp": "2026-06-22T19:03:12.500626",
+  "file": "BAJHLIP23020V012223.pdf",
+  "questions": [
+    "What is the waiting period for maternity benefits?"
+  ],
+  "answers": [
+    {
+      "decision": "unclear",
+      "confidence": 0.0,
+      "answer": "The waiting period for maternity benefits is unclear due to lack of relevant information found in the policy.",
+      "justification": "No specific clause related to maternity benefits waiting period was found in the policy.",
+      "relevant_clauses": [],
+      "reasoning_trace": [
+        {
+          "step": 1,
+          "thought": "To determine the waiting period for maternity benefits, I need to search the policy for relevant clauses.",
+          "action": "check_waiting_period",
+          "args": {
+            "benefit_type": "maternity"
+          },
+          "observation": "No relevant chunks found."
+        },
+        {
+          "step": 2,
+          "thought": "Since the initial search for waiting period clauses related to maternity benefits was unsuccessful, I need to try a more general search to find relevant information about maternity benefits in the policy.",
+          "action": "search_policy",
+          "args": {
+            "query": "maternity benefits waiting period",
+            "policy_name": null,
+            "top_k": 5
+          },
+          "observation": "No relevant chunks found."
+        },
+        {
+          "step": 3,
+          "thought": "I need to look up the definition of maternity benefits to understand what it entails and possibly find related waiting period information.",
+          "action": "get_definitions",
+          "args": {},
+          "observation": "No relevant chunks found."
+        },
+        {
+          "step": 4,
+          "thought": "Since the previous searches did not yield relevant results, I should attempt to look for a waiting period clause related to a broader category that might encompass maternity benefits, such as \"health benefits\" or specifically check for exclusions related to maternity to infer waiting periods indirectly.",
+          "action": "check_waiting_period",
+          "args": {
+            "benefit_type": "health"
+          },
+          "observation": "No relevant chunks found."
+        },
+        {
+          "step": 5,
+          "thought": "Max steps reached — forcing final answer",
+          "action": "final_answer",
+          "args": {},
+          "observation": null
+        }
+      ],
+      "steps_taken": 4,
+      "agent_status": "max_steps_reached"
+    }
+  ],
+  "timing": {
+    "total_seconds": 121.54,
+    "index_seconds": 0,
+    "embed_seconds": 0.65,
+    "query_seconds": 109.57,
+    "cache_hit": true,
+    "per_query_seconds": [
+      109.57
+    ]
+  }
+}

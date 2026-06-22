@@ -284,9 +284,8 @@ class DocumentPipeline:
     
     async def _index_documents_async(self, all_chunks: List[Dict], pinecone_api_key: str) -> Dict:
         """Async wrapper for document indexing."""
-        # Run indexing in executor to avoid blocking
         loop = asyncio.get_event_loop()
-        return await loop.run_in_executor(
+        result = await loop.run_in_executor(
             None,
             lambda: index_chunks_in_pinecone(
                 chunks=all_chunks,
@@ -295,6 +294,10 @@ class DocumentPipeline:
                 index_name=self.config.index_name
             )
         )
+        # index_chunks_in_pinecone returns False on index creation failure
+        if result is False:
+            return {"success": False, "error": "Pinecone index creation/verification failed"}
+        return result
     
     async def _update_registry_async(self, files_to_process: List[str], all_chunks: List[Dict]):
         """Async wrapper for registry updates."""

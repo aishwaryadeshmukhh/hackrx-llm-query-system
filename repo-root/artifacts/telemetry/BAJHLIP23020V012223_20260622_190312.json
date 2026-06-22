@@ -1,0 +1,50 @@
+{
+  "run_id": "BAJHLIP23020V012223_20260622_190312",
+  "timestamp": "2026-06-22T19:03:12.500626",
+  "endpoint": "/hackrx/upload",
+  "request": {
+    "filename": "BAJHLIP23020V012223.pdf",
+    "file_hash": "36284129c3989ce94f8c6e81cf7e29d6",
+    "question_count": 1,
+    "questions": [
+      "What is the waiting period for maternity benefits?"
+    ],
+    "cache_hit": true,
+    "chunk_count": 223
+  },
+  "timing": {
+    "total_s": 121.54,
+    "index_s": 0,
+    "embed_s": 0.65,
+    "query_s": 109.57,
+    "cache_hit": true
+  },
+  "per_query": [
+    {
+      "index": 0,
+      "question": "What is the waiting period for maternity benefits?",
+      "time_s": 109.57,
+      "decision": "unclear",
+      "confidence": 0.0
+    }
+  ],
+  "throughput": {
+    "questions_per_second": 0.009,
+    "chunks_per_second": null
+  },
+  "model": {
+    "embedding": "multilingual-e5-large",
+    "llm": "gemini-2.5-flash",
+    "embedding_dims": 1024
+  },
+  "quality": {
+    "decisions": [
+      "unclear"
+    ],
+    "confidences": [
+      0.0
+    ],
+    "mean_confidence": 0.0,
+    "unclear_count": 1
+  }
+}

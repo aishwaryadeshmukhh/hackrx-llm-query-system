@@ -1,0 +1,340 @@
+"""
+react_agent.py — ReAct (Reason + Act) agent loop for the Insurance RAG pipeline.
+
+Each query runs through a max of MAX_STEPS iterations:
+  1. LLM receives the question + all previous steps (thoughts + retrieved evidence)
+  2. LLM outputs either:
+       Thought + Action  →  tool is called, observation added, loop continues
+       Final Answer      →  loop exits, answer is returned
+
+The reasoning_trace (list of step dicts) is returned alongside the final answer
+so callers can include it in the API response for visibility in Swagger / Streamlit.
+
+Tool routing
+------------
+The agent can call any of the 5 tools in agent_tools.py:
+  search_policy, lookup_exclusions, check_waiting_period, get_definitions, compare_policies
+
+A simple query (clear coverage question with no ambiguity) exits in 1-2 steps.
+A complex query (exclusion + waiting period both relevant) may use 3-5 steps.
+"""
+
+from __future__ import annotations
+
+import json
+import re
+from typing import Any, Dict, List, Optional, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .agent_tools import ToolExecutor
+
+MAX_STEPS = 4
+
+# ── Prompt templates ─────────────────────────────────────────────────────────
+
+_SYSTEM_PROMPT = """You are an insurance policy analyst. Answer the question using the retrieval tools below.
+
+Available tools:
+- search_policy(query, policy_name=null, top_k=5): General semantic search
+- lookup_exclusions(procedure_or_condition): Search exclusion clauses
+- check_waiting_period(benefit_type): Search waiting period clauses
+- get_definitions(term): Fetch glossary/definition entries
+
+STRICT OUTPUT FORMAT — output EXACTLY ONE of these two blocks per step, nothing else:
+
+When you need more information:
+Thought: <one sentence on what you need next>
+Action: <tool_name>
+Args: {"key": "value"}
+
+When you have enough evidence (after 1-2 tool calls is usually enough):
+Thought: <one sentence summarising your conclusion>
+Final Answer: {"decision": "covered|not_covered|partial|unclear", "confidence": 0.0, "answer": "2-3 sentences", "justification": "which clause supports this", "relevant_clauses": [{"section": "...", "content": "...", "page": null}]}
+
+CRITICAL RULES:
+- After each tool call, if the observation contains a clear answer, output Final Answer IMMEDIATELY — do NOT call more tools
+- 1-2 tool calls is the target; 3 is the max before you must answer
+- decision must be exactly: covered, not_covered, partial, or unclear
+- Do NOT output any text outside the two formats above
+- Do NOT repeat a tool call you already made
+"""
+
+_STEP_PROMPT_TEMPLATE = """Question: {question}
+
+{steps_so_far}
+Next step (output ONLY Thought+Action+Args OR Thought+Final Answer):"""
+
+_OBSERVATION_TEMPLATE = """Step {step_num}:
+Thought: {thought}
+Action: {action}({args_json})
+Observation: {observation}
+"""
+
+_FINAL_ANSWER_SCHEMA = {
+    "decision": "unclear",
+    "confidence": 0.0,
+    "answer": "",
+    "justification": "",
+    "relevant_clauses": [],
+}
+
+
+# ── Parser ───────────────────────────────────────────────────────────────────
+
+def _parse_llm_step(text: str) -> Dict[str, Any]:
+    """
+    Parse one LLM output step into a structured dict.
+
+    Returns one of:
+      {"type": "action",  "thought": str, "tool": str, "args": dict}
+      {"type": "answer",  "thought": str, "answer": dict}
+      {"type": "parse_error", "raw": str}
+    """
+    text = text.strip()
+
+    # Extract Thought
+    thought_match = re.search(r"Thought:\s*(.+?)(?=\nAction:|\nFinal Answer:|$)", text, re.DOTALL)
+    thought = thought_match.group(1).strip() if thought_match else ""
+
+    # Check for Final Answer
+    fa_match = re.search(r"Final Answer:\s*(\{.*\})", text, re.DOTALL)
+    if fa_match:
+        try:
+            answer_json = json.loads(fa_match.group(1))
+        except json.JSONDecodeError:
+            # Try to extract JSON more aggressively
+            raw = fa_match.group(1)
+            start = raw.find("{")
+            end = raw.rfind("}") + 1
+            try:
+                answer_json = json.loads(raw[start:end])
+            except json.JSONDecodeError:
+                answer_json = dict(_FINAL_ANSWER_SCHEMA)
+                answer_json["answer"] = raw
+        # Ensure all required fields
+        for k, v in _FINAL_ANSWER_SCHEMA.items():
+            answer_json.setdefault(k, v)
+        return {"type": "answer", "thought": thought, "answer": answer_json}
+
+    # Check for Action — handle both:
+    #   Action: tool_name\nArgs: {...}       (preferred)
+    #   Action: tool_name({"key": "val"})    (Llama sometimes outputs this)
+    action_match = re.search(r"Action:\s*(\w+)", text)
+    if action_match:
+        tool = action_match.group(1).strip()
+        args = {}
+
+        # Format 1: separate Args: line
+        args_match = re.search(r"Args:\s*(\{.*\})", text, re.DOTALL)
+        if args_match:
+            try:
+                args = json.loads(args_match.group(1))
+            except json.JSONDecodeError:
+                pass
+
+        # Format 2: inline Action: tool_name({...})
+        if not args:
+            inline_match = re.search(r"Action:\s*\w+\s*\((\{.*?\})\)", text, re.DOTALL)
+            if inline_match:
+                try:
+                    args = json.loads(inline_match.group(1))
+                except json.JSONDecodeError:
+                    pass
+
+        # Format 3: key="value" or key: value anywhere after Action line
+        if not args:
+            kv_match = re.search(r'(?:query|procedure_or_condition|benefit_type|term)["\s:=]+(["\']?)([^"\'\n,}]+)\1', text)
+            if kv_match:
+                # Map whichever key was found to the right param name
+                for param in ["procedure_or_condition", "benefit_type", "term", "query"]:
+                    pm = re.search(rf'{param}["\s:=]+(["\']?)([^"\'\n,}}]+)\1', text)
+                    if pm:
+                        args[param] = pm.group(2).strip()
+
+        return {"type": "action", "thought": thought, "tool": tool, "args": args}
+
+    return {"type": "parse_error", "raw": text}
+
+
+def _format_chunks_for_observation(chunks: List[Dict]) -> str:
+    """Summarise retrieved chunks into a compact string for the observation field."""
+    if not chunks:
+        return "No relevant chunks found."
+    lines = []
+    for i, c in enumerate(chunks[:5], 1):
+        text = c.get("text", c.get("content", ""))[:300]
+        doc = c.get("document", c.get("document_name", "unknown"))
+        page = c.get("page", c.get("page_number", "?"))
+        score = c.get("score", 0.0)
+        lines.append(f"[{i}] {doc} p.{page} (score={score:.3f})\n    {text}")
+    return "\n\n".join(lines)
+
+
+# ── ReAct loop ───────────────────────────────────────────────────────────────
+
+def run_react_loop(
+    question: str,
+    llm,  # genai.GenerativeModel instance
+    tool_executor: "ToolExecutor",
+    max_steps: int = MAX_STEPS,
+) -> Dict[str, Any]:
+    """
+    Run the ReAct loop for one question.
+
+    Returns:
+        {
+            "answer": {decision, confidence, answer, justification, relevant_clauses},
+            "reasoning_trace": [
+                {
+                    "step": int,
+                    "thought": str,
+                    "action": str | "final_answer",
+                    "args": dict | {},
+                    "observation": str | null   # null for final_answer step
+                }
+            ],
+            "steps_taken": int,
+            "status": "success" | "max_steps_reached" | "error"
+        }
+    """
+    steps_so_far = ""
+    reasoning_trace = []
+
+    system = _SYSTEM_PROMPT.replace("{max_steps}", str(max_steps))
+
+    for step_num in range(1, max_steps + 1):
+        prompt = f"{system}\n\n{_STEP_PROMPT_TEMPLATE.format(question=question, steps_so_far=steps_so_far)}"
+
+        # Call LLM (Groq chat completions)
+        try:
+            response = llm.chat.completions.create(
+                model="llama-3.3-70b-versatile",
+                messages=[{"role": "user", "content": prompt}],
+                max_tokens=1024,
+                temperature=0.2,
+            )
+            raw_text = response.choices[0].message.content.strip() if response else ""
+        except Exception as e:
+            print(f"❌ ReAct LLM call failed at step {step_num}: {e}")
+            return _error_result(question, str(e), reasoning_trace)
+
+        if not raw_text:
+            print(f"⚠️ Empty LLM response at step {step_num}")
+            break
+
+        parsed = _parse_llm_step(raw_text)
+        print(f"🤔 Step {step_num} [{parsed['type']}]: {parsed.get('thought', '')[:80]}")
+
+        if parsed["type"] == "answer":
+            reasoning_trace.append({
+                "step": step_num,
+                "thought": parsed["thought"],
+                "action": "final_answer",
+                "args": {},
+                "observation": None,
+            })
+            return {
+                "answer": parsed["answer"],
+                "reasoning_trace": reasoning_trace,
+                "steps_taken": step_num,
+                "status": "success",
+            }
+
+        if parsed["type"] == "action":
+            tool_name = parsed["tool"]
+            args = parsed["args"]
+
+            # Execute the tool
+            try:
+                chunks = tool_executor.execute(tool_name, args)
+                observation = _format_chunks_for_observation(chunks)
+            except Exception as e:
+                observation = f"Tool execution failed: {e}"
+                print(f"❌ Tool {tool_name} failed: {e}")
+
+            reasoning_trace.append({
+                "step": step_num,
+                "thought": parsed["thought"],
+                "action": tool_name,
+                "args": args,
+                "observation": observation,
+            })
+
+            # Append this step to the running context for the next LLM call
+            steps_so_far += _OBSERVATION_TEMPLATE.format(
+                step_num=step_num,
+                thought=parsed["thought"],
+                action=tool_name,
+                args_json=json.dumps(args),
+                observation=observation,
+            )
+
+        else:
+            # parse_error — log and try to continue
+            print(f"⚠️ Parse error at step {step_num}: {parsed.get('raw', '')[:100]}")
+            reasoning_trace.append({
+                "step": step_num,
+                "thought": "parse_error",
+                "action": "none",
+                "args": {},
+                "observation": parsed.get("raw", ""),
+            })
+
+    # Max steps reached — ask LLM to give best answer now
+    print(f"⚠️ Max steps ({max_steps}) reached, forcing final answer")
+    forced_prompt = (
+        f"You are an insurance analyst. Based on the evidence retrieved below, give your final answer.\n\n"
+        f"Question: {question}\n\n"
+        f"Evidence retrieved:\n{steps_so_far}\n\n"
+        f"Output ONLY this JSON (no other text):\n"
+        f'{{"decision": "covered|not_covered|partial|unclear", "confidence": 0.0, "answer": "2-3 sentences", '
+        f'"justification": "which clause", "relevant_clauses": [{{"section": "...", "content": "...", "page": null}}]}}'
+    )
+    try:
+        response = llm.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[{"role": "user", "content": forced_prompt}],
+            max_tokens=1024,
+            temperature=0.1,
+        )
+        raw_text = response.choices[0].message.content.strip() if response else ""
+        parsed = _parse_llm_step("Thought: step limit\nFinal Answer: " + raw_text)
+        if parsed["type"] == "answer":
+            reasoning_trace.append({
+                "step": max_steps + 1,
+                "thought": "Max steps reached — forcing final answer",
+                "action": "final_answer",
+                "args": {},
+                "observation": None,
+            })
+            return {
+                "answer": parsed["answer"],
+                "reasoning_trace": reasoning_trace,
+                "steps_taken": max_steps,
+                "status": "max_steps_reached",
+            }
+    except Exception as e:
+        print(f"❌ Forced final answer LLM call failed: {e}")
+
+    # Absolute fallback
+    fallback_answer = dict(_FINAL_ANSWER_SCHEMA)
+    fallback_answer["answer"] = "Unable to determine from available policy evidence after maximum retrieval steps."
+    fallback_answer["justification"] = "Max steps reached without conclusive evidence."
+    return {
+        "answer": fallback_answer,
+        "reasoning_trace": reasoning_trace,
+        "steps_taken": max_steps,
+        "status": "max_steps_reached",
+    }
+
+
+def _error_result(question: str, error: str, trace: List[Dict]) -> Dict[str, Any]:
+    fallback = dict(_FINAL_ANSWER_SCHEMA)
+    fallback["answer"] = f"Agent error: {error}"
+    fallback["justification"] = error
+    return {
+        "answer": fallback,
+        "reasoning_trace": trace,
+        "steps_taken": len(trace),
+        "status": "error",
+    }

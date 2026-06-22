@@ -1,0 +1,50 @@
+{
+  "run_id": "BAJHLIP23020V012223_20260622_193721",
+  "timestamp": "2026-06-22T19:37:21.470148",
+  "endpoint": "/hackrx/upload",
+  "request": {
+    "filename": "BAJHLIP23020V012223.pdf",
+    "file_hash": "36284129c3989ce94f8c6e81cf7e29d6",
+    "question_count": 1,
+    "questions": [
+      "Is dental surgery covered?"
+    ],
+    "cache_hit": false,
+    "chunk_count": 223
+  },
+  "timing": {
+    "total_s": 61.24,
+    "index_s": 50.1,
+    "embed_s": 0.77,
+    "query_s": 5.1,
+    "cache_hit": false
+  },
+  "per_query": [
+    {
+      "index": 0,
+      "question": "Is dental surgery covered?",
+      "time_s": 5.1,
+      "decision": "partial",
+      "confidence": 0.8
+    }
+  ],
+  "throughput": {
+    "questions_per_second": 0.196,
+    "chunks_per_second": 4.5
+  },
+  "model": {
+    "embedding": "multilingual-e5-large",
+    "llm": "gemini-2.5-flash",
+    "embedding_dims": 1024
+  },
+  "quality": {
+    "decisions": [
+      "partial"
+    ],
+    "confidences": [
+      0.8
+    ],
+    "mean_confidence": 0.8,
+    "unclear_count": 0
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "run_id": "BAJHLIP23020V012223_20260622_192954",
+  "timestamp": "2026-06-22T19:29:54.948482",
+  "file": "BAJHLIP23020V012223.pdf",
+  "questions": [
+    "Is dental treatment covered under this policy?"
+  ],
+  "answers": [
+    {
+      "decision": "unclear",
+      "confidence": 0.0,
+      "answer": "Based on the policy information, this appears to be covered under your policy. Please refer to the specific terms and conditions in your policy document for complete details.",
+      "justification": "",
+      "relevant_clauses": [],
+      "query_type": "simple",
+      "reasoning_trace": [],
+      "steps_taken": 0,
+      "agent_status": "unknown"
+    }
+  ],
+  "timing": {
+    "total_seconds": 402.74,
+    "index_seconds": 382.47,
+    "embed_seconds": 0.84,
+    "query_seconds": 15.24,
+    "cache_hit": false,
+    "per_query_seconds": [
+      15.24
+    ]
+  }
+}

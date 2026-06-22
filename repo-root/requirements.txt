@@ -8,7 +8,8 @@ pinecone>=5.0.0,<6.0.0  # Pinecone with inference API support
 sentence-transformers>=2.2.0  # Fallback embeddings
 
 # LLM Integration
-google-generativeai>=0.3.0  # Gemini AI for analysis
+groq>=0.9.0  # Groq inference API (llama-3.3-70b-versatile)
+google-generativeai>=0.3.0  # Gemini AI (kept for fallback compatibility)
 
 # Machine Learning and NLP
 numpy>=1.24.0  # Numerical computations

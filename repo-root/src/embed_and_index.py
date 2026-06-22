@@ -253,8 +253,9 @@ def check_or_create_pinecone_index(pinecone_api_key: str, index_name: str = 'pol
         if index_name in existing_indexes:
             index = pc.Index(index_name)
             stats = index.describe_index_stats()
-            current_dimension = stats.get('dimension', 0)
-            if current_dimension != required_dimension:
+            # SDK returns an object, not a dict
+            current_dimension = getattr(stats, 'dimension', None) or (stats.get('dimension', 0) if isinstance(stats, dict) else 0)
+            if current_dimension and current_dimension != required_dimension:
                 print(f"⚠️ Index '{index_name}' has {current_dimension} dimensions, but we need {required_dimension}")
                 if progress_callback:
                     progress_callback(f"Deleting old index ({current_dimension}D)...", 10)

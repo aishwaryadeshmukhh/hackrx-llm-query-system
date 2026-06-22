@@ -341,6 +341,25 @@ Phases 0 and 5 can be done independently of each other. Phase 3 depends on Phase
 
 ---
 
+## Deployment & Caching Strategy
+
+The current chunk cache (`_chunk_cache: dict = {}` in `backend.py`) is in-memory only — it survives across API requests within the same server process but resets on every restart. This is fine for local development and hackathon demos.
+
+When deploying to a cloud environment, the cache should be moved out of process memory:
+
+| Layer | Local (now) | Cloud (production) |
+|---|---|---|
+| **Chunk cache** | Module-level Python dict | Redis (e.g. Upstash, Redis Cloud) with `file_hash` as key, chunks as JSON value |
+| **Pinecone index** | Already cloud-hosted | No change needed |
+| **Run telemetry** | Local JSON files in `artifacts/` | Object storage (S3/GCS bucket) or a lightweight DB (PlanetScale, Supabase) |
+| **PDF storage** | Temp files on disk | S3/GCS upload before processing; URL passed to parser |
+
+The swap is a single function change — replace the dict read/write in `_cache_get()` / `_cache_put()` with Redis `GET`/`SET` calls. Everything above those functions stays the same.
+
+For the HackRx submission or a portfolio demo, the in-memory cache is sufficient. Add Redis when you move to a persistent deployment (e.g. Render, Railway, or a cloud VM).
+
+---
+
 ## Why This Architecture Is Interesting for AI Engineering Roles
 
 Standard RAG is now table stakes. What distinguishes this project after these changes:

@@ -1,7 +1,6 @@
 # backend.py
-from fastapi import FastAPI, File, UploadFile, Form, Request, Header, HTTPException, Depends, Security
+from fastapi import FastAPI, File, UploadFile, Form, Request, Header, HTTPException
 from fastapi.responses import JSONResponse
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.middleware.cors import CORSMiddleware
 import tempfile
 import os
@@ -31,28 +30,12 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-# Security scheme for Bearer token authentication
-security = HTTPBearer()
-
-# Hardcoded API token - keep it simple
-API_TOKEN = "552a90e441d8b2a0c195b5425dd982e0e71292568a08d2facf1ebc9434c1bcd0"
-
 class QueryPDFRequest(BaseModel):
     documents: str  # URL to the PDF
     questions: List[str]  # List of questions to answer
 
-def verify_token(credentials: HTTPAuthorizationCredentials = Security(security)):
-    """Verify the token provided in the authorization header."""
-    if credentials.scheme != "Bearer" or credentials.credentials != API_TOKEN:
-        raise HTTPException(
-            status_code=401,
-            detail="Invalid authentication credentials",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    return credentials.credentials
-
 @app.post("/hackrx/run")
-async def query_pdf(input: QueryPDFRequest, token: str = Depends(verify_token)):
+async def query_pdf(input: QueryPDFRequest):
     total_start_time = time.time()
     timings = {}
     pdf_url = input.documents  # Changed from pdf_url to documents
@@ -199,7 +182,7 @@ async def query_pdf(input: QueryPDFRequest, token: str = Depends(verify_token)):
     # Initialize the QueryProcessor for cleanup later
     processor = QueryProcessor(
         pinecone_api_key=pinecone_key,
-        gemini_api_key=gemini_key,
+        groq_api_key=os.getenv("GROQ_API_KEY") or "",
         index_name="policy-index"
     )
     timings["processor_init"] = time.time() - t0
@@ -400,9 +383,22 @@ async def _process_pdf_and_answer(pdf_path: str, queries: List[str]) -> JSONResp
     cached = _chunk_cache.get(file_hash)
 
     if cached:
-        print(f"✅ Cache hit for {os.path.basename(pdf_path)} ({file_hash[:8]}) — skipping parse+embed")
+        # Chunks are cached — skip parse+chunk, but still upsert to Pinecone
+        # because the ReAct tools query Pinecone directly and need vectors present.
+        print(f"✅ Chunk cache hit for {os.path.basename(pdf_path)} ({file_hash[:8]}) — re-indexing to Pinecone")
         chunks = cached["chunks"]
-        index_time = 0.0
+        t0 = time.time()
+        from src.embed_and_index import index_chunks_in_pinecone
+        idx_result = index_chunks_in_pinecone(
+            chunks=chunks,
+            pinecone_api_key=pinecone_key,
+            pinecone_env="us-east-1",
+            index_name="policy-index",
+        )
+        if idx_result is False:
+            return JSONResponse({"error": "Pinecone re-indexing failed on cache hit"}, status_code=500)
+        index_time = time.time() - t0
+        print(f"✅ Re-indexed {len(chunks)} cached chunks in {index_time:.1f}s")
     else:
         # Step 1: Parse + chunk + embed + index
         t0 = time.time()
@@ -456,26 +452,30 @@ async def _process_pdf_and_answer(pdf_path: str, queries: List[str]) -> JSONResp
     # Step 3: Build one shared QueryProcessor and populate its chunk cache
     # This eliminates the Pinecone zero-vector fallback for adjacent chunk lookups
     from src.query_processor import QueryProcessor
+    groq_key = os.getenv("GROQ_API_KEY")
     processor = QueryProcessor(
         pinecone_api_key=pinecone_key,
-        gemini_api_key=gemini_key or "dummy",
+        groq_api_key=groq_key or "",
         index_name="policy-index"
     )
     processor.populate_chunk_cache(chunks)
 
-    # Step 4: Run all queries in parallel using the shared processor, track per-query time
+    # Step 4: Run all queries in parallel using the ReAct agent, track per-query time
     t2 = time.time()
-    async def run_query(query: str, embedding: list, idx: int):
+    async def run_query(query: str, idx: int):
         loop = asyncio.get_event_loop()
         import concurrent.futures
         t_q = time.time()
         with concurrent.futures.ThreadPoolExecutor() as pool:
             result = await loop.run_in_executor(
-                pool, processor.process_query_sync, query, embedding
+                pool, processor.process_query_routed_sync, query
             )
         return idx, result, round(time.time() - t_q, 2)
 
-    tasks = [run_query(q, emb, i) for i, (q, emb) in enumerate(zip(queries, all_embeddings))]
+    tasks = [run_query(q, i) for i, q in enumerate(queries)]
+    # Note: all_embeddings computed above is no longer used by the ReAct path
+    # (each tool call inside the agent embeds its own sub-query). Kept for
+    # potential future fast-path queries that skip the agent loop.
     raw_results = await asyncio.gather(*tasks)
     raw_results.sort(key=lambda x: x[0])
     query_time = time.time() - t2
@@ -487,10 +487,9 @@ async def _process_pdf_and_answer(pdf_path: str, queries: List[str]) -> JSONResp
     except Exception as e:
         print(f"⚠️ Index cleanup failed: {e}")
 
-    # Step 6: Build response
+    # Step 6: Build response — include reasoning_trace from ReAct loop
     answers = []
     for _, result, _ in raw_results:
-        result["success"] = result.get("status") == "success"
         evaluation = result.get("evaluation", {})
         answers.append({
             "decision": evaluation.get("decision", "unclear"),
@@ -498,6 +497,10 @@ async def _process_pdf_and_answer(pdf_path: str, queries: List[str]) -> JSONResp
             "answer": evaluation.get("answer", "No answer found"),
             "justification": evaluation.get("justification", ""),
             "relevant_clauses": evaluation.get("relevant_clauses", []),
+            "query_type": result.get("query_type", "simple"),
+            "reasoning_trace": result.get("reasoning_trace", []),
+            "steps_taken": result.get("steps_taken", 0),
+            "agent_status": result.get("agent_status", "unknown"),
         })
 
     timing = {
@@ -566,7 +569,6 @@ async def _process_pdf_and_answer(pdf_path: str, queries: List[str]) -> JSONResp
 )
 async def upload_and_query(
     request: Request,
-    token: str = Depends(verify_token),
 ):
     try:
         form = await request.form()
@@ -609,7 +611,7 @@ async def upload_and_query(
     description="Returns the number of vectors currently in the Pinecone index.",
     tags=["Insurance RAG"],
 )
-async def index_status(token: str = Depends(verify_token)):
+async def index_status():
     pinecone_key = os.getenv("PINECONE_API_KEY")
     if not pinecone_key:
         raise HTTPException(status_code=500, detail="PINECONE_API_KEY not set")
@@ -630,7 +632,7 @@ async def index_status(token: str = Depends(verify_token)):
     ),
     tags=["Insurance RAG"],
 )
-async def list_runs(token: str = Depends(verify_token)):
+async def list_runs():
     records = load_telemetry_summary()
     return JSONResponse({
         "total_runs": len(records),
@@ -644,7 +646,7 @@ async def list_runs(token: str = Depends(verify_token)):
     description="Returns the complete telemetry JSON for a single run by its run_id.",
     tags=["Insurance RAG"],
 )
-async def get_run(run_id: str, token: str = Depends(verify_token)):
+async def get_run(run_id: str):
     telemetry_path = os.path.join("artifacts", "telemetry", f"{run_id}.json")
     output_path = os.path.join("sample_outputs", f"{run_id}.json")
 
