@@ -1,0 +1,68 @@
+{
+  "run_id": "BAJHLIP23020V012223_20260622_180754",
+  "timestamp": "2026-06-22T18:07:54.975812",
+  "file": "BAJHLIP23020V012223.pdf",
+  "questions": [
+    "What about Dental treatment internationally?"
+  ],
+  "answers": [
+    {
+      "decision": "partial",
+      "confidence": 0.95,
+      "answer": "International dental treatment is partially covered. While general out-patient dental treatment expenses are not covered, an optional 'Dental Plan Benefits' can be purchased for an additional premium, covering routine dental treatments, dental surgery (excluding implants, prostheses, and orthodontics), and periodontics outside India, subject to a 20% co-payment and a 30-day waiting period in the first year. Emergency inpatient dental treatment arising from an accident and specific oral and maxillofacial surgical procedures are covered under the main inpatient plan.",
+      "justification": "The policy explicitly states exclusions for general out-patient dental treatment, outlines an optional dental plan with specific inclusions and exclusions, and mentions coverage for emergency dental treatment due to accidents and certain oral/maxillofacial surgeries.",
+      "relevant_clauses": [
+        {
+          "section": "OUT-PATIENT BENEFITS FOR INTERNATIONAL COVER",
+          "content": "Out-patient Dental Treatment expenses will not be covered.",
+          "page": 29
+        },
+        {
+          "section": "DENTAL PLAN BENEFITS (Optional)",
+          "content": "In consideration of payment of additional premium by the Insured... Global Health Care Policy is extended to pay the expenses incurred for the below mentioned Dental related covers with a mandatory Co-Payment of 20% on each and every claim...",
+          "page": 18
+        },
+        {
+          "section": "DENTAL PLAN BENEFITS (Optional)",
+          "content": "1. Dental treatment outside India We will pay Customary and Reasonable expenses... for Dental Treatment which includes annual check-up, simple fillings related to cavities or decay, root canal treatment and dental prescription drugs.",
+          "page": 18
+        },
+        {
+          "section": "DENTAL PLAN BENEFITS (Optional)",
+          "content": "2. Dental surgery outside India We will pay Customary and Reasonable expenses... for Dental Surgery which includes the surgical extraction of teeth, as well as other tooth-related surgical procedures such as apicoectomy, Surgical removal of cysts, Orthognathic surgeries for the correction of malocclusion and dental prescription drugs. Exclusions:  Dental surgery does not cover surgical treatment that relates to dental implants.  Dental Prostheses, dental implants, orthodontics.",
+          "page": 19
+        },
+        {
+          "section": "DENTAL PLAN BENEFITS (Optional)",
+          "content": "Exclusions applicable to Dental Plan Benefits: a. During the first year of Global Health Care Policy with Us, 30 days waiting period would be applicable for all claims except those arising out of Accidental Injury...",
+          "page": 19
+        },
+        {
+          "section": "IN-PATIENT BENEFITS FOR INTERNATIONAL COVER",
+          "content": "x. Emergency Inpatient Hospitalization for Dental Treatment arising from an Accident",
+          "page": 13
+        },
+        {
+          "section": "EXCLUSIONS– SPECIFIC EXCLUSIONS APPLICABLE TO INTERNATIONAL COVER",
+          "content": "30) The following benefits or any adverse consequences or complications relating to them, unless otherwise indicated in Your Table of Benefits: ...  Dental treatment, dental surgery, periodontics, orthodontics and dental prostheses. The only exception is oral and maxillofacial surgical procedures, which are covered within the overall limit of Your In-patient Plan",
+          "page": 27
+        },
+        {
+          "section": "SPECIFIC DEFINITIONS",
+          "content": "31. Oral and maxillofacial surgical procedures outside India: ... Unless You hold an International Dental Plan, We do not cover the following procedures even if they are performed by an oral and maxillofacial surgeon:  Surgical removal of impacted teeth  Surgical removal of cysts  Orthognathic surgeries for the correction of malocclusion.",
+          "page": 8
+        }
+      ]
+    }
+  ],
+  "timing": {
+    "total_seconds": 72.54,
+    "index_seconds": 33.43,
+    "embed_seconds": 0.48,
+    "query_seconds": 33.25,
+    "cache_hit": false,
+    "per_query_seconds": [
+      33.25
+    ]
+  }
+}

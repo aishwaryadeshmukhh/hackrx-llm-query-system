@@ -54,18 +54,22 @@ class QueryProcessor:
                 if check_or_create_pinecone_index(pinecone_api_key, index_name, 1024):
                     self.pc = Pinecone(api_key=pinecone_api_key)
                     self.index = self.pc.Index(index_name)
+                    self._chunk_cache: dict = {}  # (doc_name, chunk_index) -> text
                     print("✅ Initialized Pinecone client and index")
                 else:
                     print("❌ Failed to create/verify Pinecone index")
                     self.pc = None
                     self.index = None
+                    self._chunk_cache: dict = {}
             except Exception as e:
                 print(f"Pinecone initialization error: {e}")
                 self.pc = None
                 self.index = None
+                self._chunk_cache: dict = {}
         else:
             self.pc = None
             self.index = None
+            self._chunk_cache: dict = {}
         
         # Use Pinecone embeddings - no fallbacks
         print("✅ Using Pinecone multilingual-e5-large embeddings")
@@ -858,23 +862,38 @@ class QueryProcessor:
             print(f"⚠️ Error combining chunks: {e}")
             return main_text
     
+    def populate_chunk_cache(self, chunks: List[Dict]) -> None:
+        """Populate the in-memory chunk cache from a list of chunk dicts (call after indexing)."""
+        for chunk in chunks:
+            key = (chunk.get('document_name', ''), chunk.get('chunk_index', 0))
+            self._chunk_cache[key] = chunk.get('content', chunk.get('text', ''))
+        print(f"✅ Chunk cache populated: {len(self._chunk_cache)} entries")
+
     def _get_adjacent_chunks_extended(self, doc_name: str, chunk_index: int, chunks_before: int = 25, chunks_after: int = 25) -> List[Dict]:
-        """Retrieve extended adjacent chunks (25 before + 25 after) from the same document."""
+        """Retrieve adjacent chunks using the in-memory cache (fast) or Pinecone fallback."""
+        adjacent = []
+
+        # Fast path: use local cache
+        if self._chunk_cache:
+            for dist in range(1, chunks_before + 1):
+                idx = chunk_index - dist
+                text = self._chunk_cache.get((doc_name, idx))
+                if text:
+                    adjacent.append({'text': text, 'chunk_index': idx, 'position': 'before', 'distance': dist})
+            for dist in range(1, chunks_after + 1):
+                idx = chunk_index + dist
+                text = self._chunk_cache.get((doc_name, idx))
+                if text:
+                    adjacent.append({'text': text, 'chunk_index': idx, 'position': 'after', 'distance': dist})
+            print(f"🔍 Cache hit: {len(adjacent)} adjacent chunks for {doc_name} chunk {chunk_index}")
+            return adjacent
+
+        # Slow fallback: query Pinecone (only when cache is not populated)
         try:
             if not self.index:
                 return []
-            
-            # Create a dummy vector for metadata-only search (correct dimension)
-            dummy_vector = [0.0] * 1024  # Fixed dimension for multilingual-e5-large
-            
-            # Query for all chunks from the same document
-            response = self.index.query(
-                vector=dummy_vector,
-                top_k=1000,  # Get many chunks to find all adjacent ones
-                include_metadata=True
-            )
-            
-            # Filter and find adjacent chunks manually
+            dummy_vector = [0.0] * 1024
+            response = self.index.query(vector=dummy_vector, top_k=1000, include_metadata=True)
             same_doc_chunks = []
             for match in response.matches:
                 metadata = match.metadata or {}
@@ -882,57 +901,21 @@ class QueryProcessor:
                     same_doc_chunks.append({
                         "text": metadata.get("text", ""),
                         "chunk_index": metadata.get("chunk_index", 0),
-                        "chunk_id": match.id,
-                        "score": match.score
                     })
-            
-            # Sort by chunk index to find adjacent chunks
             same_doc_chunks.sort(key=lambda x: x["chunk_index"])
-            
-            # Find chunks adjacent to our target
-            adjacent = []
-            target_found = False
-            target_position = None
-            
-            for i, chunk in enumerate(same_doc_chunks):
-                if chunk["chunk_index"] == chunk_index:
-                    target_found = True
-                    target_position = i
-                    break
-            
-            if target_found:
-                # Get 25 previous chunks
-                start_idx = max(0, target_position - chunks_before)
-                for j in range(start_idx, target_position):
-                    prev_chunk = same_doc_chunks[j]
-                    adjacent.append({
-                        "text": prev_chunk["text"],
-                        "chunk_index": prev_chunk["chunk_index"],
-                        "position": "before",
-                        "distance": target_position - j
-                    })
-                
-                # Get 25 next chunks
-                end_idx = min(len(same_doc_chunks), target_position + chunks_after + 1)
-                for j in range(target_position + 1, end_idx):
-                    next_chunk = same_doc_chunks[j]
-                    adjacent.append({
-                        "text": next_chunk["text"],
-                        "chunk_index": next_chunk["chunk_index"],
-                        "position": "after",
-                        "distance": j - target_position
-                    })
-            else:
-                print(f"⚠️ Target chunk {chunk_index} not found in document {doc_name}")
+            target_pos = next((i for i, c in enumerate(same_doc_chunks) if c["chunk_index"] == chunk_index), None)
+            if target_pos is None:
                 return []
-            
-            print(f"🔍 Found {len(adjacent)} adjacent chunks for {doc_name} chunk {chunk_index} (target: 25 before + 25 after)")
+            for j in range(max(0, target_pos - chunks_before), target_pos):
+                c = same_doc_chunks[j]
+                adjacent.append({'text': c['text'], 'chunk_index': c['chunk_index'], 'position': 'before', 'distance': target_pos - j})
+            for j in range(target_pos + 1, min(len(same_doc_chunks), target_pos + chunks_after + 1)):
+                c = same_doc_chunks[j]
+                adjacent.append({'text': c['text'], 'chunk_index': c['chunk_index'], 'position': 'after', 'distance': j - target_pos})
+            print(f"🔍 Pinecone fallback: {len(adjacent)} adjacent chunks for {doc_name} chunk {chunk_index}")
             return adjacent
-            
         except Exception as e:
-            print(f"⚠️ Could not retrieve adjacent chunks: {e}")
-            import traceback
-            traceback.print_exc()
+            print(f"⚠️ Adjacent chunk lookup failed: {e}")
             return []
     
     def _create_comprehensive_context(self, top_vectors: List[Dict]) -> str:
@@ -1093,44 +1076,40 @@ class QueryProcessor:
             vector_summary.append(f"Vector {i}: {document_name} (Similarity: {score:.3f})")
         
         prompt = f"""
-        You are an insurance policy expert. Based on the comprehensive context from policy documents, provide a clear and concise answer in 2-3 sentences.
+        You are an insurance policy expert. Analyse the policy context below and answer the question.
 
         QUERY: {query}
 
         EXTRACTED ENTITIES:
         {json.dumps(entities, indent=2)}
 
-        TOP 5 VECTORS SUMMARY:
+        TOP VECTORS SUMMARY:
         {chr(10).join(vector_summary)}
 
-        COMPREHENSIVE POLICY CONTEXT WITH ADJACENT CHUNKS:
+        COMPREHENSIVE POLICY CONTEXT:
         {comprehensive_context}
 
         Instructions:
-        - Each vector section contains the most relevant chunk plus 25 chunks before and 25 chunks after it
-        - Consider information from all 5 vector sections when forming your answer
-        - Look for complementary information across different sections
-        - If multiple sections discuss the same topic, synthesize the information
-        - For coverage questions, check waiting periods, exclusions, and conditions across all sections
-        - For amount/limit questions, look for specific numbers in any of the sections
+        - Read all context sections carefully before deciding.
+        - Check for waiting periods and exclusions that may override coverage.
+        - Each vector section contains the main chunk plus 25 chunks before and after it.
 
-        Return your answer as a JSON object with these fields:
-        - answer: string (your concise answer in 2-3 sentences)
-        - source_document: string (the primary document name you referenced)
-        - relevant_sections: array of integers (which vector sections 1-5 were most relevant)
-
-        For yes/no questions, format your answer as "Yes, [brief reason]" or "No, [brief reason]"
-        Even if something is not explicitly mentioned, infer from the comprehensive context provided.
-        Use information from multiple sections to provide a complete answer.
-
-        Example response:
+        Return ONLY a JSON object with exactly these fields:
         {{
-          "answer": "Yes, dental implants are covered up to ₹50,000 under your policy's dental care benefit. This is subject to a 6-month waiting period as mentioned in the policy terms.",
-          "source_document": "policy.pdf",
-          "relevant_sections": [1, 3, 4]
+          "decision": "covered" | "not_covered" | "partial" | "unclear",
+          "confidence": <float 0.0–1.0>,
+          "answer": "<concise 2-3 sentence answer>",
+          "justification": "<which clause or section supports this decision>",
+          "relevant_clauses": [
+            {{"section": "<section name>", "content": "<relevant text excerpt>", "page": <page number or null>}}
+          ]
         }}
 
-        Please provide accurate information based solely on the comprehensive policy context provided. Only return the JSON object, nothing else.
+        Rules:
+        - decision must be exactly one of: covered, not_covered, partial, unclear
+        - confidence 0.9+ only when the clause is explicitly stated; 0.5–0.89 when inferred; below 0.5 when uncertain
+        - relevant_clauses must contain at least one entry if decision is not "unclear"
+        - Return only the JSON object, no other text.
         """
         
         # Use robust request method
@@ -1152,11 +1131,15 @@ class QueryProcessor:
         evaluation = self._extract_json_from_response(response_text, "comprehensive evaluation")
         if evaluation:
             print("✅ Successfully completed comprehensive evaluation using LLM")
-            # Add metadata about the comprehensive context
+            # Ensure all fields app.py expects are present
+            evaluation.setdefault('decision', 'unclear')
+            evaluation.setdefault('confidence', 0.5)
+            evaluation.setdefault('justification', evaluation.get('answer', 'No justification available'))
+            evaluation.setdefault('relevant_clauses', [])
             evaluation['context_stats'] = {
                 'total_vectors': len(top_vectors),
                 'total_context_length': len(comprehensive_context),
-                'chunks_per_vector': 51  # 25 before + 1 main + 25 after
+                'chunks_per_vector': 51
             }
             return evaluation
         else:

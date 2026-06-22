@@ -48,14 +48,25 @@ def detect_table_structures(page, min_rows=2, min_cols=2) -> List[Dict]:
                                 df = df.dropna(how='all').dropna(axis=1, how='all')
                                 
                                 if df.shape[0] >= 1 and df.shape[1] >= min_cols:
-                                    table_markdown = df.to_markdown(index=False, tablefmt='pipe')
-                                    tables.append({
-                                        'content': table_markdown,
-                                        'type': 'table',
-                                        'rows': len(df) + 1,  # +1 for header
-                                        'cols': len(df.columns),
-                                        'bbox': table.bbox if hasattr(table, 'bbox') else None
-                                    })
+                                    headers = list(df.columns)
+                                    rows_text = []
+                                    for _, row in df.iterrows():
+                                        cell_pairs = " | ".join(
+                                            f"{headers[i]}: {str(row.iloc[i]).strip()}"
+                                            for i in range(len(headers))
+                                            if str(row.iloc[i]).strip()
+                                        )
+                                        if cell_pairs:
+                                            rows_text.append(cell_pairs)
+                                    table_text = "\n".join(rows_text)
+                                    if table_text.strip():
+                                        tables.append({
+                                            'content': table_text,
+                                            'type': 'table',
+                                            'rows': len(df) + 1,
+                                            'cols': len(df.columns),
+                                            'bbox': table.bbox if hasattr(table, 'bbox') else None
+                                        })
                             except Exception as e:
                                 print(f"⚠️ Table DataFrame creation error: {e}")
                                 continue
@@ -213,7 +224,21 @@ def parse_document_enhanced_pymupdf(pdf_path: str, save_parsed_text: bool = Fals
                         'page': page_num + 1,
                         'source': 'optimized_pymupdf'
                     })
-            
+
+                    # Extract tables from this page (left-to-right, row by row)
+                    tables = detect_table_structures(page)
+                    for table in tables:
+                        table_text = table['content']
+                        all_text += table_text + "\n\n"
+                        ordered_content.append({
+                            'content': table_text,
+                            'type': 'table',
+                            'page': page_num + 1,
+                            'source': 'pymupdf_table',
+                            'rows': table.get('rows', 0),
+                            'cols': table.get('cols', 0)
+                        })
+
             if (page_num + 1) % 10 == 0:  # Progress update every 10 pages
                 print(f"   📖 Processed {page_num + 1}/{total_pages} pages...")
         

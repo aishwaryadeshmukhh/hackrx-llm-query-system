@@ -323,6 +323,8 @@ def index_chunks_in_pinecone(chunks: List[Dict], pinecone_api_key: str, pinecone
             'text': chunk['content'][:1000],
             'document_name': chunk['document_name'],
             'page_number': chunk.get('page_number', 0),
+            'chunk_index': chunk.get('chunk_index', 0),
+            'content_type': chunk.get('content_type', 'text'),
             'chunk_id': chunk['chunk_id']
         }
         embedding_list = embedding if isinstance(embedding, list) else list(map(float, embedding))

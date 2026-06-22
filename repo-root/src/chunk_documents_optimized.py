@@ -163,7 +163,7 @@ class OptimizedTextChunker:
         
         return chunks
     
-    def chunk_text(self, text: str, document_name: str = "unknown") -> List[Dict[str, Any]]:
+    def chunk_text(self, text: str, document_name: str = "unknown", page_number: int = 0, content_type: str = "text") -> List[Dict[str, Any]]:
         """
         Chunk a single text document into optimized chunks.
         
@@ -217,6 +217,8 @@ class OptimizedTextChunker:
                 'content': chunk_text,
                 'chunk_index': i,
                 'char_count': len(chunk_text),
+                'page_number': page_number,
+                'content_type': content_type,
                 'metadata': {
                     'chunking_method': 'optimized_text',
                     'source_document': document_name,
@@ -272,12 +274,31 @@ def chunk_documents_optimized(parsed_content: List[Dict[str, Any]],
         doc_name = doc_data.get('document_name', 'unknown')
         content = doc_data.get('content', '')
         
-        if not content or not content.strip():
+        ordered_content = doc_data.get('ordered_content', [])
+
+        if ordered_content:
+            # Chunk each content block separately, preserving page number and type
+            doc_chunks = []
+            for item in ordered_content:
+                item_text = item.get('content', '').strip()
+                if not item_text:
+                    continue
+                item_page = item.get('page', 0)
+                item_type = item.get('type', 'text')
+                item_chunks = chunker.chunk_text(item_text, doc_name, page_number=item_page, content_type=item_type)
+                # Offset chunk_index so indices are unique across the whole document
+                offset = len(doc_chunks)
+                for c in item_chunks:
+                    c['chunk_index'] = offset + c['chunk_index']
+                doc_chunks.extend(item_chunks)
+            if not doc_chunks and content and content.strip():
+                doc_chunks = chunker.chunk_text(content, doc_name)
+        elif content and content.strip():
+            doc_chunks = chunker.chunk_text(content, doc_name)
+        else:
             print(f"⚠️ Skipping empty document: {doc_name}")
             continue
-        
-        # Chunk the document
-        doc_chunks = chunker.chunk_text(content, doc_name)
+
         all_chunks.extend(doc_chunks)
     
     total_time = time.time() - start_time

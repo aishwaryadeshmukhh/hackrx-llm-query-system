@@ -9,6 +9,7 @@ import requests
 from dotenv import load_dotenv
 from src.pipeline import process_all_documents_pipeline, query_documents_sync
 from src.embed_and_index import generate_query_embedding_pinecone
+from src.telemetry import save_run, load_telemetry_summary
 from pinecone import Pinecone
 from pydantic import BaseModel
 from typing import List, Optional
@@ -368,7 +369,299 @@ async def query_pdf(input: QueryPDFRequest, token: str = Depends(verify_token)):
     }
     
     return JSONResponse(simple_response)
-     
+
+
+# Module-level cache: pdf_hash -> list of chunks (survives across requests)
+_chunk_cache: dict = {}
+
+def _hash_file(path: str) -> str:
+    import hashlib
+    h = hashlib.md5()
+    with open(path, "rb") as f:
+        for block in iter(lambda: f.read(65536), b""):
+            h.update(block)
+    return h.hexdigest()
+
+
+async def _process_pdf_and_answer(pdf_path: str, queries: List[str]) -> JSONResponse:
+    """
+    Shared logic for both upload and URL endpoints.
+    - Caches chunks by file hash so re-uploading the same PDF skips parse+embed.
+    - Populates QueryProcessor chunk cache to eliminate Pinecone zero-vector lookups.
+    """
+    total_start_time = time.time()
+    pinecone_key = os.getenv("PINECONE_API_KEY")
+    gemini_key = os.getenv("GEMINI_API_KEY")
+
+    if not pinecone_key:
+        return JSONResponse({"error": "PINECONE_API_KEY not set in environment"}, status_code=500)
+
+    file_hash = _hash_file(pdf_path)
+    cached = _chunk_cache.get(file_hash)
+
+    if cached:
+        print(f"✅ Cache hit for {os.path.basename(pdf_path)} ({file_hash[:8]}) — skipping parse+embed")
+        chunks = cached["chunks"]
+        index_time = 0.0
+    else:
+        # Step 1: Parse + chunk + embed + index
+        t0 = time.time()
+        docs_dir = os.path.dirname(pdf_path)
+        try:
+            index_result = await process_all_documents_pipeline(
+                docs_dir=docs_dir,
+                pinecone_api_key=pinecone_key,
+                force_reprocess=True
+            )
+        except Exception as e:
+            return JSONResponse({"error": f"Indexing failed: {str(e)}"}, status_code=500)
+
+        if not index_result.get("success"):
+            return JSONResponse({"error": index_result.get("error", "Indexing pipeline failed")}, status_code=500)
+
+        # Rebuild chunks from ordered_content so we can populate the processor cache
+        from src.parse_documents import load_and_parse_documents
+        from src.chunk_documents_optimized import chunk_documents_optimized
+
+        parsed = load_and_parse_documents([pdf_path])
+        transformed = []
+        for doc in parsed:
+            parsed_output = doc.get("parsed_output", {})
+            transformed.append({
+                "document_name": doc.get("document_name", ""),
+                "content": parsed_output.get("content", ""),
+                "ordered_content": parsed_output.get("ordered_content", []),
+            })
+        chunks = chunk_documents_optimized(transformed)
+
+        # Store in module-level cache
+        _chunk_cache[file_hash] = {"chunks": chunks, "filename": os.path.basename(pdf_path)}
+        index_time = time.time() - t0
+        print(f"✅ Indexed and cached {len(chunks)} chunks in {index_time:.1f}s")
+
+    # Step 2: Batch-embed all queries in one API call
+    t1 = time.time()
+    try:
+        pc = Pinecone(api_key=pinecone_key)
+        response = pc.inference.embed(
+            model="multilingual-e5-large",
+            inputs=queries,
+            parameters={"input_type": "query", "truncate": "END"}
+        )
+        all_embeddings = [item.values for item in response.data] if hasattr(response, "data") else [item["values"] for item in response]
+    except Exception:
+        all_embeddings = [generate_query_embedding_pinecone(q, pinecone_key) for q in queries]
+    embed_time = time.time() - t1
+
+    # Step 3: Build one shared QueryProcessor and populate its chunk cache
+    # This eliminates the Pinecone zero-vector fallback for adjacent chunk lookups
+    from src.query_processor import QueryProcessor
+    processor = QueryProcessor(
+        pinecone_api_key=pinecone_key,
+        gemini_api_key=gemini_key or "dummy",
+        index_name="policy-index"
+    )
+    processor.populate_chunk_cache(chunks)
+
+    # Step 4: Run all queries in parallel using the shared processor, track per-query time
+    t2 = time.time()
+    async def run_query(query: str, embedding: list, idx: int):
+        loop = asyncio.get_event_loop()
+        import concurrent.futures
+        t_q = time.time()
+        with concurrent.futures.ThreadPoolExecutor() as pool:
+            result = await loop.run_in_executor(
+                pool, processor.process_query_sync, query, embedding
+            )
+        return idx, result, round(time.time() - t_q, 2)
+
+    tasks = [run_query(q, emb, i) for i, (q, emb) in enumerate(zip(queries, all_embeddings))]
+    raw_results = await asyncio.gather(*tasks)
+    raw_results.sort(key=lambda x: x[0])
+    query_time = time.time() - t2
+    per_query_timings = [r[2] for r in raw_results]
+
+    # Step 5: Clean up Pinecone index (chunks stay in module cache)
+    try:
+        pc.Index("policy-index").delete(delete_all=True)
+    except Exception as e:
+        print(f"⚠️ Index cleanup failed: {e}")
+
+    # Step 6: Build response
+    answers = []
+    for _, result, _ in raw_results:
+        result["success"] = result.get("status") == "success"
+        evaluation = result.get("evaluation", {})
+        answers.append({
+            "decision": evaluation.get("decision", "unclear"),
+            "confidence": evaluation.get("confidence", 0.0),
+            "answer": evaluation.get("answer", "No answer found"),
+            "justification": evaluation.get("justification", ""),
+            "relevant_clauses": evaluation.get("relevant_clauses", []),
+        })
+
+    timing = {
+        "total_seconds": round(time.time() - total_start_time, 2),
+        "index_seconds": round(index_time, 2) if not cached else 0,
+        "embed_seconds": round(embed_time, 2),
+        "query_seconds": round(query_time, 2),
+        "cache_hit": bool(cached),
+        "per_query_seconds": per_query_timings,
+    }
+
+    # Step 7: Save output + telemetry
+    run_id = save_run(
+        filename=os.path.basename(pdf_path),
+        file_hash=file_hash,
+        questions=queries,
+        answers=answers,
+        timing=timing,
+        cache_hit=bool(cached),
+        per_query_timings=per_query_timings,
+        chunk_count=len(chunks),
+    )
+
+    return JSONResponse({
+        "run_id": run_id,
+        "answers": answers,
+        "timing": timing,
+        "indexed_file": os.path.basename(pdf_path),
+    })
+
+
+@app.post(
+    "/hackrx/upload",
+    summary="Upload a PDF and ask questions",
+    description=(
+        "Upload a PDF file and a newline-separated list of questions as multipart/form-data. "
+        "Fields: **file** (PDF binary) and **questions** (plain text, one question per line). "
+        "The file is indexed, all questions answered in parallel, and the index cleared afterwards."
+    ),
+    tags=["Insurance RAG"],
+    openapi_extra={
+        "requestBody": {
+            "content": {
+                "multipart/form-data": {
+                    "schema": {
+                        "type": "object",
+                        "required": ["file", "questions"],
+                        "properties": {
+                            "file": {
+                                "type": "string",
+                                "format": "binary",
+                                "description": "PDF file to ingest",
+                            },
+                            "questions": {
+                                "type": "string",
+                                "description": "One question per line",
+                                "example": "What is covered under accidental death?\nAre pre-existing conditions covered?\nWhat is the waiting period for maternity?",
+                            },
+                        },
+                    }
+                }
+            },
+            "required": True,
+        }
+    },
+)
+async def upload_and_query(
+    request: Request,
+    token: str = Depends(verify_token),
+):
+    try:
+        form = await request.form()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to parse multipart form: {e}")
+
+    file = form.get("file")
+    if file is None:
+        raise HTTPException(status_code=400, detail=f"Missing form field: 'file'. Fields received: {list(form.keys())}")
+    if not hasattr(file, "read") or not hasattr(file, "filename"):
+        raise HTTPException(status_code=400, detail="'file' must be an uploaded file, not a text field")
+    if not file.filename.lower().endswith(".pdf"):
+        raise HTTPException(status_code=400, detail="Only PDF files are accepted")
+
+    questions_raw = form.get("questions")
+    if questions_raw is None:
+        raise HTTPException(status_code=400, detail="Missing form field: 'questions'")
+    if isinstance(questions_raw, UploadFile):
+        questions_raw = (await questions_raw.read()).decode("utf-8")
+
+    query_list = [q.strip() for q in str(questions_raw).splitlines() if q.strip()]
+    if not query_list:
+        raise HTTPException(status_code=400, detail="At least one question is required")
+
+    tmpdir = tempfile.mkdtemp()
+    pdf_path = os.path.join(tmpdir, file.filename)
+    try:
+        contents = await file.read()
+        with open(pdf_path, "wb") as f:
+            f.write(contents)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to save uploaded file: {e}")
+
+    return await _process_pdf_and_answer(pdf_path, query_list)
+
+
+@app.get(
+    "/hackrx/status",
+    summary="Check index status",
+    description="Returns the number of vectors currently in the Pinecone index.",
+    tags=["Insurance RAG"],
+)
+async def index_status(token: str = Depends(verify_token)):
+    pinecone_key = os.getenv("PINECONE_API_KEY")
+    if not pinecone_key:
+        raise HTTPException(status_code=500, detail="PINECONE_API_KEY not set")
+    try:
+        from src.embed_and_index import get_index_stats
+        stats = get_index_stats(pinecone_key, "policy-index")
+        return JSONResponse(stats)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get(
+    "/hackrx/runs",
+    summary="List all past runs",
+    description=(
+        "Returns a summary table of every recorded run: timing breakdown, "
+        "confidence scores, cache hits, and decisions. Use this to compare runs over time."
+    ),
+    tags=["Insurance RAG"],
+)
+async def list_runs(token: str = Depends(verify_token)):
+    records = load_telemetry_summary()
+    return JSONResponse({
+        "total_runs": len(records),
+        "runs": records,
+    })
+
+
+@app.get(
+    "/hackrx/runs/{run_id}",
+    summary="Get full telemetry for a specific run",
+    description="Returns the complete telemetry JSON for a single run by its run_id.",
+    tags=["Insurance RAG"],
+)
+async def get_run(run_id: str, token: str = Depends(verify_token)):
+    telemetry_path = os.path.join("artifacts", "telemetry", f"{run_id}.json")
+    output_path = os.path.join("sample_outputs", f"{run_id}.json")
+
+    if not os.path.exists(telemetry_path):
+        raise HTTPException(status_code=404, detail=f"Run '{run_id}' not found")
+
+    with open(telemetry_path, encoding="utf-8") as f:
+        telemetry = json.load(f)
+
+    output = None
+    if os.path.exists(output_path):
+        with open(output_path, encoding="utf-8") as f:
+            output = json.load(f)
+
+    return JSONResponse({"telemetry": telemetry, "output": output})
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("backend:app", host="0.0.0.0", port=8000, reload=True)
