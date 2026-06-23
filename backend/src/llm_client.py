@@ -82,7 +82,7 @@ def call_llm(
         for attempt in range(max_retries + 1):
             try:
                 resp = groq_client.chat.completions.create(
-                    model="llama-3.3-70b-versatile",
+                    model="llama-3.1-8b-instant",
                     messages=messages,
                     max_tokens=max_tokens,
                     temperature=temperature,

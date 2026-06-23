@@ -23,40 +23,47 @@ from __future__ import annotations
 
 import json
 import re
-from typing import Any, Dict, List, Optional, TYPE_CHECKING
+from typing import Any, Callable, Dict, List, Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .agent_tools import ToolExecutor
 
-MAX_STEPS = 4
+MAX_STEPS = 7
 
 # ── Prompt templates ─────────────────────────────────────────────────────────
 
 _SYSTEM_PROMPT = """You are an insurance policy analyst. Answer the question using the retrieval tools below.
 
-Available tools:
-- search_policy(query, policy_name=null, top_k=5): General semantic search
-- lookup_exclusions(procedure_or_condition): Search exclusion clauses
+Available tools and their EXACT argument names:
+- search_policy(query, policy_name=null, top_k=15): General semantic search
+  Args example: {"query": "cataract surgery coverage"}
+- lookup_exclusions(procedure_or_condition): Search exclusion and conditional-coverage clauses
+  Args example: {"procedure_or_condition": "bariatric surgery"}
 - check_waiting_period(benefit_type): Search waiting period clauses
+  Args example: {"benefit_type": "pre-existing disease"}
 - get_definitions(term): Fetch glossary/definition entries
+  Args example: {"term": "day care procedure"}
 
 STRICT OUTPUT FORMAT — output EXACTLY ONE of these two blocks per step, nothing else:
 
 When you need more information:
 Thought: <one sentence on what you need next>
 Action: <tool_name>
-Args: {"key": "value"}
+Args: <JSON object with the EXACT argument name shown above>
 
-When you have enough evidence (after 1-2 tool calls is usually enough):
+When you have enough evidence:
 Thought: <one sentence summarising your conclusion>
-Final Answer: {"decision": "covered|not_covered|partial|unclear", "confidence": 0.0, "answer": "2-3 sentences", "justification": "which clause supports this", "relevant_clauses": [{"section": "...", "content": "...", "page": null}]}
+Final Answer: {"decision": "covered|not_covered|partial|unclear", "confidence": 0.0, "answer": "3-5 sentences citing the specific clause, any conditions, limits, and waiting periods that apply", "justification": "exact section name and key clause text from the observation", "relevant_clauses": [{"section": "...", "content": "direct quote from the policy clause", "page": null}]}
 
 CRITICAL RULES:
 - After each tool call, if the observation contains a clear answer, output Final Answer IMMEDIATELY — do NOT call more tools
-- 1-2 tool calls is the target; 3 is the max before you must answer
+- 1-3 tool calls is the target; 7 is the max before you must answer
 - decision must be exactly: covered, not_covered, partial, or unclear
+- In your Final Answer, the "answer" field must be specific: quote the actual limit/duration/condition from the retrieved text, not vague summaries
+- In "relevant_clauses", copy the actual clause text from the observation, do not paraphrase it
 - Do NOT output any text outside the two formats above
 - Do NOT repeat a tool call you already made
+- Use policy-domain terminology in search queries: prefer "area of cover" over "outside usa", "sum insured" over "coverage limit", "hospitalisation" over "hospital stay", "pre-existing disease" over "prior condition"
 """
 
 _STEP_PROMPT_TEMPLATE = """Question: {question}
@@ -174,10 +181,11 @@ def _format_chunks_for_observation(chunks: List[Dict]) -> str:
 
 def run_react_loop(
     question: str,
-    llm,  # groq client (primary) — kept for backward compat
+    llm,
     tool_executor: "ToolExecutor",
     max_steps: int = MAX_STEPS,
-    gemini_model=None,  # fallback model
+    gemini_model=None,
+    on_step: Optional[Callable[[Dict[str, Any]], None]] = None,
 ) -> Dict[str, Any]:
     """
     Run the ReAct loop for one question.
@@ -227,13 +235,16 @@ def run_react_loop(
         print(f"🤔 Step {step_num} [{parsed['type']}]: {parsed.get('thought', '')[:80]}")
 
         if parsed["type"] == "answer":
-            reasoning_trace.append({
+            trace_entry = {
                 "step": step_num,
                 "thought": parsed["thought"],
                 "action": "final_answer",
                 "args": {},
                 "observation": None,
-            })
+            }
+            reasoning_trace.append(trace_entry)
+            if on_step:
+                on_step({"type": "answer", **parsed["answer"], "trace_entry": trace_entry})
             return {
                 "answer": parsed["answer"],
                 "reasoning_trace": reasoning_trace,
@@ -245,13 +256,28 @@ def run_react_loop(
             tool_name = parsed["tool"]
             args = parsed["args"]
 
-            # Execute the tool
+            if on_step:
+                on_step({
+                    "type": "thought",
+                    "step": step_num,
+                    "thought": parsed["thought"],
+                    "action": tool_name,
+                    "args": args,
+                })
+
             try:
                 chunks = tool_executor.execute(tool_name, args)
                 observation = _format_chunks_for_observation(chunks)
             except Exception as e:
                 observation = f"Tool execution failed: {e}"
                 print(f"❌ Tool {tool_name} failed: {e}")
+
+            if on_step:
+                on_step({
+                    "type": "observation",
+                    "step": step_num,
+                    "observation": observation,
+                })
 
             reasoning_trace.append({
                 "step": step_num,

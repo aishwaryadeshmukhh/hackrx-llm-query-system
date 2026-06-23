@@ -54,7 +54,7 @@ TOOL_DECLARATIONS = [
                 },
                 "top_k": {
                     "type": "integer",
-                    "description": "Number of chunks to return. Defaults to 5.",
+                    "description": "Number of chunks to return. Defaults to 15.",
                 },
             },
             "required": ["query"],
@@ -147,6 +147,9 @@ _EXCLUSION_KEYWORDS = [
     "exclusion", "excluded", "not covered", "not payable", "exception",
     "limitation", "shall not", "does not cover", "specifically excluded",
     "not admissible", "not applicable",
+    # conditional-coverage terms — benefits that apply only in certain scenarios
+    "applicable to", "excluding usa", "outside area of cover", "six weeks",
+    "provided that", "subject to", "only if", "only when", "not available",
 ]
 
 _WAITING_PERIOD_KEYWORDS = [
@@ -216,16 +219,34 @@ class ToolExecutor:
 
     # ── tool implementations ─────────────────────────────────────────────────
 
+    # Map common colloquial phrases to exact policy terminology used in the document
+    _QUERY_REPHRASE = [
+        (re.compile(r'\boutside\s+usa\b', re.I),          'outside area of cover'),
+        (re.compile(r'\bexcluding\s+usa\b', re.I),         'outside area of cover'),
+        (re.compile(r'\bmedical\s+emergency\s+abroad\b', re.I), 'emergency treatment outside area of cover'),
+        (re.compile(r'\bgeograph\w+\s+coverage\b', re.I),  'area of cover'),
+        (re.compile(r'\bcoverage\s+limit\b', re.I),        'sum insured'),
+        (re.compile(r'\bhospital\s+stay\b', re.I),         'hospitalisation'),
+        (re.compile(r'\bprior\s+condition\b', re.I),       'pre-existing disease'),
+    ]
+
+    def _normalise_query(self, query: str) -> str:
+        """Replace colloquial terms with exact policy-document terminology."""
+        for pattern, replacement in self._QUERY_REPHRASE:
+            query = pattern.sub(replacement, query)
+        return query
+
     def _search_policy(
         self,
         query: str,
         policy_name: Optional[str] = None,
-        top_k: int = 5,
+        top_k: int = 15,
     ) -> List[Dict]:
         """General semantic search, optionally filtered to one document."""
         if not self.processor.index:
             return []
 
+        query = self._normalise_query(query)
         embedding = self.processor._encode_query(query)
         filter_dict = {"document_name": {"$eq": policy_name}} if policy_name else None
 
@@ -236,7 +257,7 @@ class ToolExecutor:
                 include_metadata=True,
                 filter=filter_dict,
             )
-            chunks = self.processor._process_search_results(response, min_score=0.05)
+            chunks = self.processor._process_search_results(response, min_score=0.01)
             print(f"🔧 search_policy('{query[:50]}') → {len(chunks)} chunks")
             return _format_chunks(chunks, label="search_policy")
         except Exception as e:
@@ -252,7 +273,7 @@ class ToolExecutor:
         if not self.processor.index:
             return []
 
-        search_query = f"exclusion not covered {procedure_or_condition}"
+        search_query = self._normalise_query(f"exclusion not covered {procedure_or_condition}")
         embedding = self.processor._encode_query(search_query)
 
         try:
@@ -261,7 +282,7 @@ class ToolExecutor:
                 top_k=20,
                 include_metadata=True,
             )
-            all_chunks = self.processor._process_search_results(response, min_score=0.03)
+            all_chunks = self.processor._process_search_results(response, min_score=0.01)
 
             # Post-filter: keep chunks that contain exclusion language
             exclusion_chunks = [
@@ -272,8 +293,8 @@ class ToolExecutor:
                 )
             ]
 
-            # Fall back to top-5 by score if nothing matched the keyword filter
-            result = exclusion_chunks[:5] if exclusion_chunks else all_chunks[:3]
+            # Fall back to top-8 by score if nothing matched the keyword filter
+            result = exclusion_chunks[:8] if exclusion_chunks else all_chunks[:5]
             print(f"🔧 lookup_exclusions('{procedure_or_condition}') → {len(result)} chunks")
             return _format_chunks(result, label="lookup_exclusions")
         except Exception as e:
@@ -298,7 +319,7 @@ class ToolExecutor:
                 top_k=20,
                 include_metadata=True,
             )
-            all_chunks = self.processor._process_search_results(response, min_score=0.03)
+            all_chunks = self.processor._process_search_results(response, min_score=0.01)
 
             waiting_chunks = [
                 c for c in all_chunks
@@ -333,7 +354,7 @@ class ToolExecutor:
                 top_k=15,
                 include_metadata=True,
             )
-            all_chunks = self.processor._process_search_results(response, min_score=0.03)
+            all_chunks = self.processor._process_search_results(response, min_score=0.01)
 
             definition_chunks = [
                 c for c in all_chunks

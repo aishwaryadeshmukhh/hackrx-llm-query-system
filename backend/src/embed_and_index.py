@@ -32,7 +32,7 @@ def generate_embeddings_batch(texts: List[str], api_key: str, batch_size: int = 
         # Process in batches
         for i in range(0, total_texts, batch_size):
             batch = texts[i:i+batch_size]
-            print(f"📦 Processing batch {i//batch_size + 1}/{(total_texts+batch_size-1)//batch_size}: {len(batch)} texts")
+            print(f"[embed] batch {i//batch_size + 1}/{(total_texts+batch_size-1)//batch_size}: {len(batch)} texts")
             
             # Use the inference.embed method for this batch
             response = pc.inference.embed(
@@ -48,11 +48,11 @@ def generate_embeddings_batch(texts: List[str], api_key: str, batch_size: int = 
             
             all_embeddings.extend(batch_embeddings)
         
-        print(f"✅ Generated {len(all_embeddings)} embeddings using Pinecone inference ({len(all_embeddings[0]) if all_embeddings else 0} dims)")
+        print(f"[embed] {len(all_embeddings)} embeddings OK ({len(all_embeddings[0]) if all_embeddings else 0} dims)")
         return all_embeddings
-        
+
     except Exception as e:
-        print(f"❌ Error generating embeddings with Pinecone inference: {e}")
+        print(f"[embed] ERROR generating embeddings: {e}")
         # Return non-zero random vectors as fallback
         import random
         fallback_embeddings = []
@@ -96,11 +96,11 @@ def generate_query_embedding_pinecone(query: str, api_key: str) -> List[float]:
         
         # Extract embedding from the response
         embedding = response.data[0].values
-        print(f"✅ Generated query embedding using Pinecone inference ({len(embedding)} dims)")
+        print(f"[embed] query embedding OK ({len(embedding)} dims)")
         return embedding
-        
+
     except Exception as e:
-        print(f"❌ Error generating query embedding with Pinecone inference: {e}")
+        print(f"[embed] ERROR generating query embedding: {e}")
         # Return non-zero random vector as fallback
         import random
         return [random.uniform(-0.01, 0.01) for _ in range(1024)]
@@ -160,7 +160,7 @@ def delete_duplicate_vectors(pinecone_api_key: str, index_name: str = 'policy-in
                     })
                 else:
                     content_hashes[content_hash] = vector_id
-        print(f"🔍 Found {len(duplicates)} duplicate vectors")
+        print(f"[index] Found {len(duplicates)} duplicate vectors")
         if not dry_run and duplicates:
             print("🗑️ Deleting duplicate vectors...")
             duplicate_ids = [dup['duplicate_id'] for dup in duplicates]
@@ -256,7 +256,7 @@ def check_or_create_pinecone_index(pinecone_api_key: str, index_name: str = 'pol
             # SDK returns an object, not a dict
             current_dimension = getattr(stats, 'dimension', None) or (stats.get('dimension', 0) if isinstance(stats, dict) else 0)
             if current_dimension and current_dimension != required_dimension:
-                print(f"⚠️ Index '{index_name}' has {current_dimension} dimensions, but we need {required_dimension}")
+                print(f"Index '{index_name}' has {current_dimension} dimensions, but we need {required_dimension}")
                 if progress_callback:
                     progress_callback(f"Deleting old index ({current_dimension}D)...", 10)
                 pc.delete_index(index_name)
@@ -270,10 +270,10 @@ def check_or_create_pinecone_index(pinecone_api_key: str, index_name: str = 'pol
                     spec=ServerlessSpec(cloud='aws', region='us-east-1')
                 )
                 time.sleep(20)
-                print(f"✅ Successfully recreated index '{index_name}' with {required_dimension} dimensions")
+                print(f"[index] Recreated index '{index_name}' with {required_dimension} dimensions")
                 return True
             else:
-                print(f"✅ Index '{index_name}' already exists with correct {required_dimension} dimensions")
+                print(f"[index] Index '{index_name}' already exists with correct {required_dimension} dimensions")
                 return True
         else:
             if progress_callback:
@@ -285,10 +285,10 @@ def check_or_create_pinecone_index(pinecone_api_key: str, index_name: str = 'pol
                 spec=ServerlessSpec(cloud='aws', region='us-east-1')
             )
             time.sleep(15)
-            print(f"✅ Successfully created index '{index_name}' with {required_dimension} dimensions")
+            print(f"[index] Created index '{index_name}' with {required_dimension} dimensions")
             return True
     except Exception as e:
-        print(f"❌ Error managing Pinecone index: {e}")
+        print(f"[index] ERROR managing Pinecone index: {e}")
         if progress_callback:
             progress_callback(f"Index creation failed: {e}", -1)
         return False

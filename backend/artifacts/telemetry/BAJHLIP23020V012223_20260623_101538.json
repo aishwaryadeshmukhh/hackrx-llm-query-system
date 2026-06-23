@@ -1,0 +1,50 @@
+{
+  "run_id": "BAJHLIP23020V012223_20260623_101538",
+  "timestamp": "2026-06-23T10:15:38.023884",
+  "endpoint": "/hackrx/upload",
+  "request": {
+    "filename": "BAJHLIP23020V012223.pdf",
+    "file_hash": "36284129c3989ce94f8c6e81cf7e29d6",
+    "question_count": 1,
+    "questions": [
+      "Is knee replacement surgery covered in the first year of the policy?"
+    ],
+    "cache_hit": false,
+    "chunk_count": 223
+  },
+  "timing": {
+    "total_s": 58.08,
+    "index_s": 43.98,
+    "embed_s": 0.74,
+    "query_s": 6.55,
+    "cache_hit": false
+  },
+  "per_query": [
+    {
+      "index": 0,
+      "question": "Is knee replacement surgery covered in the first year of the policy?",
+      "time_s": 6.55,
+      "decision": "not_covered",
+      "confidence": 0.82
+    }
+  ],
+  "throughput": {
+    "questions_per_second": 0.153,
+    "chunks_per_second": 5.1
+  },
+  "model": {
+    "embedding": "multilingual-e5-large",
+    "llm": "gemini-2.5-flash",
+    "embedding_dims": 1024
+  },
+  "quality": {
+    "decisions": [
+      "not_covered"
+    ],
+    "confidences": [
+      0.82
+    ],
+    "mean_confidence": 0.82,
+    "unclear_count": 0
+  }
+}
