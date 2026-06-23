@@ -1,0 +1,50 @@
+{
+  "run_id": "BAJHLIP23020V012223_20260622_191028",
+  "timestamp": "2026-06-22T19:10:28.783511",
+  "endpoint": "/hackrx/upload",
+  "request": {
+    "filename": "BAJHLIP23020V012223.pdf",
+    "file_hash": "36284129c3989ce94f8c6e81cf7e29d6",
+    "question_count": 1,
+    "questions": [
+      "Is a 45 year old male covered for knee replacement surgery done 2 months after policy inception?"
+    ],
+    "cache_hit": false,
+    "chunk_count": 223
+  },
+  "timing": {
+    "total_s": 195.83,
+    "index_s": 172.0,
+    "embed_s": 0.56,
+    "query_s": 14.72,
+    "cache_hit": false
+  },
+  "per_query": [
+    {
+      "index": 0,
+      "question": "Is a 45 year old male covered for knee replacement surgery done 2 months after policy inception?",
+      "time_s": 14.72,
+      "decision": "not_covered",
+      "confidence": 0.9
+    }
+  ],
+  "throughput": {
+    "questions_per_second": 0.068,
+    "chunks_per_second": 1.3
+  },
+  "model": {
+    "embedding": "multilingual-e5-large",
+    "llm": "gemini-2.5-flash",
+    "embedding_dims": 1024
+  },
+  "quality": {
+    "decisions": [
+      "not_covered"
+    ],
+    "confidences": [
+      0.9
+    ],
+    "mean_confidence": 0.9,
+    "unclear_count": 0
+  }
+}

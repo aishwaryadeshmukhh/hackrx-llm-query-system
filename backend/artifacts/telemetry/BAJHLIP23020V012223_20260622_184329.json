@@ -1,0 +1,50 @@
+{
+  "run_id": "BAJHLIP23020V012223_20260622_184329",
+  "timestamp": "2026-06-22T18:43:29.706825",
+  "endpoint": "/hackrx/upload",
+  "request": {
+    "filename": "BAJHLIP23020V012223.pdf",
+    "file_hash": "36284129c3989ce94f8c6e81cf7e29d6",
+    "question_count": 1,
+    "questions": [
+      "Is dental treatment covered under this policy? What is the waiting period for maternity benefits? Is a 45 year old male covered for knee replacement surgery done 2 months after policy inception?"
+    ],
+    "cache_hit": false,
+    "chunk_count": 223
+  },
+  "timing": {
+    "total_s": 88.59,
+    "index_s": 39.61,
+    "embed_s": 0.65,
+    "query_s": 25.02,
+    "cache_hit": false
+  },
+  "per_query": [
+    {
+      "index": 0,
+      "question": "Is dental treatment covered under this policy? What is the waiting period for maternity benefits? Is a 45 year old male covered for knee replacement surgery done 2 months after policy inception?",
+      "time_s": 25.02,
+      "decision": "unclear",
+      "confidence": 0.0
+    }
+  ],
+  "throughput": {
+    "questions_per_second": 0.04,
+    "chunks_per_second": 5.6
+  },
+  "model": {
+    "embedding": "multilingual-e5-large",
+    "llm": "gemini-2.5-flash",
+    "embedding_dims": 1024
+  },
+  "quality": {
+    "decisions": [
+      "unclear"
+    ],
+    "confidences": [
+      0.0
+    ],
+    "mean_confidence": 0.0,
+    "unclear_count": 1
+  }
+}

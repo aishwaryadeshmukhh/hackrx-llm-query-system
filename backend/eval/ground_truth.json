@@ -1,0 +1,122 @@
+[
+  {
+    "id": "Q01",
+    "question": "Is knee replacement surgery covered in the first year of the policy?",
+    "expected_decision": "not_covered",
+    "expected_answer_keywords": ["24 months", "waiting period", "joint replacement"],
+    "relevant_section": "SECTION D) EXCLUSIONS- STANDARD EXCLUSIONS APPLICABLE TO PART A- DOMESTIC COVER — 2) Specified disease/procedure waiting period (Code - Excl02)",
+    "query_type": "complex"
+  },
+  {
+    "id": "Q02",
+    "question": "What is the waiting period for pre-existing diseases?",
+    "expected_decision": "not_covered",
+    "expected_answer_keywords": ["36 months", "pre-existing", "continuous coverage", "inception"],
+    "relevant_section": "SECTION D) EXCLUSIONS- STANDARD EXCLUSIONS APPLICABLE TO PART A- DOMESTIC COVER — 1) Pre-Existing Diseases (Code -Excl01)",
+    "query_type": "simple"
+  },
+  {
+    "id": "Q03",
+    "question": "Is cataract surgery covered if the policy is 18 months old?",
+    "expected_decision": "not_covered",
+    "expected_answer_keywords": ["24 months", "cataract", "specified disease", "waiting period"],
+    "relevant_section": "SECTION D) EXCLUSIONS- STANDARD EXCLUSIONS APPLICABLE TO PART A- DOMESTIC COVER — 2) Specified disease/procedure waiting period (Code - Excl02)",
+    "query_type": "complex"
+  },
+  {
+    "id": "Q04",
+    "question": "What is the pre-hospitalization coverage period for domestic inpatient treatment?",
+    "expected_decision": "covered",
+    "expected_answer_keywords": ["60 days", "pre-hospitalization", "inpatient"],
+    "relevant_section": "SECTION C) BENEFITS COVERED UNDER THE POLICY — PART A — 2. Pre-Hospitalization",
+    "query_type": "simple"
+  },
+  {
+    "id": "Q05",
+    "question": "Is maternity treatment covered under the domestic plan?",
+    "expected_decision": "not_covered",
+    "expected_answer_keywords": ["maternity", "childbirth", "excluded", "caesarean"],
+    "relevant_section": "SECTION D) EXCLUSIONS- STANDARD EXCLUSIONS APPLICABLE TO PART A- DOMESTIC COVER — 18) Maternity (Code -Excl18)",
+    "query_type": "simple"
+  },
+  {
+    "id": "Q06",
+    "question": "A patient was diagnosed with hypertension 2 years before taking this policy. Is hypertension treatment covered in the first year?",
+    "expected_decision": "not_covered",
+    "expected_answer_keywords": ["pre-existing", "36 months", "exclusion", "inception"],
+    "relevant_section": "SECTION D) EXCLUSIONS- STANDARD EXCLUSIONS APPLICABLE TO PART A- DOMESTIC COVER — 1) Pre-Existing Diseases (Code -Excl01)",
+    "query_type": "complex"
+  },
+  {
+    "id": "Q07",
+    "question": "Is dental treatment covered under the domestic plan?",
+    "expected_decision": "not_covered",
+    "expected_answer_keywords": ["dental", "excluded", "accidental", "hospitalization"],
+    "relevant_section": "SECTION D) EXCLUSIONS– SPECIFIC EXCLUSIONS APPLICABLE TO PART A- DOMESTIC COVER — 1) Any Dental Treatment",
+    "query_type": "simple"
+  },
+  {
+    "id": "Q08",
+    "question": "Is mental illness inpatient treatment covered?",
+    "expected_decision": "covered",
+    "expected_answer_keywords": ["mental illness", "inpatient", "psychiatric", "sum insured"],
+    "relevant_section": "SECTION C) BENEFITS COVERED UNDER THE POLICY — PART A — 10. Mental Illness Treatment",
+    "query_type": "simple"
+  },
+  {
+    "id": "Q09",
+    "question": "Is bariatric surgery covered under this policy?",
+    "expected_decision": "not_covered",
+    "expected_answer_keywords": ["bariatric", "24 months", "specified disease", "waiting period"],
+    "relevant_section": "SECTION D) EXCLUSIONS- STANDARD EXCLUSIONS APPLICABLE TO PART A- DOMESTIC COVER — 2) Specified disease/procedure waiting period (Code - Excl02)",
+    "query_type": "simple"
+  },
+  {
+    "id": "Q10",
+    "question": "If a person fractures a tooth in an accident and requires emergency hospitalization, is the dental treatment covered?",
+    "expected_decision": "covered",
+    "expected_answer_keywords": ["accidental", "dental", "emergency", "hospitalization", "natural teeth"],
+    "relevant_section": "SECTION C) BENEFITS COVERED UNDER THE POLICY — PART A — I-1. In-patient Hospitalization Treatment",
+    "query_type": "complex"
+  },
+  {
+    "id": "Q11",
+    "question": "What is the post-hospitalization coverage period under the domestic plan?",
+    "expected_decision": "covered",
+    "expected_answer_keywords": ["180 days", "post-hospitalization", "discharge"],
+    "relevant_section": "SECTION C) BENEFITS COVERED UNDER THE POLICY — PART A — 3. Post-Hospitalization",
+    "query_type": "simple"
+  },
+  {
+    "id": "Q12",
+    "question": "Is cosmetic surgery covered if it is required to reconstruct tissue after a cancer treatment?",
+    "expected_decision": "covered",
+    "expected_answer_keywords": ["cosmetic", "cancer", "reconstruction", "medically necessary"],
+    "relevant_section": "SECTION D) EXCLUSIONS- STANDARD EXCLUSIONS APPLICABLE TO PART A- DOMESTIC COVER — 8) Cosmetic or plastic Surgery (Code- Excl08)",
+    "query_type": "complex"
+  },
+  {
+    "id": "Q13",
+    "question": "Does the policy cover treatment for alcoholism or drug abuse?",
+    "expected_decision": "not_covered",
+    "expected_answer_keywords": ["alcoholism", "drug", "substance abuse", "excluded"],
+    "relevant_section": "SECTION D) EXCLUSIONS- STANDARD EXCLUSIONS APPLICABLE TO PART A- DOMESTIC COVER — 12) Treatment for Alcoholism",
+    "query_type": "simple"
+  },
+  {
+    "id": "Q14",
+    "question": "A patient has a hernia and the policy is 30 months old. Is hernia surgery covered?",
+    "expected_decision": "covered",
+    "expected_answer_keywords": ["hernia", "24 months", "waiting period", "expiry"],
+    "relevant_section": "SECTION D) EXCLUSIONS- STANDARD EXCLUSIONS APPLICABLE TO PART A- DOMESTIC COVER — 2) Specified disease/procedure waiting period (Code - Excl02)",
+    "query_type": "complex"
+  },
+  {
+    "id": "Q15",
+    "question": "Is ayurvedic hospitalization treatment covered under this policy?",
+    "expected_decision": "covered",
+    "expected_answer_keywords": ["ayurvedic", "homeopathic", "government hospital", "24 hours", "inpatient"],
+    "relevant_section": "SECTION C) BENEFITS COVERED UNDER THE POLICY — PART A — 8. Ayurvedic / Homeopathic Hospitalization Expenses",
+    "query_type": "simple"
+  }
+]

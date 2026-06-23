@@ -1,0 +1,50 @@
+{
+  "run_id": "BAJHLIP23020V012223_20260622_192954",
+  "timestamp": "2026-06-22T19:29:54.948482",
+  "endpoint": "/hackrx/upload",
+  "request": {
+    "filename": "BAJHLIP23020V012223.pdf",
+    "file_hash": "36284129c3989ce94f8c6e81cf7e29d6",
+    "question_count": 1,
+    "questions": [
+      "Is dental treatment covered under this policy?"
+    ],
+    "cache_hit": false,
+    "chunk_count": 223
+  },
+  "timing": {
+    "total_s": 402.74,
+    "index_s": 382.47,
+    "embed_s": 0.84,
+    "query_s": 15.24,
+    "cache_hit": false
+  },
+  "per_query": [
+    {
+      "index": 0,
+      "question": "Is dental treatment covered under this policy?",
+      "time_s": 15.24,
+      "decision": "unclear",
+      "confidence": 0.0
+    }
+  ],
+  "throughput": {
+    "questions_per_second": 0.066,
+    "chunks_per_second": 0.6
+  },
+  "model": {
+    "embedding": "multilingual-e5-large",
+    "llm": "gemini-2.5-flash",
+    "embedding_dims": 1024
+  },
+  "quality": {
+    "decisions": [
+      "unclear"
+    ],
+    "confidences": [
+      0.0
+    ],
+    "mean_confidence": 0.0,
+    "unclear_count": 1
+  }
+}
