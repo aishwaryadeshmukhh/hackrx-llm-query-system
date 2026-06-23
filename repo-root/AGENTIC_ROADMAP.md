@@ -1,371 +1,225 @@
-# Agentic RAG — Implementation Roadmap
+# Agentic RAG — System State & Roadmap
 
-> This document captures the current honest state of the system and a concrete plan to evolve it into a genuinely agentic RAG pipeline suitable for an AI engineering portfolio.
+> Last updated: June 2026. This document reflects what is **actually built and running**, what design decisions were made and why, and what remains.
 
 ---
 
-## Current State of the Project
+## What Was Built (Starting Point)
 
-### What it is
+A linear RAG pipeline for HackRx 2024:
+- PDF → parse → chunk → embed (Pinecone multilingual-e5-large) → index → single LLM call → answer
+- FastAPI backend + Streamlit UI
+- No structured output schema, no tool use, no reasoning trace
 
-A **linear RAG pipeline** built for HackRx 2024. A user submits a question, the system retrieves document chunks from Pinecone, and passes them to Gemini with a single prompt. It has two interfaces: a Streamlit UI (`app.py`) and a FastAPI backend (`backend.py`) that accepts a PDF URL + list of questions and returns answers in bulk.
+---
 
-### What works well
+## What Is Built Now
 
-- End-to-end pipeline is functional: PDF → parse → chunk → embed (Pinecone multilingual-e5-large) → index → query → Gemini answer
-- FastAPI endpoint parallelises multiple queries against a freshly uploaded PDF, with proper async task management
-- Document registry prevents reprocessing unchanged files
-- Graceful fallback when Gemini quota is exceeded
-- Async wrappers throughout the pipeline mean it is non-blocking under load
+### 1. Agentic ReAct Loop (`src/react_agent.py`)
 
-### Honest gaps (RAG layer)
+Replaced the single LLM call with a **ReAct (Reason + Act) loop**. The LLM now decides what to retrieve at each step rather than receiving a large context blob.
 
-| Area | Issue |
+**How it works:**
+- Each iteration: LLM outputs `Thought` + `Action` OR `Final Answer`
+- Actions dispatch to one of 5 retrieval tools
+- Observations (retrieved chunks) are appended to context for the next step
+- Loop exits on `Final Answer` or after `MAX_STEPS = 4`
+- If max steps hit, a forced-answer prompt extracts the best conclusion from accumulated evidence
+
+**Why ReAct over single-shot:**
+- Single-shot RAG gives the LLM one chance with whatever chunks were retrieved. If the top chunks don't contain the exclusion clause, the answer is wrong with no recovery.
+- ReAct lets the agent call `lookup_exclusions` after `search_policy` — it can self-correct mid-loop if the first retrieval is insufficient.
+- The reasoning trace is logged per step (thought, action, args, observation) and returned in the API response — observable, not a black box.
+
+**Parser robustness:**
+Llama 3.3 outputs tool calls in 3 non-standard formats. `_parse_llm_step()` handles all three:
+- `Args: {"key": "val"}` (preferred)
+- `Action: tool_name({"key": "val"})` (inline)
+- `key="value"` after Action line (key=value style)
+
+---
+
+### 2. Query Router (`src/query_router.py`)
+
+Before hitting the agent loop, every query is classified as `simple` or `complex`.
+
+**Why this matters:**
+- Simple queries (definitions, limits, "what is covered") don't need multi-step reasoning — they need one retrieval + one LLM call (~2s)
+- Complex queries (waiting periods, pre-existing + policy age, conditional coverage) need the agent loop (~15s)
+- Running ReAct on a simple query wastes 3-4 LLM calls and 12 extra seconds
+
+**Classification strategy (two-tier):**
+1. **Keyword fast-path** — regex patterns for known complex signals (`waiting period`, `inception`, `pre-existing`, `first year`, `X and Y`) and known simple signals (`what is`, `define`, `sum insured`). Returns immediately without an LLM call.
+2. **LLM classifier fallback** — for ambiguous queries, a single Groq call with `max_tokens=10` returns `simple` or `complex`. Cost: ~50 tokens.
+
+---
+
+### 3. Tool Layer (`src/agent_tools.py`)
+
+Five focused retrieval tools the agent can call:
+
+| Tool | What it does |
 |---|---|
-| **Ingestion** | `detect_table_structures()` is fully written in `parse_documents.py` but never called — the actual parse function does `page.get_text()` in a plain loop, discarding all table data |
-| **Chunking** | Pure character-count chunking with paragraph/sentence heuristics. No section-boundary awareness — a clause about exclusions and a clause about benefits can end up in the same chunk |
-| **Chunk metadata** | Page numbers are extracted during parsing but dropped before the chunk is written to Pinecone |
-| **Adjacent-chunk lookup** | `_get_adjacent_chunks_extended()` queries Pinecone with a `[0.0] * 1024` zero vector to find neighbours by document name — this is not guaranteed to return all chunks, is slow, and burns API quota |
-| **Hybrid search** | Described as "hybrid" but is actually dense vector search with post-retrieval keyword score boosting on a hardcoded synonym dict — no sparse index, no BM25 |
-| **Metadata filtering** | All queries scan the full index regardless of which policy is being asked about |
-| **Evaluation schema** | `app.py` renders `decision`, `confidence`, `justification` fields but `_llm_evaluation_with_comprehensive_context()` only returns `answer`, `source_document`, `relevant_sections` — the coverage verdict fields are never actually populated by the LLM |
-| **No eval harness** | No test set, no accuracy measurement, no retrieval recall metric |
+| `search_policy(query, policy_name)` | General semantic search across the index |
+| `lookup_exclusions(procedure_or_condition)` | Targeted search biased toward exclusion sections |
+| `check_waiting_period(benefit_type)` | Targeted search biased toward waiting period clauses |
+| `get_definitions(term)` | Targeted search biased toward definition sections |
+| `compare_policies(query)` | Runs search and groups results by source document |
 
-### Honest gaps (agentic layer)
-
-The system has no agency at all. The LLM is called exactly once per query, given a large context blob, and asked to produce a JSON answer. There is no:
-- Query decomposition
-- Tool selection
-- Iterative retrieval
-- Self-verification
-- Visible reasoning trace
+Each tool returns the top-k chunks with document name, page number, and similarity score. The agent sees these as observations and decides whether to call another tool or conclude.
 
 ---
 
-## Target Architecture: Agentic RAG
+### 4. Calibrated Confidence Scores (`src/query_processor.py`)
 
-The goal is to replace the single `process_query()` call with an **agent loop** where the LLM controls what to retrieve, decides when it has enough information, and verifies its own answer before returning it.
+Previously: LLM self-reported confidence (made-up number, no grounding).
+
+Now: **retrieval-anchored blending**
 
 ```
-User Query
-    │
-    ▼
-┌─────────────────────────────────┐
-│         Planner Agent           │  ← Decomposes query into sub-questions
-│  "What do I need to answer      │    and decides which tools to call first
-│   this completely?"             │
-└────────────┬────────────────────┘
-             │  sub-questions + tool plan
-             ▼
-┌─────────────────────────────────┐
-│       Tool Execution Layer      │  ← Each tool is a focused retrieval call
-│                                 │
-│  search_policy(q, policy_name)  │  Dense vector search, optional filter
-│  lookup_exclusions(procedure)   │  Filtered search on exclusion sections
-│  check_waiting_period(benefit)  │  Filtered search on waiting period clauses
-│  compare_policies(q)            │  Runs search across all loaded policies
-│  get_clause_by_section(ref)     │  Exact section lookup by heading
-└────────────┬────────────────────┘
-             │  retrieved evidence per tool call
-             ▼
-┌─────────────────────────────────┐
-│        Reasoning Agent          │  ← ReAct loop: Thought → Action → Observation
-│                                 │    Runs until confident or max steps hit
-│  Thought: "I have coverage      │
-│  info but haven't checked       │
-│  exclusions yet"                │
-│  Action: lookup_exclusions(...)  │
-│  Observation: [chunk text]      │
-│  Thought: "No exclusion found,  │
-│  ready to answer"               │
-└────────────┬────────────────────┘
-             │  reasoning trace + evidence
-             ▼
-┌─────────────────────────────────┐
-│         Critic Agent            │  ← Single focused check:
-│  "Does this answer contradict   │    "Is there any exclusion or waiting
-│   any exclusion clause?"        │     period that invalidates this answer?"
-└────────────┬────────────────────┘
-             │  verified answer or revision request
-             ▼
-┌─────────────────────────────────┐
-│          Synthesizer            │  ← Formats final response:
-│                                 │    decision + confidence + clause citations
-│  decision: covered/not_covered  │    + full reasoning trace for UI display
-│  confidence: 0.0 – 1.0         │
-│  relevant_clauses: [...]        │
-│  reasoning_trace: [steps]       │
-└─────────────────────────────────┘
+retrieval_score = mean cosine similarity of top-3 retrieved chunks (0–1, from Pinecone)
+blended = 0.4 × retrieval_score + 0.6 × llm_confidence
 ```
+
+**Why this formula:**
+- LLM self-confidence is not calibrated — it will say 0.95 even when the best chunk scored 0.55
+- Pure retrieval score ignores whether the LLM actually found the right clause in the text
+- 60/40 split keeps LLM judgment dominant (it has clause context) but retrieval quality pulls it down when evidence is weak
+- Result is capped to [0.0, 1.0] and rounded to 2dp
+
+For the ReAct path: scores are parsed from observation strings (`score=X.XXX`) in the reasoning trace since the tool calls don't return a unified vector list.
 
 ---
 
-## Implementation Plan
+### 5. Direct Semantic Search for Simple Path
 
-### Phase 0 — Fix the Existing Bugs First (1–2 days)
+Previously: simple queries triggered `advanced_search_pinecone()` — a 3-stage pipeline:
+- Stage 1: direct semantic search
+- Stage 2: query expansion (8 synonym queries)
+- Stage 3: context-aware keyword term search
 
-These are quick fixes that unblock everything downstream. Do these before any agentic work.
+This made 14+ Pinecone embed calls per simple query and was the source of the token explosion (292k chars of context, ~74k tokens per call).
 
-**0.1 Wire up table extraction**
+Now: simple path calls `semantic_search_with_similarity()` directly — **1 embed call**, top-5 results, 5 adjacent chunks each side (2+main+2), ~5-6k tokens total.
 
-In `parse_documents.py`, `parse_document_enhanced_pymupdf()` ignores the `detect_table_structures()` function that is already written. Add one call per page and append table content to `ordered_content` with `type: 'table'`.
-
-```python
-# In parse_document_enhanced_pymupdf(), inside the page loop:
-tables = detect_table_structures(page)
-for table in tables:
-    ordered_content.append({
-        'content': table['content'],
-        'type': 'table',
-        'page': page_num + 1,
-        'source': 'pymupdf_table'
-    })
-```
-
-**0.2 Preserve page numbers in chunk metadata**
-
-In `chunk_documents_optimized.py`, add `page_number` to the structured chunk dict. The parser already produces page numbers in `ordered_content` — they just need to be threaded through.
-
-**0.3 Fix the evaluation schema**
-
-In `query_processor.py`, `_llm_evaluation_with_comprehensive_context()` prompt should return `decision`, `confidence`, `justification`, and `relevant_clauses` — not just `answer`. Update the prompt and the JSON schema it expects to match what `app.py` actually renders.
-
-**0.4 Replace zero-vector adjacent chunk lookup**
-
-Replace `_get_adjacent_chunks_extended()` with a local in-memory lookup. When chunks are loaded into Pinecone, also write them to a `dict[tuple[doc_name, chunk_index], text]` stored on the `QueryProcessor` instance. Neighbour lookup then becomes a dict access rather than a Pinecone query.
+The advanced multi-stage search still exists in the codebase for future use but is no longer called in any hot path.
 
 ---
 
-### Phase 1 — Tool Layer (2–3 days)
+### 6. Adjacent Chunk Context (Optimised)
 
-Define the tools the agent can call. Each tool is a thin wrapper around the existing retrieval code with a clear schema.
+Previously: `_get_adjacent_chunks_extended(doc, idx, 25, 25)` — 50 adjacent chunks per vector × 5 vectors = 255 chunks, ~74k tokens.
 
-**File: `src/agent_tools.py`** (new file)
+Now: `adjacent=2` — 2 before + main + 2 after per vector × 5 vectors = 25 chunks, ~5-6k tokens.
 
-```python
-TOOLS = [
-    {
-        "name": "search_policy",
-        "description": "Search the full policy index for text relevant to a question.",
-        "parameters": {
-            "query": "str — the sub-question to search",
-            "policy_name": "str | None — filter to a specific PDF filename, or None for all"
-        }
-    },
-    {
-        "name": "lookup_exclusions",
-        "description": "Search specifically in exclusion clauses. Use when checking if something is explicitly excluded.",
-        "parameters": {
-            "procedure_or_condition": "str — the thing to check for exclusion"
-        }
-    },
-    {
-        "name": "check_waiting_period",
-        "description": "Search specifically for waiting period clauses for a given benefit type.",
-        "parameters": {
-            "benefit_type": "str — e.g. 'maternity', 'dental', 'pre-existing conditions'"
-        }
-    },
-    {
-        "name": "compare_policies",
-        "description": "Run a query across all loaded policies and return results from each.",
-        "parameters": {
-            "query": "str — the question to compare across policies"
-        }
-    }
-]
-```
-
-Each tool maps to a method on `QueryProcessor` that does a targeted Pinecone query. `lookup_exclusions` and `check_waiting_period` use Pinecone metadata filters once section labels are stored in chunk metadata (Phase 0 + Phase 2).
+**Why 2+2 is enough:**
+- Insurance clauses are typically 2-4 paragraphs. A 5-chunk window (±2) captures the full clause plus its heading and the clause before/after.
+- The ReAct path doesn't use adjacent chunks at all — each tool call fetches fresh focused vectors.
 
 ---
 
-### Phase 2 — Section-Aware Chunking (2 days)
+### 7. Groq LLM + Gemini Fallback (`src/llm_client.py`)
 
-Replace character-count chunking with section-boundary chunking so each chunk maps to one logical clause.
+**Primary: Groq** (`llama-3.3-70b-versatile`)
+- OpenAI-compatible API, fast inference
+- 100k tokens/day on free tier
 
-**In `chunk_documents_optimized.py`**, add a section detector that runs before the current chunker:
+**Fallback: Gemini** (`gemini-3.5-flash`)
+- Triggered automatically on any Groq 429 / rate limit
+- Uses new `google-genai` SDK (old `google.generativeai` is deprecated)
+- Parses `retry_delay { seconds: N }` from the error body to wait the exact time the API specifies — avoids wasting daily quota on premature retries
+- Daily quota exhaustion (`per day` in error) stops retrying immediately — no point burning remaining quota
 
-```python
-SECTION_HEADER_PATTERN = re.compile(
-    r'^(?:Section|Clause|Article|Part|Schedule|Annexure)\s+[\dA-Z]+[\.\-]?\s+\w+',
-    re.MULTILINE | re.IGNORECASE
-)
-```
-
-Split the document on these headers first. Each section becomes a chunk (or is further split at sentence boundaries only if it exceeds `max_chunk_size`). Store `section_title` in chunk metadata — this is what enables the targeted tool searches in Phase 1.
-
----
-
-### Phase 3 — ReAct Agent Loop (3–4 days)
-
-This is the core of the agentic upgrade. Replace `process_query()` in `query_processor.py` with an agent loop.
-
-**The loop (pseudocode):**
-
-```
-max_steps = 6
-steps = []
-
-for step in range(max_steps):
-    prompt = build_react_prompt(original_query, steps, TOOLS)
-    response = llm.generate(prompt)          # returns Thought + Action or Final Answer
-    
-    if response.is_final_answer:
-        break
-    
-    tool_result = execute_tool(response.action)
-    steps.append({
-        "thought": response.thought,
-        "action": response.action,
-        "observation": tool_result
-    })
-```
-
-**The ReAct prompt structure:**
-
-```
-You are an insurance policy analyst. Answer the question by using the available tools.
-For each step, output:
-  Thought: your reasoning about what to do next
-  Action: tool_name({"param": "value"})
-When you have enough information, output:
-  Final Answer: {"decision": ..., "confidence": ..., "justification": ..., "relevant_clauses": [...]}
-
-Question: {original_query}
-
-{previous_steps}
-```
-
-The agent decides when it has enough evidence. It can call `lookup_exclusions` after `search_policy` if the initial results mention exclusions. It can call `check_waiting_period` if the policy duration is relevant to the query. This is what makes it genuinely agentic — the retrieval path is not hardcoded.
+**All 4 LLM call sites use this fallback:**
+- Simple path evaluation (`_make_llm_request_with_retry`)
+- ReAct loop step (`run_react_loop`)
+- ReAct forced final answer
+- Query router LLM classifier (`classify_query_llm`)
 
 ---
 
-### Phase 4 — Critic Agent (1–2 days)
+### 8. Cache-Hit Pinecone Re-Indexing (`src/backend.py`)
 
-After the ReAct loop produces an answer, run a single focused verification pass.
+Previously: cache hits skipped indexing entirely — the ReAct tools queried an empty Pinecone index and returned 0 chunks.
 
-```python
-critic_prompt = f"""
-You are reviewing an insurance coverage decision for correctness.
-
-Original question: {query}
-Proposed answer: {react_answer}
-All retrieved evidence: {all_retrieved_chunks}
-
-Your task: Check ONLY whether the proposed answer missed any exclusion clause or 
-waiting period that would change the decision. 
-
-If you find a contradiction, return:
-{{"verdict": "revise", "reason": "...", "missed_clause": "..."}}
-
-If the answer is consistent with all evidence, return:
-{{"verdict": "confirmed"}}
-"""
-```
-
-If the critic returns `"revise"`, the synthesizer adjusts the confidence score downward and appends the missed clause to `relevant_clauses`. This single extra LLM call is cheap and catches the most common failure mode in insurance RAG — silently ignoring exclusions.
+Now: cache hits re-upsert all chunks to Pinecone before running queries. The module-level chunk cache (`_chunk_cache: dict`) stores parsed chunks by MD5 file hash. On a cache hit, re-indexing takes ~30s instead of ~380s (no re-parsing, no re-chunking, just embedding + upsert).
 
 ---
 
-### Phase 5 — Evaluation Harness (1 day)
+### 9. Evaluation Harness (`eval/run_eval.py`)
 
-Add `eval/run_eval.py` with 10–15 hardcoded question/answer pairs derived from a known policy document. The script runs each question through the full pipeline and reports:
+15 ground-truth Q&A pairs derived from the actual policy text (`BAJHLIP23020V012223.pdf`), covering:
+- 6 complex queries (waiting periods, policy age conditions, conditional coverage)
+- 9 simple queries (definitions, limits, exclusions)
+- Mix of `covered`, `not_covered`, `partial` expected decisions
 
-- Exact match on `decision` (covered / not_covered / partial)
-- Clause citation recall (did the right clause appear in `relevant_clauses`?)
-- Mean confidence score for correct vs incorrect answers
+**Metrics:**
+- Decision accuracy: exact match on `covered/not_covered/partial/unclear`
+- Clause recall: do expected keywords appear in `answer + justification`?
+- Mean confidence: correct vs incorrect answers (validates calibration — correct answers should score higher)
+- Simple vs complex accuracy breakdown
 
-This is the thing that transforms "I built a demo" into "I built a system" in an interview.
-
-```
-python eval/run_eval.py --policy docs/sample_policy.pdf
-
-Results:
-  Decision accuracy:     11/15  (73%)
-  Clause recall:         9/15   (60%)
-  Mean confidence (correct):  0.82
-  Mean confidence (incorrect): 0.51
-```
+**Design:**
+- Indexes PDF once, then runs 15 questions sequentially with a 3s gap between calls
+- Calls `process_query_routed_sync()` directly — no HTTP overhead, no server needed
+- Saves timestamped JSON to `eval/results/`
 
 ---
 
-### Phase 6 — UI: Visible Reasoning Trace (1 day)
+## What Remains
 
-In `app.py`, display the agent's reasoning steps in a Streamlit expander. This is the feature that makes the demo visually impressive — the user can see the agent thinking.
+### Phase 6 — Streamlit Reasoning Trace UI (1 day)
+
+The reasoning trace is already in the API response (`reasoning_trace` list). It just needs to be surfaced in `app.py`:
 
 ```
-Step 1 — Thought: "I need to check if dental surgery is in the base coverage first"
-         Action: search_policy("dental surgery coverage")
-         Found: 2 chunks from policy.pdf
+Step 1 — Thought: "Need to check waiting period for surgical procedures"
+         Action: check_waiting_period("surgical procedures")
+         Found: 5 chunks — Excl02 clause, 24-month waiting period
 
-Step 2 — Thought: "Coverage found, but policy is only 3 months old — checking waiting periods"
-         Action: check_waiting_period("dental")
-         Found: "Dental procedures: 12-month waiting period applies"
-
-Step 3 — Thought: "Waiting period exceeds policy duration. Answer is not covered."
-         Final Answer: NOT COVERED (confidence: 0.91)
+Step 2 — Thought: "Knee replacement is listed — surgery is 2 months in, clearly not covered"
+         Final Answer: NOT COVERED (confidence: 0.81)
 ```
+
+This is the highest-impact remaining feature for demo purposes — makes the reasoning visible instead of just showing a JSON answer.
 
 ---
 
-## File Change Summary
+### Phase 7 — Deployment
 
-| File | Change |
+**Current state:**
+- In-memory chunk cache (`_chunk_cache: dict` in `backend.py`) — survives across requests within one process, resets on restart
+- Pinecone index cleared after each run (`delete(delete_all=True)`)
+- Run telemetry in local JSON files (`artifacts/telemetry/`)
+
+**Production deployment plan:**
+
+| Layer | Local (now) | Cloud |
+|---|---|---|
+| **Chunk cache** | Module-level Python dict | Redis (Upstash free tier) — key: MD5 file hash, value: serialised chunks |
+| **Pinecone index** | Already cloud-hosted | No change |
+| **Run telemetry** | Local JSON in `artifacts/` | S3/GCS or Supabase |
+| **PDF storage** | Temp files on disk | S3 presigned URL → parse from URL |
+| **Server** | Local uvicorn | Render / Railway / GCP Cloud Run (containerised) |
+
+The cache swap is a single function change — replace dict read/write in two places with Redis `GET`/`SET`. Nothing else changes.
+
+**Rate limit strategy for production:**
+- Groq 100k TPD is insufficient for sustained load — upgrade to Dev tier ($) or switch primary to Gemini 1M TPD
+- Add a per-request token budget check before dispatching to the ReAct loop
+- Queue concurrent requests rather than running them all in parallel
+
+---
+
+## Architecture Decision Log (AI Engineering Perspective)
+
+| Decision | Why |
 |---|---|
-| `src/parse_documents.py` | Wire up `detect_table_structures()` into the main parse loop |
-| `src/chunk_documents_optimized.py` | Add section-header detection, store `section_title` and `page_number` in chunk metadata |
-| `src/agent_tools.py` | New file — tool definitions and execution wrappers |
-| `src/query_processor.py` | Replace `process_query()` with ReAct agent loop + critic pass; fix evaluation JSON schema |
-| `src/pipeline.py` | Thread `section_title`/`page_number` metadata through to Pinecone upsert |
-| `app.py` | Add reasoning trace display in query results |
-| `eval/run_eval.py` | New file — offline evaluation script |
-| `requirements.txt` | No new dependencies needed — Gemini function calling handles tool dispatch |
-
----
-
-## Estimated Timeline
-
-| Phase | Work | Days |
-|---|---|---|
-| 0 | Fix existing bugs | 1–2 |
-| 1 | Tool layer | 2–3 |
-| 2 | Section-aware chunking | 2 |
-| 3 | ReAct agent loop | 3–4 |
-| 4 | Critic agent | 1–2 |
-| 5 | Evaluation harness | 1 |
-| 6 | UI reasoning trace | 1 |
-| **Total** | | **~2 weeks** |
-
-Phases 0 and 5 can be done independently of each other. Phase 3 depends on Phases 1 and 2 being complete. Phase 4 depends on Phase 3.
-
----
-
-## Deployment & Caching Strategy
-
-The current chunk cache (`_chunk_cache: dict = {}` in `backend.py`) is in-memory only — it survives across API requests within the same server process but resets on every restart. This is fine for local development and hackathon demos.
-
-When deploying to a cloud environment, the cache should be moved out of process memory:
-
-| Layer | Local (now) | Cloud (production) |
-|---|---|---|
-| **Chunk cache** | Module-level Python dict | Redis (e.g. Upstash, Redis Cloud) with `file_hash` as key, chunks as JSON value |
-| **Pinecone index** | Already cloud-hosted | No change needed |
-| **Run telemetry** | Local JSON files in `artifacts/` | Object storage (S3/GCS bucket) or a lightweight DB (PlanetScale, Supabase) |
-| **PDF storage** | Temp files on disk | S3/GCS upload before processing; URL passed to parser |
-
-The swap is a single function change — replace the dict read/write in `_cache_get()` / `_cache_put()` with Redis `GET`/`SET` calls. Everything above those functions stays the same.
-
-For the HackRx submission or a portfolio demo, the in-memory cache is sufficient. Add Redis when you move to a persistent deployment (e.g. Render, Railway, or a cloud VM).
-
----
-
-## Why This Architecture Is Interesting for AI Engineering Roles
-
-Standard RAG is now table stakes. What distinguishes this project after these changes:
-
-1. **Observable reasoning** — the agent's tool calls and thoughts are visible, not hidden inside one black-box prompt
-2. **Tool-grounded retrieval** — the LLM controls what gets retrieved based on what it finds, not a hardcoded retrieval pipeline
-3. **Self-verification** — the critic pass models a real quality-control pattern used in production LLM systems
-4. **Measurable** — the eval harness means you can quote accuracy numbers, which is what separates engineering from hacking
-5. **Honest about limits** — confidence scores are calibrated by the critic, not just a number the LLM makes up
+| ReAct over single-shot | Observable reasoning, self-correcting retrieval, handles multi-hop insurance queries that require checking both coverage and exclusions |
+| Query router before agent | Prevents 3-4 unnecessary LLM calls on simple factual lookups — saves ~12s and ~3k tokens per simple query |
+| Retrieval-anchored confidence | LLM self-confidence is uncalibrated. Blending with cosine similarity grounds the score in actual retrieval quality |
+| Adjacent chunk context (2+2 not 25+25) | 25+25 adjacent chunks = 255 chunks = 74k tokens per call = guaranteed rate limit. 2+2 captures full clause context at 5-6k tokens |
+| Direct search for simple path | The 3-stage advanced search with 8 expansion queries made sense for complex queries but was overkill for "what is the sum insured" |
+| Groq primary, Gemini fallback | Groq is faster and cheaper per call. Gemini has 10x higher daily token budget. Fallback is automatic, transparent to the caller |
+| Sequential eval with 3s gaps | Running 15 questions in parallel burns the daily TPD in seconds. Sequential with gaps stays within RPM limits |
+| Module-level chunk cache | Avoids re-parsing 380s PDF processing on repeated queries during a demo. Redis swap is a one-function change when deploying |

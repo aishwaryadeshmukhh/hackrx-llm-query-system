@@ -1,0 +1,41 @@
+{
+  "run_id": "BAJHLIP23020V012223_20260622_202926",
+  "timestamp": "2026-06-22T20:29:26.054889",
+  "file": "BAJHLIP23020V012223.pdf",
+  "questions": [
+    "Is knee replacement surgery covered in the first year of the policy?"
+  ],
+  "answers": [
+    {
+      "decision": "unclear",
+      "confidence": 0.34,
+      "answer": "Unable to determine from available policy evidence after maximum retrieval steps.",
+      "justification": "Max steps reached without conclusive evidence.",
+      "relevant_clauses": [],
+      "query_type": "complex",
+      "reasoning_trace": [
+        {
+          "step": 1,
+          "thought": "I need to check if there is a waiting period for knee replacement surgery in the policy.",
+          "action": "check_waiting_period",
+          "args": {
+            "benefit_type": "knee replacement"
+          },
+          "observation": "[1] BAJHLIP23020V012223.pdf p.30.0 (score=0.854)\n    % of: Monthly\n% of: Premium\n: Up to 15 days from 1st Instalment Date | % of: As per Free Look Period Condition\n: Exceeding 15 days but less than or equal to 3 | : No Refund | % of Half Yearly\nPremium: 30%\n: months\n: Exceeding 3 months but less than or equal to 6 | % of Half Yearly\nPremium: 0%\n: mont\n\n[2] BAJHLIP23020V012223.pdf p.28.0 (score=0.852)\n    C. Applicable to Part B-II (OUT-PATIENT BENEFITS FOR INTERNATIONAL COVER) 1. Out-patient Treatment \na. During the first year of Global Health Care Policy with Us, 30 days waiting period would be applicable for all \nclaims under out-patient except those arising out of Accidental Injury, however the w\n\n[3] BAJHLIP23020V012223.pdf p.25.0 (score=0.847)\n    3) 30-day waiting period (Code-Excl03) \na. Expenses related to the treatment of any Illness within 30 days from the first Policy commencement date shall \nbe excluded except claims arising due to an Accident, provided the same are covered. \nb. This exclusion shall not, however apply if the Insured ha\n\n[4] BAJHLIP23020V012223.pdf p.21.0 (score=0.845)\n    19. Diseases of gall bladder including cholecystitis \n20. Pancreatitis \n21. All forms of Cirrhosis \n22. Gout and rheumatism \n23. Tonsilitis \n24. Surgery for varicose veins and \nvaricose ulcers \n25. Chronic Kidney Disease \n26. Alzheimer’s Disease \n27. Joint replacement surgery \n28. Surgery for verteb\n\n[5] BAJHLIP23020V012223.pdf p.20.0 (score=0.843)\n    2) Specified disease/procedure waiting period (Code - Excl02) \na. Expenses related to the treatment of the listed Conditions, surgeries/treatments shall be excluded until the \nexpiry of 24 months of continuous coverage after the date of inception of the first Global Health Care Policy \nwith Us. This"
+        }
+      ],
+      "steps_taken": 4,
+      "agent_status": "max_steps_reached"
+    }
+  ],
+  "timing": {
+    "total_seconds": 184.67,
+    "index_seconds": 36.74,
+    "embed_seconds": 0.64,
+    "query_seconds": 140.39,
+    "cache_hit": false,
+    "per_query_seconds": [
+      140.39
+    ]
+  }
+}

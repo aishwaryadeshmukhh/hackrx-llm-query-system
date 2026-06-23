@@ -183,6 +183,7 @@ async def query_pdf(input: QueryPDFRequest):
     processor = QueryProcessor(
         pinecone_api_key=pinecone_key,
         groq_api_key=os.getenv("GROQ_API_KEY") or "",
+        gemini_api_key=os.getenv("GEMINI_API_KEY") or "",
         index_name="policy-index"
     )
     timings["processor_init"] = time.time() - t0
@@ -453,9 +454,11 @@ async def _process_pdf_and_answer(pdf_path: str, queries: List[str]) -> JSONResp
     # This eliminates the Pinecone zero-vector fallback for adjacent chunk lookups
     from src.query_processor import QueryProcessor
     groq_key = os.getenv("GROQ_API_KEY")
+    gemini_key = os.getenv("GEMINI_API_KEY")
     processor = QueryProcessor(
         pinecone_api_key=pinecone_key,
         groq_api_key=groq_key or "",
+        gemini_api_key=gemini_key or "",
         index_name="policy-index"
     )
     processor.populate_chunk_cache(chunks)

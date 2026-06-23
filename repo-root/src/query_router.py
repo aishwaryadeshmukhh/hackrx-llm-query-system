@@ -73,7 +73,7 @@ def classify_query_fast(query: str) -> QueryType | None:
     return None  # uncertain — use LLM classifier
 
 
-def classify_query_llm(query: str, llm) -> QueryType:
+def classify_query_llm(query: str, llm, gemini_model=None) -> QueryType:
     """
     LLM-based classifier for ambiguous queries. Single call, max_tokens=10.
     """
@@ -87,14 +87,14 @@ def classify_query_llm(query: str, llm) -> QueryType:
         "Reply with exactly one word: simple or complex"
     )
     try:
-        response = llm.chat.completions.create(
-            model="llama-3.3-70b-versatile",
-            messages=[{"role": "user", "content": prompt}],
+        from .llm_client import call_llm
+        label = call_llm(
+            llm, gemini_model,
+            [{"role": "user", "content": prompt}],
             max_tokens=10,
             temperature=0.0,
-        )
-        label = response.choices[0].message.content.strip().lower()
-        if "complex" in label:
+        ) or "simple"
+        if "complex" in label.lower():
             return "complex"
         return "simple"
     except Exception as e:
@@ -102,7 +102,7 @@ def classify_query_llm(query: str, llm) -> QueryType:
         return "simple"
 
 
-def route_query(query: str, llm) -> QueryType:
+def route_query(query: str, llm, gemini_model=None) -> QueryType:
     """
     Main router: keyword fast-path first, LLM fallback for uncertain cases.
     """
@@ -111,6 +111,6 @@ def route_query(query: str, llm) -> QueryType:
         print(f"🔀 Router (keyword): '{query[:60]}' → {fast}")
         return fast
 
-    label = classify_query_llm(query, llm)
+    label = classify_query_llm(query, llm, gemini_model)
     print(f"🔀 Router (LLM): '{query[:60]}' → {label}")
     return label

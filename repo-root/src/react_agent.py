@@ -174,9 +174,10 @@ def _format_chunks_for_observation(chunks: List[Dict]) -> str:
 
 def run_react_loop(
     question: str,
-    llm,  # genai.GenerativeModel instance
+    llm,  # groq client (primary) — kept for backward compat
     tool_executor: "ToolExecutor",
     max_steps: int = MAX_STEPS,
+    gemini_model=None,  # fallback model
 ) -> Dict[str, Any]:
     """
     Run the ReAct loop for one question.
@@ -205,15 +206,15 @@ def run_react_loop(
     for step_num in range(1, max_steps + 1):
         prompt = f"{system}\n\n{_STEP_PROMPT_TEMPLATE.format(question=question, steps_so_far=steps_so_far)}"
 
-        # Call LLM (Groq chat completions)
+        # Call LLM (Groq-first, Gemini fallback)
         try:
-            response = llm.chat.completions.create(
-                model="llama-3.3-70b-versatile",
-                messages=[{"role": "user", "content": prompt}],
+            from .llm_client import call_llm
+            raw_text = call_llm(
+                llm, gemini_model,
+                [{"role": "user", "content": prompt}],
                 max_tokens=1024,
                 temperature=0.2,
-            )
-            raw_text = response.choices[0].message.content.strip() if response else ""
+            ) or ""
         except Exception as e:
             print(f"❌ ReAct LLM call failed at step {step_num}: {e}")
             return _error_result(question, str(e), reasoning_trace)
@@ -291,13 +292,13 @@ def run_react_loop(
         f'"justification": "which clause", "relevant_clauses": [{{"section": "...", "content": "...", "page": null}}]}}'
     )
     try:
-        response = llm.chat.completions.create(
-            model="llama-3.3-70b-versatile",
-            messages=[{"role": "user", "content": forced_prompt}],
+        from .llm_client import call_llm
+        raw_text = call_llm(
+            llm, gemini_model,
+            [{"role": "user", "content": forced_prompt}],
             max_tokens=1024,
             temperature=0.1,
-        )
-        raw_text = response.choices[0].message.content.strip() if response else ""
+        ) or ""
         parsed = _parse_llm_step("Thought: step limit\nFinal Answer: " + raw_text)
         if parsed["type"] == "answer":
             reasoning_trace.append({

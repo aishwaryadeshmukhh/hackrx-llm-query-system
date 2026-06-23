@@ -79,27 +79,17 @@ class QueryProcessor:
         self.reranker = None
         self.reranker_type = "none"
         
-        # Initialize Groq
-        _groq_key = (groq_api_key or "").strip().strip('"').strip("'")
-        if GROQ_AVAILABLE and _groq_key and _groq_key != 'dummy':
-            try:
-                self.llm = GroqClient(api_key=_groq_key)
-                self.model_name = "llama-3.3-70b-versatile"
-                print(f"✅ Groq initialised: {self.model_name}")
-            except Exception as e:
-                print(f"❌ Groq init error: {e}")
-                self.llm = None
-                self.model_name = None
-                if 'quota' in str(e).lower() or 'limit' in str(e).lower() or 'rate' in str(e).lower():
-                    self.quota_exceeded = True
-                    self.fallback_reason = f"Groq rate limit: {e}"
-                else:
-                    self.fallback_reason = f"Groq init error: {e}"
-        else:
-            self.llm = None
-            self.model_name = None
-            self.fallback_reason = "GROQ_API_KEY not provided"
-            print("⚠️ Groq not initialised — set GROQ_API_KEY in .env")
+        # Initialize LLM clients (Groq primary, Gemini fallback)
+        from .llm_client import build_llm_clients
+        _gemini_key = (gemini_api_key or "").strip().strip('"').strip("'")
+        self._groq_client, self._gemini_model = build_llm_clients(groq_api_key, _gemini_key)
+        # self.llm is kept for backward-compat (react_agent / query_router pass it around)
+        self.llm = self._groq_client or self._gemini_model
+        self.model_name = "llama-3.3-70b-versatile" if self._groq_client else (
+            "gemini-3.5-flash" if self._gemini_model else None
+        )
+        if not self.llm:
+            self.fallback_reason = "No LLM keys provided"
     
     def _encode_query(self, query: str) -> List[float]:
         """Encode query using Pinecone's embedding service."""
@@ -170,46 +160,18 @@ class QueryProcessor:
         return None
     
     def _make_llm_request_with_retry(self, prompt: str, max_retries: int = 2) -> Optional[str]:
-        """Make LLM request via Groq with retry logic."""
-        if not self.llm:
+        """Make LLM request with Groq-first, Gemini fallback."""
+        if not self._groq_client and not self._gemini_model:
             return None
-
-        for attempt in range(max_retries + 1):
-            try:
-                response = self.llm.chat.completions.create(
-                    model=self.model_name,
-                    messages=[{"role": "user", "content": prompt}],
-                    max_tokens=2048,
-                    temperature=0.3,
-                )
-                text = response.choices[0].message.content
-                if text:
-                    if self.quota_exceeded:
-                        self.quota_exceeded = False
-                    return text.strip()
-                else:
-                    if attempt < max_retries:
-                        time.sleep(1)
-                        continue
-                    return None
-
-            except Exception as e:
-                error_msg = str(e).lower()
-                if 'rate' in error_msg or 'quota' in error_msg or 'limit' in error_msg:
-                    self.quota_exceeded = True
-                    wait_time = min(5 * (attempt + 1), 15)
-                    print(f"⚠️ Groq rate limit, waiting {wait_time}s: {e}")
-                    time.sleep(wait_time)
-                    continue
-                elif attempt < max_retries:
-                    print(f"🔄 Retry {attempt + 1}: {str(e)[:60]}")
-                    time.sleep(1)
-                    continue
-                else:
-                    print(f"❌ Groq request failed: {e}")
-                    return None
-
-        return None
+        from .llm_client import call_llm
+        return call_llm(
+            self._groq_client,
+            self._gemini_model,
+            [{"role": "user", "content": prompt}],
+            max_tokens=2048,
+            temperature=0.3,
+            max_retries=max_retries,
+        )
 
     def extract_entities(self, query: str) -> Dict[str, Any]:
         """Extract structured entities from natural language query using Gemini only."""
@@ -1309,7 +1271,7 @@ class QueryProcessor:
             result.setdefault("reasoning_trace", [])
             return result
 
-        query_type = route_query(query, self.llm)
+        query_type = route_query(query, self._groq_client, self._gemini_model)
 
         if query_type == "complex":
             result = self.process_query_react_sync(query)
@@ -1352,7 +1314,8 @@ class QueryProcessor:
         executor = ToolExecutor(self)
         result = run_react_loop(
             question=query,
-            llm=self.llm,
+            llm=self._groq_client,
+            gemini_model=self._gemini_model,
             tool_executor=executor,
         )
 

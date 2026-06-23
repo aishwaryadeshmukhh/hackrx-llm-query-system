@@ -9,7 +9,7 @@ sentence-transformers>=2.2.0  # Fallback embeddings
 
 # LLM Integration
 groq>=0.9.0  # Groq inference API (llama-3.3-70b-versatile)
-google-generativeai>=0.3.0  # Gemini AI (kept for fallback compatibility)
+google-genai>=1.0.0  # Gemini AI (new SDK)
 
 # Machine Learning and NLP
 numpy>=1.24.0  # Numerical computations
