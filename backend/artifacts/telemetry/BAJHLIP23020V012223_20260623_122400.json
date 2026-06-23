@@ -1,0 +1,50 @@
+{
+  "run_id": "BAJHLIP23020V012223_20260623_122400",
+  "timestamp": "2026-06-23T12:24:00.658405",
+  "endpoint": "/hackrx/upload",
+  "request": {
+    "filename": "BAJHLIP23020V012223.pdf",
+    "file_hash": "36284129c3989ce94f8c6e81cf7e29d6",
+    "question_count": 1,
+    "questions": [
+      "A patient with schizophrenia (diagnosed during the policy period) was admitted to a recognized psychiatric unit and treated by a psychiatrist with prescription medication. Is inpatient treatment covered?"
+    ],
+    "cache_hit": false,
+    "chunk_count": 223
+  },
+  "timing": {
+    "total_s": 148.57,
+    "index_s": 37.82,
+    "embed_s": 0.49,
+    "query_s": 103.49,
+    "cache_hit": false
+  },
+  "per_query": [
+    {
+      "index": 0,
+      "question": "A patient with schizophrenia (diagnosed during the policy period) was admitted to a recognized psychiatric unit and treated by a psychiatrist with prescription medication. Is inpatient treatment covered?",
+      "time_s": 103.49,
+      "decision": "covered",
+      "confidence": 0.87
+    }
+  ],
+  "throughput": {
+    "questions_per_second": 0.01,
+    "chunks_per_second": 5.9
+  },
+  "model": {
+    "embedding": "multilingual-e5-large",
+    "llm": "gemini-2.5-flash",
+    "embedding_dims": 1024
+  },
+  "quality": {
+    "decisions": [
+      "covered"
+    ],
+    "confidences": [
+      0.87
+    ],
+    "mean_confidence": 0.87,
+    "unclear_count": 0
+  }
+}

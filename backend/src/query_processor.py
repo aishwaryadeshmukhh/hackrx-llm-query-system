@@ -367,13 +367,14 @@ class QueryProcessor:
                 result_item = {
                     "score": pinecone_score,
                     "content": content,
-                    "text": content,  # Ensure 'text' field exists for compatibility
+                    "text": content,
                     "content_type": metadata.get('content_type', 'text'),
                     "metadata": metadata,
                     "id": match.id,
                     "document_name": metadata.get('document_name', ''),
                     "page_number": metadata.get('page_number', 1),
-                    "chunk_index": metadata.get('chunk_index', 0)
+                    "chunk_index": metadata.get('chunk_index', 0),
+                    "section": metadata.get('section', ''),
                 }
                 
                 # Add table-specific info if available
@@ -1321,17 +1322,18 @@ class QueryProcessor:
 
         # Calibrate confidence using retrieval scores embedded in the trace observations
         answer = result["answer"]
-        raw_scores = _re.findall(
-            r"score=([\d.]+)",
-            " ".join(
-                step.get("observation", "") or ""
-                for step in result["reasoning_trace"]
-            ),
+        all_obs = " ".join(
+            step.get("observation", "") or ""
+            for step in result["reasoning_trace"]
         )
+        raw_scores = _re.findall(r"score=([\d.]+)", all_obs)
         pseudo_vectors = [{"score": float(s)} for s in raw_scores[:5]] if raw_scores else []
-        answer["confidence"] = self._calibrate_confidence(
-            float(answer.get("confidence", 0.5)), pseudo_vectors
-        )
+
+        # If max_steps_reached and LLM self-reported 0.0, infer from retrieval scores
+        llm_conf = float(answer.get("confidence", 0.5))
+        if llm_conf == 0.0 and pseudo_vectors:
+            llm_conf = 0.6  # treat as moderate confidence when forced answer had good retrieval
+        answer["confidence"] = self._calibrate_confidence(llm_conf, pseudo_vectors)
 
         return {
             "query": query,

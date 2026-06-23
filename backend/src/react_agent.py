@@ -65,6 +65,15 @@ CRITICAL RULES:
 - Do NOT output any text outside the two formats above
 - Do NOT repeat a tool call you already made
 - Use policy-domain terminology in search queries: prefer "area of cover" over "outside usa", "sum insured" over "coverage limit", "hospitalisation" over "hospital stay", "pre-existing disease" over "prior condition"
+
+DECISION LOGIC — apply these rules strictly:
+- If an exclusion clause says "excluded until X months" and the insured is LESS than X months into the policy → decision = not_covered
+- If an exclusion clause says "excluded until X months" and the insured is MORE than X months into the policy → decision = covered (waiting period elapsed)
+- If the clause says "excluded" with no time condition → decision = not_covered
+- If coverage is conditional ("only if X is opted", "only when Y") and the condition is met per the query → decision = covered
+- If coverage is conditional and the condition is NOT met → decision = not_covered
+- Only use "partial" when coverage exists but with a sub-limit or co-payment that reduces the payout
+- Only use "unclear" when the policy text genuinely does not address the scenario
 """
 
 _STEP_PROMPT_TEMPLATE = """Question: {question}
@@ -174,7 +183,9 @@ def _format_chunks_for_observation(chunks: List[Dict]) -> str:
         doc = c.get("document", c.get("document_name", "unknown"))
         page = c.get("page", c.get("page_number", "?"))
         score = c.get("score", 0.0)
-        lines.append(f"[{i}] {doc} p.{page} (score={score:.3f})\n    {text}")
+        section = c.get("section", "")
+        header = f" | Section: {section}" if section else ""
+        lines.append(f"[{i}] {doc} p.{page} (score={score:.3f}){header}\n    {text}")
     return "\n\n".join(lines)
 
 

@@ -324,15 +324,30 @@ def index_chunks_in_pinecone(chunks: List[Dict], pinecone_api_key: str, pinecone
         return False
     if progress_callback:
         progress_callback("Preparing vectors for indexing...", 60)
+    def _extract_section_header(text: str) -> str:
+        """Extract the leading section heading from chunk text, if present."""
+        import re
+        # Match patterns like "12. Emergency treatment..." or "SECTION D) ..." or "A. Applicable to..."
+        m = re.match(r'^(\d+[\.\)]\s+[^\n]{5,80}|[A-Z][A-Z0-9\s\-]+[\)\.]\s+[^\n]{5,80}|[A-Z]\.\s+[^\n]{5,60})', text.strip())
+        if m:
+            return m.group(1).strip()[:120]
+        # Fallback: first non-empty line if short enough to be a heading
+        first_line = text.strip().split('\n')[0].strip()
+        if 10 <= len(first_line) <= 100:
+            return first_line
+        return ""
+
     vectors = []
     for chunk, embedding in zip(chunks, embeddings):
+        section_header = _extract_section_header(chunk['content'])
         meta = {
             'text': chunk['content'][:1000],
             'document_name': chunk['document_name'],
             'page_number': chunk.get('page_number', 0),
             'chunk_index': chunk.get('chunk_index', 0),
             'content_type': chunk.get('content_type', 'text'),
-            'chunk_id': chunk['chunk_id']
+            'chunk_id': chunk['chunk_id'],
+            'section': section_header,
         }
         embedding_list = embedding if isinstance(embedding, list) else list(map(float, embedding))
         vectors.append((chunk['chunk_id'], embedding_list, meta))
