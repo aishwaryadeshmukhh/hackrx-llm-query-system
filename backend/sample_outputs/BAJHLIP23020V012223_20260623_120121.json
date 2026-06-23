@@ -1,0 +1,112 @@
+{
+  "run_id": "BAJHLIP23020V012223_20260623_120121",
+  "timestamp": "2026-06-23T12:01:21.332143",
+  "file": "BAJHLIP23020V012223.pdf",
+  "questions": [
+    "An insured travelling abroad (Imperial Plus plan, excluding USA) has a medical emergency in the USA during a 3-week business trip. Is the treatment covered?"
+  ],
+  "answers": [
+    {
+      "decision": "covered",
+      "confidence": 0.81,
+      "answer": "The policy covers emergency treatment outside the area of cover for up to six weeks per trip within the Sum Insured limit, including treatment required due to an Accident or the sudden beginning or worsening of a severe Illness which presents an immediate threat to Your health. However, there is a waiting period of 30 days for out-patient claims under international cover, except those arising out of Accidental Injury. The policy also covers medical repatriation to the home country for treatment, if necessary, and the cost of return trip to the country from where the insured was repatriated within one month after treatment.",
+      "justification": "Section D) Exclusions- Standard Exclusions Applicable to Part B- International Cover, Section C) Benefits Covered Under the Policy, and Section 13) Medical Repatriation",
+      "relevant_clauses": [
+        {
+          "section": "Section D) Exclusions- Standard Exclusions Applicable to Part B- International Cover",
+          "content": "We will pay the Customary and Reasonable expenses, up to the limit specified in the Policy Schedule, incurred for treatment of medical emergencies which occur during business or holiday trips outside Your area of cover. Cover is provided for up to six weeks per trip within the Sum Insured limit.",
+          "page": "p.16.0"
+        },
+        {
+          "section": "Section C) Benefits Covered Under the Policy",
+          "content": "During the first year of Global Health Care Policy with Us, 30 days waiting period would be applicable for all claims under out-patient except those arising out of Accidental Injury, however the waiting period would not be applied during subsequent renewals.",
+          "page": "p.28.0"
+        },
+        {
+          "section": "Section 13) Medical Repatriation",
+          "content": "If the necessary treatment for which You are covered isn't available locally You can choose to be medically evacuated to Your home country for treatment, instead of to the nearest appropriate medical centre. This only applies when Your home country is within Your geographical area of cover.",
+          "page": "p.16.0"
+        }
+      ],
+      "query_type": "complex",
+      "reasoning_trace": [
+        {
+          "step": 1,
+          "thought": "The policy name is Imperial Plus, but the insured is in the USA, which is excluded from the policy.",
+          "action": "lookup_exclusions",
+          "args": {
+            "procedure_or_condition": "medical emergency in the USA"
+          },
+          "observation": "[1] BAJHLIP23020V012223.pdf p.20.0 (score=0.840)\n    SECTION D) EXCLUSIONS- STANDARD EXCLUSIONS APPLICABLE TO PART A- DOMESTIC COVER \nUNDER SECTION C) BENEFITS COVERED UNDER THE POLICY 1) Pre-Existing Diseases (Code -Excl01) \na. Expenses related to the treatment of a Pre-Existing Disease (PED) and its direct complications shall be \nexcluded until the expiry of 36 months of continuous coverage after the date of inception of the first Global \nHealth Care Policy with Us. \nb. In case of enhancement of Sum Insured the exclusion shall apply afresh to the extent of Sum Insured increase. \nc. If the Insured is continuously covered without any break as de\n\n[2] BAJHLIP23020V012223.pdf p.22.0 (score=0.838)\n    10) Breach of law (Code -Excl10) \nExpenses for treatment directly arising from or consequent upon any Insured committing or attempting to commit \na breach of law with criminal intent. 11) Excluded Providers (Code -Excl11) \nExpenses incurred towards treatment in any Hospital or by any Medical Practitioner or any other provider \nspecifically excluded by the Insurer and disclosed in its website / notified to the policyholders are not admissible. \nHowever, in case of life threatening situations or following an Accident, expenses up to the stage of stabilization \nare payable but not the complete cl\n\n[3] BAJHLIP23020V012223.pdf p.24.0 (score=0.830)\n    2) Specified disease/procedure waiting period (Code-Excl02) \na. Expenses related to the treatment of the listed Conditions, surgeries/treatments shall be excluded until the \nexpiry of 24 months of continuous coverage after the date of inception of the first Global Health Care Policy \nwith Us. This exclusion shall not be applicable for claims arising due to an Accident. \nb. In case of enhancement of Sum Insured the exclusion shall apply afresh to the extent of Sum Insured increase. \nc. If any of the specified disease/procedure falls under the waiting period specified for Pre-Existing diseases, \n\n[4] BAJHLIP23020V012223.pdf p.21.0 (score=0.827)\n    19. Diseases of gall bladder including cholecystitis \n20. Pancreatitis \n21. All forms of Cirrhosis \n22. Gout and rheumatism \n23. Tonsilitis \n24. Surgery for varicose veins and \nvaricose ulcers \n25. Chronic Kidney Disease \n26. Alzheimer’s Disease \n27. Joint replacement surgery \n28. Surgery for vertebral column \ndisorders (unless necessitated due \nto an Accident) \n29. Surgery to correct deviated nasal septum \n30. Hypertrophied turbinate \n31. Congenital internal diseases or anomalies \n32. Treatment for correction of eye \nsight due to refractive error \nrecommended by Ophthalmologist \nfor medical r\n\n[5] BAJHLIP23020V012223.pdf p.15.0 (score=0.844)\n    Exclusions: Mental Illness Treatment does not cover: \na. Any expenses for Mental Illness Treatment related to Alcoholism, drug or substance abuse or any addictive \ncondition and consequences thereof. ."
+        },
+        {
+          "step": 2,
+          "thought": "The policy excludes treatment in the USA, but it's unclear if this exclusion applies to medical emergencies.",
+          "action": "lookup_exclusions",
+          "args": {
+            "procedure_or_condition": "medical emergency"
+          },
+          "observation": "[1] BAJHLIP23020V012223.pdf p.26.0 (score=0.846)\n    18) Maternity (Code-Excl18): \na. Medical Treatment Expenses traceable to childbirth (including complicated deliveries and caesarean sections \nincurred during Hospitalization) except ectopic pregnancy. \nb. Expenses towards miscarriage (unless due to an Accident) and lawful medical termination of pregnancy during \nthe Policy Period. SECTION D) EXCLUSIONS– SPECIFIC EXCLUSIONS APPLICABLE TO INTERNATIONAL COVER UNDER \nSECTION C) BENEFITS COVERED UNDER THE POLICY B. Applicable to Part B-I, B-II, B-III \nWe do not cover the following expenses unless indicated otherwise in the Table of Benefits or in a\n\n[2] BAJHLIP23020V012223.pdf p.7.0 (score=0.847)\n    UIN- BAJHLIP23020V012223 \n Global Health Care/ Policy Wordings/Page 7 Bajaj Allianz General Insurance Co. Ltd. \nBajaj Allianz House, Airport Road, Yerawada, Pune - 411 006. Reg. No.: 113 \nFor more details, log on to: www.bajajallianz.com | E-mail: bagichelp@bajajallianz.co.in or \nCall at: Sales - 1800 209 0144 / Service - 1800 209 5858 (Toll Free No.) \nGLOBAL HEALTH CARE the Emergency event. Cover does not extend to follow-up Dental Treatment, dental surgery, dental prostheses, \northodontics or periodontics. 15. Emergency Treatment outside area of cover:- \nEmergency treatment outside area of c\n\n[3] BAJHLIP23020V012223.pdf p.15.0 (score=0.860)\n    Exclusions: Mental Illness Treatment does not cover: \na. Any expenses for Mental Illness Treatment related to Alcoholism, drug or substance abuse or any addictive \ncondition and consequences thereof. .\n\n[4] BAJHLIP23020V012223.pdf p.25.0 (score=0.848)\n    3) 30-day waiting period (Code-Excl03) \na. Expenses related to the treatment of any Illness within 30 days from the first Policy commencement date shall \nbe excluded except claims arising due to an Accident, provided the same are covered. \nb. This exclusion shall not, however apply if the Insured has Continuous Coverage for more than twelve months. \nc. The within referred waiting period is made applicable to the enhanced Sum Insured in the event of granting \nhigher Sum Insured subsequently. 4) Investigation & Evaluation (Code-Excl04) \na. Expenses related to any admission primarily for diagnost\n\n[5] BAJHLIP23020V012223.pdf p.24.0 (score=0.846)\n    SECTION D) EXCLUSIONS- STANDARD EXCLUSIONS APPLICABLE TO PART B- INTERNATIONAL COVER \nUNDER SECTION C) BENEFITS COVERED UNDER THE POLICY A. Applicable for Part B-I (IN-PATIENT BENEFITS FOR INTERNATIONAL COVER ) 1) Pre-Existing Diseases (Code-Excl01) \na. Expenses related to the treatment of a Pre-Existing Disease (PED) and its direct complications shall be \nexcluded until the expiry of 36 months of continuous coverage after the date of inception of the first Global \nHealth Care Policy with Insurer. \nb. In case of enhancement of Sum Insured the exclusion shall apply afresh to the extent of Sum I"
+        },
+        {
+          "step": 3,
+          "thought": "The policy excludes treatment in the USA, but it's unclear if this exclusion applies to medical emergencies, and there's also a waiting period for international cover.",
+          "action": "search_policy",
+          "args": {
+            "query": "emergency treatment outside area of cover",
+            "policy_name": "Imperial Plus"
+          },
+          "observation": "[1] BAJHLIP23020V012223.pdf p.15.0 (score=0.827)\n    If You can’t travel for medical reasons following discharge from an Inpatient episode of care, We will cover the \nreasonable cost of hotel accommodation in a private en-suite room for up to seven days. If You are evacuated to the nearest appropriate medical centre for ongoing treatment, We will cover the reasonable \ncost of hotel accommodation in a private en-suite room. This cost must be more economical than the cost of a \nseries of journeys between the nearest appropriate medical centre and Your principal country of residence. Following completion of treatment, We will also cover the cost of\n\n[2] BAJHLIP23020V012223.pdf p.16.0 (score=0.863)\n    12. Emergency treatment outside area of cover (Applicable to Imperial Plus Plan only if “Excluding USA” cover \nis opted) \nWe will pay the Customary and Reasonable expenses, up to the limit specified in the Policy Schedule, incurred for \ntreatment of medical emergencies which occur during business or holiday trips outside Your area of cover. Cover is \nprovided for up to six weeks per trip within the Sum Insured limit. It includes treatment required due to an Accident \nor the sudden beginning or worsening of a severe Illness which presents an immediate threat to Your health. \nTreatment by a Doct\n\n[3] BAJHLIP23020V012223.pdf p.16.0 (score=0.834)\n    13. Medical repatriation (Applicable to Imperial Plus Plan only) \nIf the necessary treatment for which You are covered isn't available locally You can choose to be medically \nevacuated to Your home country for treatment, instead of to the nearest appropriate medical centre. This only \napplies when Your home country is within Your geographical area of cover. Following completion of treatment, We \nwill also cover the cost of Your return trip (i.e. one way ticket) at economy rates, to the country from where you \nwere repatriated. The return journey must take place within one month after treatment\n\n[4] BAJHLIP23020V012223.pdf p.6.0 (score=0.829)\n    8. Dental surgery outside India:- \nDental surgery outside India includes the surgical extraction of teeth, as well as other tooth-related surgical \nprocedures such as apicoectomy and dental prescription drugs. All investigative procedures that establish the \nneed for dental surgery such as laboratory tests, X-rays, CT scans and MRI(s) are included under this benefit. \nDental surgery does not cover surgical treatment that relates to dental implants. 9. Dental treatment outside India:- \nDental treatment outside India includes an annual check-up, simple fillings related to cavities or decay, root\n\n[5] BAJHLIP23020V012223.pdf p.28.0 (score=0.825)\n    C. Applicable to Part B-II (OUT-PATIENT BENEFITS FOR INTERNATIONAL COVER) 1. Out-patient Treatment \na. During the first year of Global Health Care Policy with Us, 30 days waiting period would be applicable for all \nclaims under out-patient except those arising out of Accidental Injury, however the waiting period would not be \napplied during subsequent renewals. \nb. Out-patient Dental Treatment expenses will not be covered. 2. Alternate/Complementary Treatment \nDuring the first year of Global Health Care Policy with Us, 30 days waiting period would be applicable for all claims \nunder Alternate/"
+        },
+        {
+          "step": 4,
+          "thought": "The policy has a specific exclusion for emergency treatment outside the area of cover, but it's unclear if this applies to the insured's situation.",
+          "action": "lookup_exclusions",
+          "args": {
+            "procedure_or_condition": "emergency treatment outside area of cover"
+          },
+          "observation": "[1] BAJHLIP23020V012223.pdf p.16.0 (score=0.884)\n    12. Emergency treatment outside area of cover (Applicable to Imperial Plus Plan only if “Excluding USA” cover \nis opted) \nWe will pay the Customary and Reasonable expenses, up to the limit specified in the Policy Schedule, incurred for \ntreatment of medical emergencies which occur during business or holiday trips outside Your area of cover. Cover is \nprovided for up to six weeks per trip within the Sum Insured limit. It includes treatment required due to an Accident \nor the sudden beginning or worsening of a severe Illness which presents an immediate threat to Your health. \nTreatment by a Doct\n\n[2] BAJHLIP23020V012223.pdf p.7.0 (score=0.869)\n    UIN- BAJHLIP23020V012223 \n Global Health Care/ Policy Wordings/Page 7 Bajaj Allianz General Insurance Co. Ltd. \nBajaj Allianz House, Airport Road, Yerawada, Pune - 411 006. Reg. No.: 113 \nFor more details, log on to: www.bajajallianz.com | E-mail: bagichelp@bajajallianz.co.in or \nCall at: Sales - 1800 209 0144 / Service - 1800 209 5858 (Toll Free No.) \nGLOBAL HEALTH CARE the Emergency event. Cover does not extend to follow-up Dental Treatment, dental surgery, dental prostheses, \northodontics or periodontics. 15. Emergency Treatment outside area of cover:- \nEmergency treatment outside area of c\n\n[3] BAJHLIP23020V012223.pdf p.22.0 (score=0.849)\n    10) Breach of law (Code -Excl10) \nExpenses for treatment directly arising from or consequent upon any Insured committing or attempting to commit \na breach of law with criminal intent. 11) Excluded Providers (Code -Excl11) \nExpenses incurred towards treatment in any Hospital or by any Medical Practitioner or any other provider \nspecifically excluded by the Insurer and disclosed in its website / notified to the policyholders are not admissible. \nHowever, in case of life threatening situations or following an Accident, expenses up to the stage of stabilization \nare payable but not the complete cl\n\n[4] BAJHLIP23020V012223.pdf p.15.0 (score=0.848)\n    If You can’t travel for medical reasons following discharge from an Inpatient episode of care, We will cover the \nreasonable cost of hotel accommodation in a private en-suite room for up to seven days. If You are evacuated to the nearest appropriate medical centre for ongoing treatment, We will cover the reasonable \ncost of hotel accommodation in a private en-suite room. This cost must be more economical than the cost of a \nseries of journeys between the nearest appropriate medical centre and Your principal country of residence. Following completion of treatment, We will also cover the cost of\n\n[5] BAJHLIP23020V012223.pdf p.28.0 (score=0.847)\n     Preventive treatment \n Routine maternity, Routine Delivery and newborn care and Complications of childbirth \n Travel costs of Insured family members in the event of an evacuation/repatriation \n Travel costs of Insured family members in the event of the repatriation of mortal remains \n Travel costs of Insured members to be with a family member who is at peril of death or who has died \n Vaccinations \n31) Air Ambulance + Medical Evacuation (Applicable to Imperial Plus Plan only) \na. costs for hotel suites, four or five-star hotel accommodation or hotel accommodation for an accompanying \npe"
+        },
+        {
+          "step": 5,
+          "thought": "The policy has a specific exclusion for emergency treatment outside the area of cover, but it's unclear if this applies to the insured's situation, and there's also a waiting period for international cover.",
+          "action": "search_policy",
+          "args": {
+            "query": "emergency treatment outside area of cover and waiting period for international cover",
+            "policy_name": "Imperial Plus"
+          },
+          "observation": "[1] BAJHLIP23020V012223.pdf p.16.0 (score=0.899)\n    12. Emergency treatment outside area of cover (Applicable to Imperial Plus Plan only if “Excluding USA” cover \nis opted) \nWe will pay the Customary and Reasonable expenses, up to the limit specified in the Policy Schedule, incurred for \ntreatment of medical emergencies which occur during business or holiday trips outside Your area of cover. Cover is \nprovided for up to six weeks per trip within the Sum Insured limit. It includes treatment required due to an Accident \nor the sudden beginning or worsening of a severe Illness which presents an immediate threat to Your health. \nTreatment by a Doct\n\n[2] BAJHLIP23020V012223.pdf p.7.0 (score=0.885)\n    UIN- BAJHLIP23020V012223 \n Global Health Care/ Policy Wordings/Page 7 Bajaj Allianz General Insurance Co. Ltd. \nBajaj Allianz House, Airport Road, Yerawada, Pune - 411 006. Reg. No.: 113 \nFor more details, log on to: www.bajajallianz.com | E-mail: bagichelp@bajajallianz.co.in or \nCall at: Sales - 1800 209 0144 / Service - 1800 209 5858 (Toll Free No.) \nGLOBAL HEALTH CARE the Emergency event. Cover does not extend to follow-up Dental Treatment, dental surgery, dental prostheses, \northodontics or periodontics. 15. Emergency Treatment outside area of cover:- \nEmergency treatment outside area of c\n\n[3] BAJHLIP23020V012223.pdf p.28.0 (score=0.877)\n    C. Applicable to Part B-II (OUT-PATIENT BENEFITS FOR INTERNATIONAL COVER) 1. Out-patient Treatment \na. During the first year of Global Health Care Policy with Us, 30 days waiting period would be applicable for all \nclaims under out-patient except those arising out of Accidental Injury, however the waiting period would not be \napplied during subsequent renewals. \nb. Out-patient Dental Treatment expenses will not be covered. 2. Alternate/Complementary Treatment \nDuring the first year of Global Health Care Policy with Us, 30 days waiting period would be applicable for all claims \nunder Alternate/\n\n[4] BAJHLIP23020V012223.pdf p.16.0 (score=0.867)\n    13. Medical repatriation (Applicable to Imperial Plus Plan only) \nIf the necessary treatment for which You are covered isn't available locally You can choose to be medically \nevacuated to Your home country for treatment, instead of to the nearest appropriate medical centre. This only \napplies when Your home country is within Your geographical area of cover. Following completion of treatment, We \nwill also cover the cost of Your return trip (i.e. one way ticket) at economy rates, to the country from where you \nwere repatriated. The return journey must take place within one month after treatment\n\n[5] BAJHLIP23020V012223.pdf p.6.0 (score=0.860)\n    8. Dental surgery outside India:- \nDental surgery outside India includes the surgical extraction of teeth, as well as other tooth-related surgical \nprocedures such as apicoectomy and dental prescription drugs. All investigative procedures that establish the \nneed for dental surgery such as laboratory tests, X-rays, CT scans and MRI(s) are included under this benefit. \nDental surgery does not cover surgical treatment that relates to dental implants. 9. Dental treatment outside India:- \nDental treatment outside India includes an annual check-up, simple fillings related to cavities or decay, root"
+        },
+        {
+          "step": 6,
+          "thought": "The policy has a specific exclusion for emergency treatment outside the area of cover, but it's unclear if this applies to the insured's situation, and there's also a waiting period for international cover.",
+          "action": "SKIPPED:search_policy",
+          "args": {
+            "query": "emergency treatment outside area of cover and waiting period for international cover",
+            "policy_name": "Imperial Plus"
+          },
+          "observation": "Identical tool call already made. You MUST output Final Answer now using existing observations."
+        },
+        {
+          "step": 7,
+          "thought": "The policy has a specific exclusion for emergency treatment outside the area of cover, but it's unclear if this applies to the insured's situation, and there's also a waiting period for international cover.",
+          "action": "final_answer",
+          "args": {},
+          "observation": null
+        }
+      ],
+      "steps_taken": 7,
+      "agent_status": "success"
+    }
+  ],
+  "timing": {
+    "total_seconds": 254.32,
+    "index_seconds": 54.95,
+    "embed_seconds": 0.52,
+    "query_seconds": 193.19,
+    "cache_hit": false,
+    "per_query_seconds": [
+      193.19
+    ]
+  }
+}

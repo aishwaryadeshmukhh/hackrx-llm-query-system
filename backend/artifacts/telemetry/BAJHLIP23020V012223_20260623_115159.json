@@ -1,0 +1,50 @@
+{
+  "run_id": "BAJHLIP23020V012223_20260623_115159",
+  "timestamp": "2026-06-23T11:51:59.172196",
+  "endpoint": "/hackrx/upload",
+  "request": {
+    "filename": "BAJHLIP23020V012223.pdf",
+    "file_hash": "36284129c3989ce94f8c6e81cf7e29d6",
+    "question_count": 1,
+    "questions": [
+      "An insured travelling abroad (Imperial Plus plan, excluding USA) has a medical emergency in the USA during a 3-week business trip. Is the treatment covered?"
+    ],
+    "cache_hit": false,
+    "chunk_count": 223
+  },
+  "timing": {
+    "total_s": 96.44,
+    "index_s": 37.04,
+    "embed_s": 0.48,
+    "query_s": 53.44,
+    "cache_hit": false
+  },
+  "per_query": [
+    {
+      "index": 0,
+      "question": "An insured travelling abroad (Imperial Plus plan, excluding USA) has a medical emergency in the USA during a 3-week business trip. Is the treatment covered?",
+      "time_s": 53.44,
+      "decision": "covered",
+      "confidence": 0.94
+    }
+  ],
+  "throughput": {
+    "questions_per_second": 0.019,
+    "chunks_per_second": 6.0
+  },
+  "model": {
+    "embedding": "multilingual-e5-large",
+    "llm": "gemini-2.5-flash",
+    "embedding_dims": 1024
+  },
+  "quality": {
+    "decisions": [
+      "covered"
+    ],
+    "confidences": [
+      0.94
+    ],
+    "mean_confidence": 0.94,
+    "unclear_count": 0
+  }
+}

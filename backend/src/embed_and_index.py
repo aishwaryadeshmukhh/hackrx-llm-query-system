@@ -114,8 +114,14 @@ def clear_pinecone_index(pinecone_api_key: str, index_name: str = 'policy-index'
         return 0
     index = pc.Index(index_name)
     stats = index.describe_index_stats()
-    total_vectors = stats.get('total_vector_count', 0)
-    index.delete(delete_all=True)
+    total_vectors = getattr(stats, 'total_vector_count', 0) or (stats.get('total_vector_count', 0) if isinstance(stats, dict) else 0)
+    try:
+        index.delete(delete_all=True)
+    except Exception as e:
+        if "namespace not found" in str(e).lower() or "404" in str(e):
+            print(f"[index] Index already empty, skipping delete")
+        else:
+            raise
     return total_vectors
 
 def delete_duplicate_vectors(pinecone_api_key: str, index_name: str = 'policy-index', dry_run: bool = True):
@@ -134,7 +140,7 @@ def delete_duplicate_vectors(pinecone_api_key: str, index_name: str = 'policy-in
         total_vectors = stats.get('total_vector_count', 0)
         if total_vectors == 0:
             return {'message': 'No vectors in index', 'duplicates_found': 0}
-        print(f"📊 Found {total_vectors} vectors in index")
+        print(f" Found {total_vectors} vectors in index")
         # Pinecone query returns a dict with 'matches' key
         query_response = index.query(
             vector=[0.0] * 1024,
@@ -162,7 +168,7 @@ def delete_duplicate_vectors(pinecone_api_key: str, index_name: str = 'policy-in
                     content_hashes[content_hash] = vector_id
         print(f"[index] Found {len(duplicates)} duplicate vectors")
         if not dry_run and duplicates:
-            print("🗑️ Deleting duplicate vectors...")
+            print(" Deleting duplicate vectors...")
             duplicate_ids = [dup['duplicate_id'] for dup in duplicates]
             batch_size = 100
             deleted_count = 0
@@ -300,7 +306,7 @@ def index_chunks_in_pinecone(chunks: List[Dict], pinecone_api_key: str, pinecone
     if progress_callback:
         progress_callback("Initializing Pinecone...", 0)
     if not check_or_create_pinecone_index(pinecone_api_key, index_name, 1024, progress_callback):
-        print("❌ Failed to create or verify Pinecone index")
+        print(" Failed to create or verify Pinecone index")
         if progress_callback:
             progress_callback("Failed to create index", -1)
         return False
@@ -312,7 +318,7 @@ def index_chunks_in_pinecone(chunks: List[Dict], pinecone_api_key: str, pinecone
     try:
         embeddings = generate_embeddings_pinecone(texts, pinecone_api_key)
     except Exception as e:
-        print(f"❌ Error generating embeddings: {e}")
+        print(f" Error generating embeddings: {e}")
         if progress_callback:
             progress_callback(f"Error generating embeddings: {e}", -1)
         return False
@@ -364,10 +370,10 @@ def smart_index_documents(docs_folder: str, pinecone_api_key: str, index_name: s
         'missing': len([f for f, s in status.items() if s == 'missing'])
     }
     if progress_callback:
-        progress_callback(f"📊 Status: {status_counts['indexed']} indexed, {status_counts['new']} new, {status_counts['changed']} changed", 10)
+        progress_callback(f" Status: {status_counts['indexed']} indexed, {status_counts['new']} new, {status_counts['changed']} changed", 10)
     if not files_to_process:
         if progress_callback:
-            progress_callback("🎉 All documents are already indexed and up-to-date!", 100)
+            progress_callback(" All documents are already indexed and up-to-date!", 100)
         return {
             "status": "up_to_date",
             "processed_files": 0,
@@ -382,7 +388,7 @@ def smart_index_documents(docs_folder: str, pinecone_api_key: str, index_name: s
     for i, filename in enumerate(files_to_process):
         file_path = os.path.join(docs_folder, filename)
         if progress_callback:
-            progress_callback(f"🔄 Processing {filename} ({i+1}/{total_files})...", 20 + (i / total_files) * 60)
+            progress_callback(f" Processing {filename} ({i+1}/{total_files})...", 20 + (i / total_files) * 60)
         try:
             from .parse_documents import load_and_parse_from_folder
             parsed_docs = load_and_parse_from_folder(docs_folder, file_filter=[filename], save_parsed_text=save_parsed_text)
@@ -404,13 +410,13 @@ def smart_index_documents(docs_folder: str, pinecone_api_key: str, index_name: s
                     registry.mark_document_indexed(filename, file_path, len(chunks))
                     processed_files.append(filename)
                     if progress_callback:
-                        progress_callback(f"✅ {filename}: {len(chunks)} chunks indexed", 20 + ((i+1) / total_files) * 60)
+                        progress_callback(f" {filename}: {len(chunks)} chunks indexed", 20 + ((i+1) / total_files) * 60)
                 else:
                     if progress_callback:
-                        progress_callback(f"❌ Failed to index {filename}", 20 + ((i+1) / total_files) * 60)
+                        progress_callback(f" Failed to index {filename}", 20 + ((i+1) / total_files) * 60)
         except Exception as e:
             if progress_callback:
-                progress_callback(f"❌ Error processing {filename}: {str(e)}", 20 + ((i+1) / total_files) * 60)
+                progress_callback(f"Error processing {filename}: {str(e)}", 20 + ((i+1) / total_files) * 60)
     end_time = time.time()
     processing_time = end_time - start_time
     if progress_callback:
@@ -430,14 +436,14 @@ def force_reindex_all(docs_folder: str, pinecone_api_key: str, index_name: str =
     """
     registry = DocumentRegistry()
     if progress_callback:
-        progress_callback("🔄 Force re-indexing: clearing registry and index...", 5)
+        progress_callback(" Force re-indexing: clearing registry and index...", 5)
     registry.clear_registry()
     try:
         clear_result = clear_pinecone_index(pinecone_api_key, index_name)
         if progress_callback:
-            progress_callback(f"🗑️ Cleared {clear_result} vectors from index", 10)
+            progress_callback(f" Cleared {clear_result} vectors from index", 10)
     except Exception as e:
         if progress_callback:
-            progress_callback(f"❌ Failed to clear index: {str(e)}", 10)
+            progress_callback(f" Failed to clear index: {str(e)}", 10)
         return {"status": "failed", "error": f"Could not clear index: {str(e)}"}
     return smart_index_documents(docs_folder, pinecone_api_key, index_name, progress_callback, save_parsed_text)

@@ -28,7 +28,7 @@ from typing import Any, Callable, Dict, List, Optional, TYPE_CHECKING
 if TYPE_CHECKING:
     from .agent_tools import ToolExecutor
 
-MAX_STEPS = 7
+MAX_STEPS = 4
 
 # ── Prompt templates ─────────────────────────────────────────────────────────
 
@@ -57,7 +57,8 @@ Final Answer: {"decision": "covered|not_covered|partial|unclear", "confidence": 
 
 CRITICAL RULES:
 - After each tool call, if the observation contains a clear answer, output Final Answer IMMEDIATELY — do NOT call more tools
-- 1-3 tool calls is the target; 7 is the max before you must answer
+- 1-2 tool calls is the target; 4 is the absolute max — you MUST answer by step 3 if you have any coverage clause
+- If you have found the relevant clause AND a waiting period clause, output Final Answer immediately — do not search further
 - decision must be exactly: covered, not_covered, partial, or unclear
 - In your Final Answer, the "answer" field must be specific: quote the actual limit/duration/condition from the retrieved text, not vague summaries
 - In "relevant_clauses", copy the actual clause text from the observation, do not paraphrase it
@@ -169,7 +170,7 @@ def _format_chunks_for_observation(chunks: List[Dict]) -> str:
         return "No relevant chunks found."
     lines = []
     for i, c in enumerate(chunks[:5], 1):
-        text = c.get("text", c.get("content", ""))[:300]
+        text = c.get("text", c.get("content", ""))[:600]
         doc = c.get("document", c.get("document_name", "unknown"))
         page = c.get("page", c.get("page_number", "?"))
         score = c.get("score", 0.0)
@@ -255,6 +256,22 @@ def run_react_loop(
         if parsed["type"] == "action":
             tool_name = parsed["tool"]
             args = parsed["args"]
+
+            # Skip repeated identical tool calls — force agent to conclude instead
+            prev_calls = re.findall(r"Action: (\w+)\((\{[^)]*?\})\)", steps_so_far)
+            repeat_count = sum(1 for t, a in prev_calls if t == tool_name and a == json.dumps(args))
+            if repeat_count >= 1:
+                print(f"[react] Blocked repeat: {tool_name}({args}) — injecting skip notice")
+                skip_msg = "Identical tool call already made. You MUST output Final Answer now using existing observations."
+                steps_so_far += _OBSERVATION_TEMPLATE.format(
+                    step_num=step_num, thought=parsed["thought"],
+                    action=tool_name, args_json=json.dumps(args), observation=skip_msg,
+                )
+                reasoning_trace.append({
+                    "step": step_num, "thought": parsed["thought"],
+                    "action": f"SKIPPED:{tool_name}", "args": args, "observation": skip_msg,
+                })
+                continue
 
             if on_step:
                 on_step({

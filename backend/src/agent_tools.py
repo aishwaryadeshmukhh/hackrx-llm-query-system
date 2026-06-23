@@ -248,7 +248,11 @@ class ToolExecutor:
 
         query = self._normalise_query(query)
         embedding = self.processor._encode_query(query)
-        filter_dict = {"document_name": {"$eq": policy_name}} if policy_name else None
+        # Only use policy_name filter when it looks like an actual filename
+        if policy_name and policy_name.endswith(".pdf"):
+            filter_dict = {"document_name": {"$eq": policy_name}}
+        else:
+            filter_dict = None
 
         try:
             response = self.processor.index.query(
@@ -257,7 +261,28 @@ class ToolExecutor:
                 include_metadata=True,
                 filter=filter_dict,
             )
+            if response.matches:
+                scores = [m.score for m in response.matches[:5]]
+                print(f"[search_policy] raw scores: {[round(s,4) for s in scores]}")
+                m0 = response.matches[0]
+                print(f"[search_policy] top match metadata keys: {list((m0.metadata or {}).keys())}, has_text: {bool((m0.metadata or {}).get('text'))}")
+            else:
+                print(f"[search_policy] Pinecone returned 0 matches (empty response)")
             chunks = self.processor._process_search_results(response, min_score=0.01)
+            # If still empty, return top matches regardless of score — the agent needs something
+            if not chunks and response.matches:
+                print(f"[search_policy] score filter dropped all matches, returning top-5 unfiltered")
+                chunks = []
+                for m in response.matches[:5]:
+                    md = m.metadata or {}
+                    content = md.get("text", md.get("content", ""))
+                    if content:
+                        chunks.append({
+                            "score": m.score, "content": content, "text": content,
+                            "document_name": md.get("document_name", ""),
+                            "page_number": md.get("page_number", 1),
+                            "chunk_index": md.get("chunk_index", 0),
+                        })
             print(f"🔧 search_policy('{query[:50]}') → {len(chunks)} chunks")
             return _format_chunks(chunks, label="search_policy")
         except Exception as e:

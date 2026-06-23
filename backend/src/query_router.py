@@ -39,6 +39,19 @@ _COMPLEX_PATTERNS = [
     r"\b(first|second|third) year\b",
     r"\b\d+ months? (old|ago|since)\b",
     r"\b\d+ years? (old policy|since inception)\b",
+    # specific medical conditions — always need exclusion check
+    r"\b(mental illness|psychiatric|schizophrenia|depression|anxiety disorder)\b",
+    r"\b(cancer|tumor|tumour|oncolog)\b",
+    r"\b(maternity|pregnancy|childbirth|delivery|newborn)\b",
+    r"\b(bariatric|obesity|weight loss surgery)\b",
+    r"\b(cosmetic|aesthetic|plastic surgery)\b",
+    r"\b(cataract|knee replacement|hip replacement|joint replacement)\b",
+    r"\b(abroad|overseas|international|outside india|outside usa|usa|foreign)\b",
+    r"\b(excluded|exclusion|not covered|limitation)\b",
+    r"\b(diagnosed|diagnosis|condition)\b",
+    r"\b(admitted|admission|inpatient|hospitali[sz]ed)\b",
+    r"\bis .{3,60} covered\b",
+    r"\bcovered (for|under|by)\b",
 ]
 
 _SIMPLE_PATTERNS = [

@@ -1,0 +1,97 @@
+{
+  "run_id": "BAJHLIP23020V012223_20260623_115159",
+  "timestamp": "2026-06-23T11:51:59.172196",
+  "file": "BAJHLIP23020V012223.pdf",
+  "questions": [
+    "An insured travelling abroad (Imperial Plus plan, excluding USA) has a medical emergency in the USA during a 3-week business trip. Is the treatment covered?"
+  ],
+  "answers": [
+    {
+      "decision": "covered",
+      "confidence": 0.94,
+      "answer": "The policy covers medical emergencies in the USA for the Imperial Plus plan, specifically considering the 'Excluding USA' cover option, up to the limit specified in the Policy Schedule. However, there is a 30-day waiting period for all claims under out-patient treatment, except those arising out of Accidental Injury.",
+      "justification": "Section 12 of the policy wordings states that emergency treatment outside the area of cover is covered if the 'Excluding USA' cover option is opted. However, Section C of the policy wordings states that there is a 30-day waiting period for all claims under out-patient treatment, except those arising out of Accidental Injury.",
+      "relevant_clauses": [
+        {
+          "section": "12. Emergency treatment outside area of cover",
+          "content": "We will pay the Customary and Reasonable expenses, up to the limit specified in the Policy Schedule, incurred for treatment of medical emergencies which occur during business or",
+          "page": "p.16.0"
+        },
+        {
+          "section": "C. Applicable to Part B-II (OUT-PATIENT BENEFITS FOR INTERNATIONAL COVER)",
+          "content": "During the first year of Global Health Care Policy with Us, 30 days waiting period would be applicable for all claims under out-patient except those arising out of Accidental Injury, however the w",
+          "page": "p.28.0"
+        }
+      ],
+      "query_type": "complex",
+      "reasoning_trace": [
+        {
+          "step": 1,
+          "thought": "We need to check if the policy covers medical emergencies abroad, specifically in the USA.",
+          "action": "search_policy",
+          "args": {
+            "query": "medical emergency coverage abroad",
+            "policy_name": "Imperial Plus"
+          },
+          "observation": "No relevant chunks found."
+        },
+        {
+          "step": 2,
+          "thought": "We need to check if the policy covers medical emergencies in the USA, specifically for the Imperial Plus plan.",
+          "action": "lookup_exclusions",
+          "args": {
+            "procedure_or_condition": "medical emergency in USA"
+          },
+          "observation": "[1] BAJHLIP23020V012223.pdf p.16.0 (score=0.865)\n    12. Emergency treatment outside area of cover (Applicable to Imperial Plus Plan only if “Excluding USA” cover \nis opted) \nWe will pay the Customary and Reasonable expenses, up to the limit specified in the Policy Schedule, incurred for \ntreatment of medical emergencies which occur during business or\n\n[2] BAJHLIP23020V012223.pdf p.15.0 (score=0.846)\n    Exclusions: Mental Illness Treatment does not cover: \na. Any expenses for Mental Illness Treatment related to Alcoholism, drug or substance abuse or any addictive \ncondition and consequences thereof. .\n\n[3] BAJHLIP23020V012223.pdf p.20.0 (score=0.844)\n    SECTION D) EXCLUSIONS- STANDARD EXCLUSIONS APPLICABLE TO PART A- DOMESTIC COVER \nUNDER SECTION C) BENEFITS COVERED UNDER THE POLICY 1) Pre-Existing Diseases (Code -Excl01) \na. Expenses related to the treatment of a Pre-Existing Disease (PED) and its direct complications shall be \nexcluded until the \n\n[4] BAJHLIP23020V012223.pdf p.22.0 (score=0.841)\n    10) Breach of law (Code -Excl10) \nExpenses for treatment directly arising from or consequent upon any Insured committing or attempting to commit \na breach of law with criminal intent. 11) Excluded Providers (Code -Excl11) \nExpenses incurred towards treatment in any Hospital or by any Medical Practit\n\n[5] BAJHLIP23020V012223.pdf p.26.0 (score=0.841)\n    18) Maternity (Code-Excl18): \na. Medical Treatment Expenses traceable to childbirth (including complicated deliveries and caesarean sections \nincurred during Hospitalization) except ectopic pregnancy. \nb. Expenses towards miscarriage (unless due to an Accident) and lawful medical termination of preg"
+        },
+        {
+          "step": 3,
+          "thought": "We need to check if the policy covers medical emergencies in the USA for the Imperial Plus plan, specifically considering the \"Excluding USA\" cover option.",
+          "action": "search_policy",
+          "args": {
+            "query": "medical emergency coverage in USA excluding USA option",
+            "policy_name": "Imperial Plus"
+          },
+          "observation": "No relevant chunks found."
+        },
+        {
+          "step": 4,
+          "thought": "We need to check the waiting period for pre-existing diseases, as the policyholder has a 3-week business trip in the USA.",
+          "action": "check_waiting_period",
+          "args": {
+            "benefit_type": "pre-existing disease"
+          },
+          "observation": "[1] BAJHLIP23020V012223.pdf p.20.0 (score=0.864)\n    2) Specified disease/procedure waiting period (Code - Excl02) \na. Expenses related to the treatment of the listed Conditions, surgeries/treatments shall be excluded until the \nexpiry of 24 months of continuous coverage after the date of inception of the first Global Health Care Policy \nwith Us. This\n\n[2] BAJHLIP23020V012223.pdf p.20.0 (score=0.861)\n    SECTION D) EXCLUSIONS- STANDARD EXCLUSIONS APPLICABLE TO PART A- DOMESTIC COVER \nUNDER SECTION C) BENEFITS COVERED UNDER THE POLICY 1) Pre-Existing Diseases (Code -Excl01) \na. Expenses related to the treatment of a Pre-Existing Disease (PED) and its direct complications shall be \nexcluded until the \n\n[3] BAJHLIP23020V012223.pdf p.10.0 (score=0.858)\n    2. Pre-Hospitalization \nThe Medical Expenses incurred during the 60 days immediately before You were Hospitalized, provided that: Such \nMedical Expenses were incurred for the same Illness/Injury for which subsequent Hospitalization was required, and \nWe have accepted an Inpatient Hospitalization cla\n\n[4] BAJHLIP23020V012223.pdf p.24.0 (score=0.857)\n    SECTION D) EXCLUSIONS- STANDARD EXCLUSIONS APPLICABLE TO PART B- INTERNATIONAL COVER \nUNDER SECTION C) BENEFITS COVERED UNDER THE POLICY A. Applicable for Part B-I (IN-PATIENT BENEFITS FOR INTERNATIONAL COVER ) 1) Pre-Existing Diseases (Code-Excl01) \na. Expenses related to the treatment of a Pre-Exi\n\n[5] BAJHLIP23020V012223.pdf p.25.0 (score=0.856)\n    3) 30-day waiting period (Code-Excl03) \na. Expenses related to the treatment of any Illness within 30 days from the first Policy commencement date shall \nbe excluded except claims arising due to an Accident, provided the same are covered. \nb. This exclusion shall not, however apply if the Insured ha"
+        },
+        {
+          "step": 5,
+          "thought": "We need to check if the policy covers medical emergencies in the USA for the Imperial Plus plan, specifically considering the \"Excluding USA\" cover option.",
+          "action": "lookup_exclusions",
+          "args": {
+            "procedure_or_condition": "medical emergency in USA with Excluding USA option"
+          },
+          "observation": "[1] BAJHLIP23020V012223.pdf p.16.0 (score=0.875)\n    12. Emergency treatment outside area of cover (Applicable to Imperial Plus Plan only if “Excluding USA” cover \nis opted) \nWe will pay the Customary and Reasonable expenses, up to the limit specified in the Policy Schedule, incurred for \ntreatment of medical emergencies which occur during business or\n\n[2] BAJHLIP23020V012223.pdf p.7.0 (score=0.853)\n    UIN- BAJHLIP23020V012223 \n Global Health Care/ Policy Wordings/Page 7 Bajaj Allianz General Insurance Co. Ltd. \nBajaj Allianz House, Airport Road, Yerawada, Pune - 411 006. Reg. No.: 113 \nFor more details, log on to: www.bajajallianz.com | E-mail: bagichelp@bajajallianz.co.in or \nCall at: Sales - 18\n\n[3] BAJHLIP23020V012223.pdf p.26.0 (score=0.849)\n    18) Maternity (Code-Excl18): \na. Medical Treatment Expenses traceable to childbirth (including complicated deliveries and caesarean sections \nincurred during Hospitalization) except ectopic pregnancy. \nb. Expenses towards miscarriage (unless due to an Accident) and lawful medical termination of preg\n\n[4] BAJHLIP23020V012223.pdf p.28.0 (score=0.843)\n    C. Applicable to Part B-II (OUT-PATIENT BENEFITS FOR INTERNATIONAL COVER) 1. Out-patient Treatment \na. During the first year of Global Health Care Policy with Us, 30 days waiting period would be applicable for all \nclaims under out-patient except those arising out of Accidental Injury, however the w\n\n[5] BAJHLIP23020V012223.pdf p.20.0 (score=0.842)\n    SECTION D) EXCLUSIONS- STANDARD EXCLUSIONS APPLICABLE TO PART A- DOMESTIC COVER \nUNDER SECTION C) BENEFITS COVERED UNDER THE POLICY 1) Pre-Existing Diseases (Code -Excl01) \na. Expenses related to the treatment of a Pre-Existing Disease (PED) and its direct complications shall be \nexcluded until the "
+        },
+        {
+          "step": 6,
+          "thought": "We need to check if the policy covers medical emergencies in the USA for the Imperial Plus plan, specifically considering the \"Excluding USA\" cover option and the waiting period for pre-existing diseases.",
+          "action": "final_answer",
+          "args": {},
+          "observation": null
+        }
+      ],
+      "steps_taken": 6,
+      "agent_status": "success"
+    }
+  ],
+  "timing": {
+    "total_seconds": 96.44,
+    "index_seconds": 37.04,
+    "embed_seconds": 0.48,
+    "query_seconds": 53.44,
+    "cache_hit": false,
+    "per_query_seconds": [
+      53.44
+    ]
+  }
+}
