@@ -321,8 +321,3 @@ Questions run sequentially with 3s gaps to stay within API rate limits.
 
 ---
 
-## Team JBBR
-
-Built for HackRx 2024.
-
-*Insurance policy analysis should take seconds, not hours.*
