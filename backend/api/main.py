@@ -85,13 +85,18 @@ async def stream_query(request: Request):
 
             file_hash = _hash_file(pdf_path)
             cached    = _chunk_cache.get(file_hash)
+            already_indexed = cached and cached.get("indexed_in_pinecone", False)
 
             if cached:
                 chunks = cached["chunks"]
-                q.put({"type": "status", "message": "Cache hit — re-indexing to Pinecone…"})
+                if already_indexed:
+                    q.put({"type": "status", "message": f"Document already indexed ({len(chunks)} chunks). Starting analysis…"})
+                else:
+                    q.put({"type": "status", "message": "Chunks cached — indexing to Pinecone…"})
             else:
                 from src.parse_documents import load_and_parse_documents
                 from src.chunk_documents_optimized import chunk_documents_optimized
+                q.put({"type": "status", "message": "Parsing PDF…"})
                 parsed = load_and_parse_documents([pdf_path])
                 transformed = [{
                     "document_name":   d.get("document_name", ""),
@@ -99,16 +104,19 @@ async def stream_query(request: Request):
                     "ordered_content": d.get("parsed_output", {}).get("ordered_content", []),
                 } for d in parsed]
                 chunks = chunk_documents_optimized(transformed)
-                _chunk_cache[file_hash] = {"chunks": chunks}
+                _chunk_cache[file_hash] = {"chunks": chunks, "indexed_in_pinecone": False}
 
-            from src.embed_and_index import index_chunks_in_pinecone
-            index_chunks_in_pinecone(
-                chunks=chunks,
-                pinecone_api_key=pinecone_key,
-                pinecone_env="us-east-1",
-                index_name="policy-index",
-            )
-            q.put({"type": "status", "message": f"Indexed {len(chunks)} chunks. Starting analysis…"})
+            if not already_indexed:
+                from src.embed_and_index import index_chunks_in_pinecone
+                q.put({"type": "status", "message": f"Indexing {len(chunks)} chunks to Pinecone…"})
+                index_chunks_in_pinecone(
+                    chunks=chunks,
+                    pinecone_api_key=pinecone_key,
+                    pinecone_env="us-east-1",
+                    index_name="policy-index",
+                )
+                _chunk_cache[file_hash]["indexed_in_pinecone"] = True
+                q.put({"type": "status", "message": f"Indexed {len(chunks)} chunks. Starting analysis…"})
 
             # ── Build processor ──────────────────────────────────────────
             from src.query_processor import QueryProcessor

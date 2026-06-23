@@ -96,11 +96,11 @@ def generate_query_embedding_pinecone(query: str, api_key: str) -> List[float]:
         
         # Extract embedding from the response
         embedding = response.data[0].values
-        print(f"✅ Generated query embedding using Pinecone inference ({len(embedding)} dims)")
+        print(f"[embed] query embedding OK ({len(embedding)} dims)")
         return embedding
-        
+
     except Exception as e:
-        print(f"❌ Error generating query embedding with Pinecone inference: {e}")
+        print(f"[embed] ERROR generating query embedding: {e}")
         # Return non-zero random vector as fallback
         import random
         return [random.uniform(-0.01, 0.01) for _ in range(1024)]

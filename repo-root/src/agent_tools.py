@@ -54,7 +54,7 @@ TOOL_DECLARATIONS = [
                 },
                 "top_k": {
                     "type": "integer",
-                    "description": "Number of chunks to return. Defaults to 5.",
+                    "description": "Number of chunks to return. Defaults to 15.",
                 },
             },
             "required": ["query"],
@@ -147,6 +147,9 @@ _EXCLUSION_KEYWORDS = [
     "exclusion", "excluded", "not covered", "not payable", "exception",
     "limitation", "shall not", "does not cover", "specifically excluded",
     "not admissible", "not applicable",
+    # conditional-coverage terms — benefits that apply only in certain scenarios
+    "applicable to", "excluding usa", "outside area of cover", "six weeks",
+    "provided that", "subject to", "only if", "only when", "not available",
 ]
 
 _WAITING_PERIOD_KEYWORDS = [
@@ -220,7 +223,7 @@ class ToolExecutor:
         self,
         query: str,
         policy_name: Optional[str] = None,
-        top_k: int = 5,
+        top_k: int = 15,
     ) -> List[Dict]:
         """General semantic search, optionally filtered to one document."""
         if not self.processor.index:
@@ -236,7 +239,7 @@ class ToolExecutor:
                 include_metadata=True,
                 filter=filter_dict,
             )
-            chunks = self.processor._process_search_results(response, min_score=0.05)
+            chunks = self.processor._process_search_results(response, min_score=0.03)
             print(f"🔧 search_policy('{query[:50]}') → {len(chunks)} chunks")
             return _format_chunks(chunks, label="search_policy")
         except Exception as e:
@@ -272,8 +275,8 @@ class ToolExecutor:
                 )
             ]
 
-            # Fall back to top-5 by score if nothing matched the keyword filter
-            result = exclusion_chunks[:5] if exclusion_chunks else all_chunks[:3]
+            # Fall back to top-8 by score if nothing matched the keyword filter
+            result = exclusion_chunks[:8] if exclusion_chunks else all_chunks[:5]
             print(f"🔧 lookup_exclusions('{procedure_or_condition}') → {len(result)} chunks")
             return _format_chunks(result, label="lookup_exclusions")
         except Exception as e:

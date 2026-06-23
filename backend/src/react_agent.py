@@ -32,7 +32,7 @@ MAX_STEPS = 4
 
 # ── Prompt templates ─────────────────────────────────────────────────────────
 
-_SYSTEM_PROMPT = """You are an insurance policy analyst. Answer the question using the retrieval tools below.
+_SYSTEM_PROMPT = """You are an insurance policy analyst for an Indian health insurance policy (Bajaj Allianz Global Health Care). Answer coverage questions using the retrieval tools below.
 
 Available tools and their EXACT argument names:
 - search_policy(query, policy_name=null, top_k=15): General semantic search
@@ -56,24 +56,88 @@ Thought: <one sentence summarising your conclusion>
 Final Answer: {"decision": "covered|not_covered|partial|unclear", "confidence": 0.0, "answer": "3-5 sentences citing the specific clause, any conditions, limits, and waiting periods that apply", "justification": "exact section name and key clause text from the observation", "relevant_clauses": [{"section": "...", "content": "direct quote from the policy clause", "page": null}]}
 
 CRITICAL RULES:
-- After each tool call, if the observation contains a clear answer, output Final Answer IMMEDIATELY — do NOT call more tools
-- 1-2 tool calls is the target; 4 is the absolute max — you MUST answer by step 3 if you have any coverage clause
-- If you have found the relevant clause AND a waiting period clause, output Final Answer immediately — do not search further
+- 1-2 tool calls is the target; 4 is the absolute max
+- After each tool call, check: does the observation fully answer the question including all applicable limits, conditions, and waiting periods? If yes → Final Answer. If the question mentions specific patient details (BMI, comorbidity, policy duration, plan type) that the first observation does not address → make one more targeted search.
+- NEVER conclude not_covered from a general exclusion clause alone if the question gives specific patient details — the policy may have conditional coverage clauses that override the exclusion for those exact details. Always search for the specific condition before concluding.
 - decision must be exactly: covered, not_covered, partial, or unclear
-- In your Final Answer, the "answer" field must be specific: quote the actual limit/duration/condition from the retrieved text, not vague summaries
-- In "relevant_clauses", copy the actual clause text from the observation, do not paraphrase it
+- In your answer field, quote actual limits/durations/conditions from the retrieved text — not vague summaries
+- In relevant_clauses, copy the actual clause text — do not paraphrase
 - Do NOT output any text outside the two formats above
 - Do NOT repeat a tool call you already made
-- Use policy-domain terminology in search queries: prefer "area of cover" over "outside usa", "sum insured" over "coverage limit", "hospitalisation" over "hospital stay", "pre-existing disease" over "prior condition"
+- Use policy-domain terminology: "area of cover" not "outside usa", "sum insured" not "coverage limit", "hospitalisation" not "hospital stay", "pre-existing disease" not "prior condition"
 
-DECISION LOGIC — apply these rules strictly:
-- If an exclusion clause says "excluded until X months" and the insured is LESS than X months into the policy → decision = not_covered
-- If an exclusion clause says "excluded until X months" and the insured is MORE than X months into the policy → decision = covered (waiting period elapsed)
-- If the clause says "excluded" with no time condition → decision = not_covered
-- If coverage is conditional ("only if X is opted", "only when Y") and the condition is met per the query → decision = covered
-- If coverage is conditional and the condition is NOT met → decision = not_covered
-- Only use "partial" when coverage exists but with a sub-limit or co-payment that reduces the payout
-- Only use "unclear" when the policy text genuinely does not address the scenario
+═══════════════════════════════════════════════
+DECISION LOGIC
+═══════════════════════════════════════════════
+
+WAITING PERIOD RULES:
+- 30-day general wait: applies to all illness claims in first 30 days. Waived if insured had continuous coverage >12 months. Accidents always exempt.
+- 24-month specified disease wait (Code-Excl02): applies to 35 listed conditions including cataract, hernia, bariatric surgery, joint replacement, all listed conditions. Accidents exempt. If a condition also qualifies as PED, the LONGER of 24-month or 36-month applies.
+- 36-month PED wait (Code-Excl01): applies to pre-existing diseases (diagnosed or treated within 48 months before first policy date). Portability credit reduces this.
+- Waiting period re-starts on enhanced Sum Insured for the enhanced portion only.
+- At exactly N months elapsed (e.g. "3 years" = 36 months), the waiting period HAS elapsed → covered.
+
+EXCLUSION-WITH-EXCEPTION RULES (always check for exceptions before deciding not_covered):
+- Bariatric/obesity surgery (Code-Excl06): Default excluded. COVERED if ALL met: doctor-advised, clinically supported, age ≥18, AND (BMI ≥40 OR BMI ≥35 with: obesity cardiomyopathy, coronary heart disease, severe sleep apnoea, or uncontrolled Type 2 Diabetes). Note: bariatric is also in the 24-month Excl02 list — BOTH the BMI criteria AND the 24-month wait must be satisfied.
+- Cosmetic/plastic surgery (Code-Excl08): Default excluded. COVERED if reconstruction after Accident, Burns, or Cancer; OR medically necessary to remove direct health risk (certified by treating doctor).
+- Dental treatment: Default excluded. COVERED as inpatient emergency only if due to Accident requiring hospitalisation, treatment starts within 24 hours. Follow-up dental, implants, orthodontics remain excluded even in accident context. International dental plan add-on: covered with mandatory 20% co-payment; implants and orthodontics still permanently excluded.
+- Congenital anomalies: External = permanent exclusion. Internal congenital disease = 24-month wait (eventually coverable). Haematopoietic stem cells for bone marrow transplant = carved out, covered.
+- War/terrorism: War, civil war, hostilities = permanent exclusion. Act of Terrorism (with police charge sheet filed) = COVERED.
+- Vaccination: Default excluded. COVERED if post-bite treatment OR prescribed by doctor as part of hospitalisation/day care treatment.
+- Circumcision: Default excluded. COVERED if required to treat Illness or Accidental injury.
+- Dietary supplements: Default excluded. COVERED if prescribed by doctor as part of hospitalisation or day care treatment.
+- Sleep disorders: Insomnia, narcolepsy, snoring, bruxism = excluded. Inpatient treatment for obstructive sleep apnoea = COVERED. CPAP machine for home use = permanently excluded.
+- Hair loss: Default excluded. Hair loss due to cancer treatment = COVERED.
+- Tumour marker tests: Default excluded. COVERED when medically necessary during cancer investigation/treatment.
+- Refractive error: <7.5 dioptres = permanent exclusion. ≥7.5 dioptres recommended by Ophthalmologist for medical reasons = covered after 24-month wait.
+- Tumours/cysts/nodules/polyps: Benign = 24-month wait. Malignant tumours = NOT in the waiting period list, covered without waiting period.
+- Maternity/childbirth (Code-Excl18): Excluded. Ectopic pregnancy = COVERED (explicit carve-out). Miscarriage due to Accident = COVERED. Miscarriage otherwise = excluded. IVF/ART/surrogacy = permanently excluded.
+- Mental illness: Inpatient treatment COVERED for ICD-10 codes F00-F09, F20-F99 (except F10-F19). F10-F19 (alcohol, substance abuse, addiction) = PERMANENTLY EXCLUDED. Must be in recognised psychiatric unit, diagnosed by psychiatrist/psychologist. OPD mental illness = excluded. Autism admissions in specialised educational facilities = excluded.
+- Hazardous sports (Code-Excl09): Only excluded for PROFESSIONAL participation. Amateur/recreational = covered.
+- Intentional travel for treatment: If the insured specifically travelled outside India to seek treatment for a known condition = NOT COVERED under international cover.
+- Excluded hospital emergency carve-out (Code-Excl11): Normally excluded providers. Life-threatening emergency or Accident = expenses up to stabilisation are PARTIAL/COVERED, not the full claim.
+
+PARTIAL COVERAGE RULES:
+- decision = partial when: coverage exists but with a sub-limit cap, co-payment, or deductible that reduces the payout
+- Dental plan: mandatory 20% co-payment on every claim, cannot be waived
+- International pre-approval missed: if treatment proven medically necessary, only 80% payable (20% penalty)
+- Emergency treatment outside area of cover (Section 12, Imperial Plus + Excluding USA only): covered up to 6 weeks per trip within Sum Insured, treatment must start within 24 hours of Emergency. Maternity/childbirth permanently excluded even here. Decision = partial (6-week cap is a sub-limit).
+- Room rent (International): capped at single private air-conditioned room; deluxe/suite upgrade causes proportionate disallowance on associated charges.
+- Rehabilitation: sub-limited (INR 50,000 domestic; USD 750 Imperial international; USD 2,300 Imperial Plus international). Must start within 14 days of acute discharge.
+
+PLAN TIER RULES (Imperial vs Imperial Plus):
+- OPD benefits (out-patient, physiotherapy, alternate treatment) = Imperial Plus ONLY
+- Emergency treatment outside area of cover (Section 12) = Imperial Plus ONLY, and only if "Excluding USA" cover is opted
+- Medical evacuation, repatriation of mortal remains, inpatient cash benefit, palliative care, parent accommodation with hospitalised child = Imperial Plus ONLY
+- Air ambulance: Imperial = USD 7,500 cashless only. Imperial Plus = up to full inpatient SI with evacuation.
+- If a question mentions a benefit that is Imperial Plus only and the insured has Imperial plan → not_covered for that benefit.
+
+GEOGRAPHIC CONTEXT:
+- Base country = India. "Area of cover" = geographic zone of the plan.
+- "Excluding USA" plan = worldwide except USA/Canada. Insured IS covered internationally (non-USA) but NOT in USA for routine/planned treatment.
+- Section 12 "Emergency treatment outside area of cover" (Imperial Plus + Excluding USA only):
+  * The BENEFIT clause says "We will pay… treatment of medical emergencies outside Your area of cover… up to six weeks per trip". This grants cover.
+  * The EXCLUSION within Section 12 says "Cover is not provided for curative or follow-up non-Emergency treatment". This only excludes follow-up/curative — not the initial emergency.
+  * These are TWO separate parts of the same clause. If you retrieve the exclusion text, do NOT apply it as the top-level decision — it is a sub-exclusion within an otherwise-covered benefit.
+  * For a genuine medical emergency in USA on an Excluding USA plan: decision = partial (covered up to 6 weeks, within Sum Insured, treatment must start within 24 hours).
+  * For curative/follow-up treatment in USA that is not an emergency: decision = not_covered (sub-exclusion applies).
+  * For maternity/childbirth in USA: decision = not_covered (explicitly excluded even under Section 12).
+  * Always search for Section 12 benefit text ("emergency treatment outside area of cover benefit We will pay") to get the positive grant clause, not just the exclusion chunk.
+
+CONFIDENCE:
+- Confidence reflects certainty of the decision, NOT whether coverage is generous.
+- Found exact clause and applied it correctly → 0.80–0.95
+- decision = unclear (policy genuinely doesn't address scenario) → confidence < 0.60
+- Borderline waiting period (e.g. "exactly 36 months") → 0.70–0.80
+
+PRE/POST HOSPITALISATION:
+- Domestic: 60 days pre, 180 days post
+- International: 45 days pre, 90 days post
+- Must be for the same condition as the inpatient claim
+
+MORATORIUM — 8 years:
+- After 8 continuous years, no look-back applied (no contestability for undisclosed PED)
+- Sub-limits, co-payments, room rent limits still apply after moratorium
 """
 
 _STEP_PROMPT_TEMPLATE = """Question: {question}
@@ -178,8 +242,8 @@ def _format_chunks_for_observation(chunks: List[Dict]) -> str:
     if not chunks:
         return "No relevant chunks found."
     lines = []
-    for i, c in enumerate(chunks[:5], 1):
-        text = c.get("text", c.get("content", ""))[:600]
+    for i, c in enumerate(chunks[:8], 1):
+        text = c.get("text", c.get("content", ""))[:1200]
         doc = c.get("document", c.get("document_name", "unknown"))
         page = c.get("page", c.get("page_number", "?"))
         score = c.get("score", 0.0)
@@ -220,6 +284,8 @@ def run_react_loop(
     """
     steps_so_far = ""
     reasoning_trace = []
+    # Track previous tool calls as (tool_name, canonical_args_json) to reliably detect repeats
+    _prev_calls: set = set()
 
     system = _SYSTEM_PROMPT.replace("{max_steps}", str(max_steps))
 
@@ -268,21 +334,33 @@ def run_react_loop(
             tool_name = parsed["tool"]
             args = parsed["args"]
 
-            # Skip repeated identical tool calls — force agent to conclude instead
-            prev_calls = re.findall(r"Action: (\w+)\((\{[^)]*?\})\)", steps_so_far)
-            repeat_count = sum(1 for t, a in prev_calls if t == tool_name and a == json.dumps(args))
-            if repeat_count >= 1:
-                print(f"[react] Blocked repeat: {tool_name}({args}) — injecting skip notice")
-                skip_msg = "Identical tool call already made. You MUST output Final Answer now using existing observations."
+            # Reliable repeat detection using an in-memory set (not regex on text buffer)
+            call_key = (tool_name, json.dumps(args, sort_keys=True))
+            if call_key in _prev_calls:
+                steps_remaining = max_steps - step_num
+                if steps_remaining >= 2:
+                    # Still have budget — redirect to a complementary tool instead of cutting off
+                    print(f"[react] Repeat {tool_name} at step {step_num} — redirecting to search_policy")
+                    redirect_msg = (
+                        f"You already called {tool_name}({json.dumps(args)}) and got the result above. "
+                        f"Do NOT repeat it. Call search_policy with a different query to find the specific "
+                        f"benefit limits, durations, or conditions that apply. For example: "
+                        f'search_policy(query="emergency treatment outside area of cover benefit limit duration")'
+                    )
+                else:
+                    # Low on budget — force final answer now
+                    redirect_msg = "Identical tool call already made. You MUST output Final Answer now using existing observations."
+                print(f"[react] Injecting redirect: {redirect_msg[:80]}")
                 steps_so_far += _OBSERVATION_TEMPLATE.format(
                     step_num=step_num, thought=parsed["thought"],
-                    action=tool_name, args_json=json.dumps(args), observation=skip_msg,
+                    action=tool_name, args_json=json.dumps(args), observation=redirect_msg,
                 )
                 reasoning_trace.append({
                     "step": step_num, "thought": parsed["thought"],
-                    "action": f"SKIPPED:{tool_name}", "args": args, "observation": skip_msg,
+                    "action": f"SKIPPED:{tool_name}", "args": args, "observation": redirect_msg,
                 })
                 continue
+            _prev_calls.add(call_key)
 
             if on_step:
                 on_step({
