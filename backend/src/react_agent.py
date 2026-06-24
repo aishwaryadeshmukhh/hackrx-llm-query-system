@@ -28,7 +28,7 @@ from typing import Any, Callable, Dict, List, Optional, TYPE_CHECKING
 if TYPE_CHECKING:
     from .agent_tools import ToolExecutor
 
-MAX_STEPS = 4
+MAX_STEPS = 6
 
 # ── Prompt templates ─────────────────────────────────────────────────────────
 
@@ -56,15 +56,18 @@ Thought: <one sentence summarising your conclusion>
 Final Answer: {"decision": "covered|not_covered|partial|unclear", "confidence": 0.0, "answer": "3-5 sentences citing the specific clause, any conditions, limits, and waiting periods that apply", "justification": "exact section name and key clause text from the observation", "relevant_clauses": [{"section": "...", "content": "direct quote from the policy clause", "page": null}]}
 
 CRITICAL RULES:
-- 1-2 tool calls is the target; 4 is the absolute max
+- 2-3 tool calls is the target; 6 is the absolute max
 - After each tool call, check: does the observation fully answer the question including all applicable limits, conditions, and waiting periods? If yes → Final Answer. If the question mentions specific patient details (BMI, comorbidity, policy duration, plan type) that the first observation does not address → make one more targeted search.
+- When you have found all relevant clauses, STOP searching and give Final Answer — do not repeat searches or search for confirmation of what you already know.
 - NEVER conclude not_covered from a general exclusion clause alone if the question gives specific patient details — the policy may have conditional coverage clauses that override the exclusion for those exact details. Always search for the specific condition before concluding.
 - decision must be exactly: covered, not_covered, partial, or unclear
 - In your answer field, quote actual limits/durations/conditions from the retrieved text — not vague summaries
-- In relevant_clauses, copy the actual clause text — do not paraphrase
+- In relevant_clauses, copy the actual clause text — do not paraphrase. NEVER write content that is not a direct quote from the observation text.
 - Do NOT output any text outside the two formats above
 - Do NOT repeat a tool call you already made
 - Use policy-domain terminology: "area of cover" not "outside usa", "sum insured" not "coverage limit", "hospitalisation" not "hospital stay", "pre-existing disease" not "prior condition"
+- This is a HEALTH insurance policy — it covers medical treatment expenses only. It does NOT provide: accidental death lump sum, life cover, personal accident benefit, disability income, critical illness lump sum. If the question asks about one of these and no specific benefit clause is found in the observations, decision = not_covered, confidence = 0.90. Do not infer coverage from unrelated clauses.
+- If after 2 tool calls you have not found a clause that directly addresses the question, conclude with the best available decision — do not keep searching for something that may not exist in the policy.
 
 ═══════════════════════════════════════════════
 DECISION LOGIC
@@ -143,6 +146,7 @@ MORATORIUM — 8 years:
 _STEP_PROMPT_TEMPLATE = """Question: {question}
 
 {steps_so_far}
+{current_observation}
 Next step (output ONLY Thought+Action+Args OR Thought+Final Answer):"""
 
 _OBSERVATION_TEMPLATE = """Step {step_num}:
@@ -238,19 +242,87 @@ def _parse_llm_step(text: str) -> Dict[str, Any]:
 
 
 def _format_chunks_for_observation(chunks: List[Dict]) -> str:
-    """Summarise retrieved chunks into a compact string for the observation field."""
+    """
+    Format retrieved chunks for the LLM observation.
+
+    Top 2 chunks: full text up to 1200 chars (the ones most likely to contain the answer).
+    Chunks 3-6: section header + first 120 chars only (context breadcrumbs, not full text).
+    This keeps the observation readable while cutting token usage by ~65% vs 8 full chunks.
+    """
     if not chunks:
         return "No relevant chunks found."
     lines = []
-    for i, c in enumerate(chunks[:8], 1):
-        text = c.get("text", c.get("content", ""))[:1200]
-        doc = c.get("document", c.get("document_name", "unknown"))
-        page = c.get("page", c.get("page_number", "?"))
-        score = c.get("score", 0.0)
+    for i, c in enumerate(chunks[:6], 1):
+        doc     = c.get("document", c.get("document_name", "unknown"))
+        page    = c.get("page", c.get("page_number", "?"))
+        score   = c.get("score", 0.0)
         section = c.get("section", "")
-        header = f" | Section: {section}" if section else ""
-        lines.append(f"[{i}] {doc} p.{page} (score={score:.3f}){header}\n    {text}")
+        text    = c.get("text", c.get("content", ""))
+        header  = f" | Section: {section}" if section else ""
+
+        if i <= 2:
+            # Full text for top 2 results
+            lines.append(f"[{i}] {doc} p.{page} (score={score:.3f}){header}\n    {text[:1200]}")
+        else:
+            # Header + snippet for remaining results
+            lines.append(f"[{i}] {doc} p.{page} (score={score:.3f}){header} — {text[:120]}…")
     return "\n\n".join(lines)
+
+
+def _compress_observation(tool_name: str, args: dict, observation: str) -> str:
+    """
+    Produce a compact 1-2 line summary of a completed step for the steps_so_far history.
+
+    The full observation is shown to the LLM at the time of the step. For subsequent
+    steps, only a compressed version is kept in context so the history doesn't balloon.
+    """
+    # Extract the highest-scoring section names and first clause sentence from observation
+    sections = re.findall(r"Section:\s*([^\n|]+)", observation)
+    section_str = "; ".join(s.strip() for s in sections[:3]) if sections else ""
+
+    # Pull first sentence of the top chunk text (after the header line)
+    first_text_match = re.search(r"\n\s+(.+?)(?:\n|$)", observation)
+    first_sentence = ""
+    if first_text_match:
+        raw = first_text_match.group(1).strip()
+        # Take up to first period or 200 chars
+        dot = raw.find(".")
+        first_sentence = raw[:dot + 1] if 0 < dot < 200 else raw[:200]
+
+    arg_str = ", ".join(f"{k}={v!r}" for k, v in args.items())
+    summary = f"{tool_name}({arg_str})"
+    if section_str:
+        summary += f" → sections: {section_str}"
+    if first_sentence:
+        summary += f" | key clause: {first_sentence}"
+    return summary
+
+
+# ── Decision correction ──────────────────────────────────────────────────────
+
+_PARTIAL_INDICATORS = [
+    "up to six weeks", "up to 6 weeks", "six weeks per trip", "6 weeks per trip",
+    "sub-limit", "sublimit", "co-payment", "copayment", "20% co-payment",
+    "proportionate deduction", "proportionate disallowance",
+    "80% payable", "only 80%",
+    "subject to a limit", "subject to sub-limit",
+    "capped at", "maximum benefit amount",
+]
+
+def _correct_decision(answer: dict) -> dict:
+    """
+    Upgrade covered → partial when the answer text contains sub-limit language.
+    The LLM often picks 'covered' when it should be 'partial' because it focuses
+    on whether the claim is payable rather than whether a cap reduces the payout.
+    """
+    if answer.get("decision") != "covered":
+        return answer
+    text = (answer.get("answer", "") + " " + answer.get("justification", "")).lower()
+    if any(indicator in text for indicator in _PARTIAL_INDICATORS):
+        answer = dict(answer)
+        answer["decision"] = "partial"
+        print("[react] Decision corrected: covered → partial (sub-limit language detected)")
+    return answer
 
 
 # ── ReAct loop ───────────────────────────────────────────────────────────────
@@ -282,7 +354,8 @@ def run_react_loop(
             "status": "success" | "max_steps_reached" | "error"
         }
     """
-    steps_so_far = ""
+    steps_so_far = ""       # compressed history of all completed steps
+    current_observation = "" # full observation from the most recent tool call
     reasoning_trace = []
     # Track previous tool calls as (tool_name, canonical_args_json) to reliably detect repeats
     _prev_calls: set = set()
@@ -290,7 +363,7 @@ def run_react_loop(
     system = _SYSTEM_PROMPT.replace("{max_steps}", str(max_steps))
 
     for step_num in range(1, max_steps + 1):
-        prompt = f"{system}\n\n{_STEP_PROMPT_TEMPLATE.format(question=question, steps_so_far=steps_so_far)}"
+        prompt = f"{system}\n\n{_STEP_PROMPT_TEMPLATE.format(question=question, steps_so_far=steps_so_far, current_observation=current_observation)}"
 
         # Call LLM (Groq-first, Gemini fallback)
         try:
@@ -321,10 +394,11 @@ def run_react_loop(
                 "observation": None,
             }
             reasoning_trace.append(trace_entry)
+            corrected = _correct_decision(parsed["answer"])
             if on_step:
-                on_step({"type": "answer", **parsed["answer"], "trace_entry": trace_entry})
+                on_step({"type": "answer", **corrected, "trace_entry": trace_entry})
             return {
-                "answer": parsed["answer"],
+                "answer": corrected,
                 "reasoning_trace": reasoning_trace,
                 "steps_taken": step_num,
                 "status": "success",
@@ -341,15 +415,22 @@ def run_react_loop(
                 if steps_remaining >= 2:
                     # Still have budget — redirect to a complementary tool instead of cutting off
                     print(f"[react] Repeat {tool_name} at step {step_num} — redirecting to search_policy")
+                    # Build a contextual redirect — suggest a query relevant to the args
+                    prev_query = args.get("query") or args.get("procedure_or_condition") or args.get("condition") or "coverage conditions"
                     redirect_msg = (
                         f"You already called {tool_name}({json.dumps(args)}) and got the result above. "
-                        f"Do NOT repeat it. Call search_policy with a different query to find the specific "
-                        f"benefit limits, durations, or conditions that apply. For example: "
-                        f'search_policy(query="emergency treatment outside area of cover benefit limit duration")'
+                        f"Do NOT repeat it. Use a DIFFERENT tool or a different query angle. "
+                        f"If you have seen exclusion text, now search for the benefit/exception clause: "
+                        f'search_policy(query="{prev_query} benefit conditions exceptions covered")'
                     )
                 else:
                     # Low on budget — force final answer now
-                    redirect_msg = "Identical tool call already made. You MUST output Final Answer now using existing observations."
+                    redirect_msg = (
+                        "Identical tool call already made. No more tool calls allowed. "
+                        "Output Final Answer now based on existing observations. "
+                        "If the observations do not contain a clause directly granting coverage for the question, "
+                        "decision = not_covered. Do NOT infer coverage from unrelated clauses."
+                    )
                 print(f"[react] Injecting redirect: {redirect_msg[:80]}")
                 steps_so_far += _OBSERVATION_TEMPLATE.format(
                     step_num=step_num, thought=parsed["thought"],
@@ -393,14 +474,18 @@ def run_react_loop(
                 "observation": observation,
             })
 
-            # Append this step to the running context for the next LLM call
+            # History: store compressed summary so prior steps don't balloon context.
+            # Current step: expose full observation via current_observation so the LLM
+            # can reason from the complete retrieved text before deciding the next action.
+            compressed = _compress_observation(tool_name, args, observation)
             steps_so_far += _OBSERVATION_TEMPLATE.format(
                 step_num=step_num,
                 thought=parsed["thought"],
                 action=tool_name,
                 args_json=json.dumps(args),
-                observation=observation,
+                observation=compressed,
             )
+            current_observation = f"Full observation for step {step_num}:\n{observation}\n"
 
         else:
             # parse_error — log and try to continue
@@ -441,7 +526,7 @@ def run_react_loop(
                 "observation": None,
             })
             return {
-                "answer": parsed["answer"],
+                "answer": _correct_decision(parsed["answer"]),
                 "reasoning_trace": reasoning_trace,
                 "steps_taken": max_steps,
                 "status": "max_steps_reached",

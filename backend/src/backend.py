@@ -21,13 +21,14 @@ import shutil
 load_dotenv()
 app = FastAPI(title="HackRx Insurance API", description="API for querying insurance PDFs")
 
-# Add CORS middleware
+# CORS — restrict to specific origins in production via CORS_ORIGINS env var
+_cors_origins = [o.strip() for o in os.getenv("CORS_ORIGINS", "*").split(",") if o.strip()]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins
+    allow_origins=_cors_origins,
     allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods
-    allow_headers=["*"],  # Allows all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 class QueryPDFRequest(BaseModel):
@@ -238,17 +239,9 @@ async def query_pdf(input: QueryPDFRequest):
     print(f"📊 Individual query times: {[f'{t:.2f}s' for t in query_times]}")
     print(f"📊 Max query time: {max(query_times):.2f}s, Parallel execution time: {total_batch_time:.2f}s")
     
-    # Clean up Pinecone index after all queries are processed
-    try:
-        t0 = time.time()
-        if processor.index:
-            # Delete all vectors from the index
-            processor.index.delete(delete_all=True)
-            print("✅ Successfully deleted all vectors from Pinecone index")
-        timings["cleanup_index"] = time.time() - t0
-    except Exception as e:
-        print(f"❌ Error cleaning up Pinecone index: {e}")
-        timings["cleanup_index"] = 0
+    # Pinecone vectors intentionally left in place — deleting after every request
+    # breaks back-to-back queries. Redis chunk cache tracks indexed state.
+    timings["cleanup_index"] = 0
         
     timings["total_execution_time"] = time.time() - total_start_time
 
@@ -380,28 +373,54 @@ async def _process_pdf_and_answer(pdf_path: str, queries: List[str]) -> JSONResp
     if not pinecone_key:
         return JSONResponse({"error": "PINECONE_API_KEY not set in environment"}, status_code=500)
 
-    file_hash = _hash_file(pdf_path)
-    cached = _chunk_cache.get(file_hash)
+    file_hash  = _hash_file(pdf_path)
+    index_time = 0.0  # set to 0 on cache hit, actual duration on first parse
 
-    if cached:
-        # Chunks are cached — skip parse+chunk, but still upsert to Pinecone
-        # because the ReAct tools query Pinecone directly and need vectors present.
-        print(f"✅ Chunk cache hit for {os.path.basename(pdf_path)} ({file_hash[:8]}) — re-indexing to Pinecone")
-        chunks = cached["chunks"]
-        t0 = time.time()
-        from src.embed_and_index import index_chunks_in_pinecone
-        idx_result = index_chunks_in_pinecone(
-            chunks=chunks,
-            pinecone_api_key=pinecone_key,
-            pinecone_env="us-east-1",
-            index_name="policy-index",
-        )
-        if idx_result is False:
-            return JSONResponse({"error": "Pinecone re-indexing failed on cache hit"}, status_code=500)
-        index_time = time.time() - t0
-        print(f"✅ Re-indexed {len(chunks)} cached chunks in {index_time:.1f}s")
+    from src import cache as _cache
+    cached_doc      = _cache.get_chunks(file_hash)
+    already_indexed = cached_doc is not None and cached_doc.get("indexed_in_pinecone", False)
+
+    if cached_doc:
+        chunks = cached_doc["chunks"]
+        if already_indexed:
+            # Verify Pinecone actually has the vectors — index may have been wiped
+            try:
+                from pinecone import Pinecone as _PC
+                _pc = _PC(api_key=pinecone_key)
+                _idx = _pc.Index("policy-index")
+                stats = _idx.describe_index_stats()
+                # Newer Pinecone SDK returns a Pydantic model, not a plain dict
+                if hasattr(stats, "total_vector_count"):
+                    total_vectors = stats.total_vector_count or 0
+                else:
+                    total_vectors = stats.get("total_vector_count", 0) or 0
+            except Exception:
+                total_vectors = -1  # can't verify, assume present
+
+            if total_vectors == 0:
+                print(f"⚠️ Redis says indexed but Pinecone is empty — re-indexing {len(chunks)} chunks…")
+                already_indexed = False
+                _cache.mark_indexed.__func__ if False else None  # reset flag below after index
+
+        if not already_indexed:
+            print(f"✅ Redis cache hit — {len(chunks)} chunks, indexing to Pinecone…")
+            t0 = time.time()
+            from src.embed_and_index import index_chunks_in_pinecone
+            idx_result = index_chunks_in_pinecone(
+                chunks=chunks,
+                pinecone_api_key=pinecone_key,
+                pinecone_env="us-east-1",
+                index_name="policy-index",
+            )
+            if idx_result is False:
+                return JSONResponse({"error": "Pinecone re-indexing failed on cache hit"}, status_code=500)
+            _cache.mark_indexed(file_hash)
+            index_time = time.time() - t0
+            print(f"✅ Re-indexed {len(chunks)} chunks in {index_time:.1f}s")
+        else:
+            print(f"✅ Redis cache hit — {len(chunks)} chunks already indexed, skipping parse+index")
     else:
-        # Step 1: Parse + chunk + embed + index
+        # Parse + chunk + embed + index (first time seeing this PDF)
         t0 = time.time()
         docs_dir = os.path.dirname(pdf_path)
         try:
@@ -416,7 +435,6 @@ async def _process_pdf_and_answer(pdf_path: str, queries: List[str]) -> JSONResp
         if not index_result.get("success"):
             return JSONResponse({"error": index_result.get("error", "Indexing pipeline failed")}, status_code=500)
 
-        # Rebuild chunks from ordered_content so we can populate the processor cache
         from src.parse_documents import load_and_parse_documents
         from src.chunk_documents_optimized import chunk_documents_optimized
 
@@ -431,10 +449,11 @@ async def _process_pdf_and_answer(pdf_path: str, queries: List[str]) -> JSONResp
             })
         chunks = chunk_documents_optimized(transformed)
 
-        # Store in module-level cache
+        # Store in Redis (and in-memory fallback) with indexed=True since pipeline just indexed
+        _cache.set_chunks(file_hash, chunks, indexed=True)
+        # Keep in-memory cache in sync for same-session hits
         _chunk_cache[file_hash] = {"chunks": chunks, "filename": os.path.basename(pdf_path)}
-        index_time = time.time() - t0
-        print(f"✅ Indexed and cached {len(chunks)} chunks in {index_time:.1f}s")
+        print(f"✅ Parsed, indexed and cached {len(chunks)} chunks in {time.time() - t0:.1f}s")
 
     # Step 2: Batch-embed all queries in one API call
     t1 = time.time()
@@ -466,6 +485,26 @@ async def _process_pdf_and_answer(pdf_path: str, queries: List[str]) -> JSONResp
     # Step 4: Run all queries in parallel using the ReAct agent, track per-query time
     t2 = time.time()
     async def run_query(query: str, idx: int):
+        # Check query result cache first — skip agent if same PDF+question seen before
+        cached_qr = _cache.get_query_result(file_hash, query)
+        if cached_qr:
+            print(f"⚡ Query cache hit for: {query[:60]}")
+            # Reconstruct a result dict compatible with the loop below
+            return idx, {
+                "evaluation": {
+                    "decision":          cached_qr.get("decision", "unclear"),
+                    "confidence":        cached_qr.get("confidence", 0.0),
+                    "answer":            cached_qr.get("answer", ""),
+                    "justification":     cached_qr.get("justification", ""),
+                    "relevant_clauses":  cached_qr.get("relevant_clauses", []),
+                },
+                "query_type":    cached_qr.get("query_type", "simple"),
+                "reasoning_trace": cached_qr.get("reasoning_trace", []),
+                "steps_taken":   cached_qr.get("steps_taken", 0),
+                "agent_status":  "cache_hit",
+                "_from_cache":   True,
+            }, 0.0
+
         loop = asyncio.get_event_loop()
         import concurrent.futures
         t_q = time.time()
@@ -473,7 +512,23 @@ async def _process_pdf_and_answer(pdf_path: str, queries: List[str]) -> JSONResp
             result = await loop.run_in_executor(
                 pool, processor.process_query_routed_sync, query
             )
-        return idx, result, round(time.time() - t_q, 2)
+        elapsed = round(time.time() - t_q, 2)
+
+        # Store result in query cache for next time
+        evaluation = result.get("evaluation", {})
+        _cache.set_query_result(file_hash, query, {
+            "decision":          evaluation.get("decision", "unclear"),
+            "confidence":        evaluation.get("confidence", 0.0),
+            "answer":            evaluation.get("answer", ""),
+            "justification":     evaluation.get("justification", ""),
+            "relevant_clauses":  evaluation.get("relevant_clauses", []),
+            "query_type":        result.get("query_type", "simple"),
+            "reasoning_trace":   result.get("reasoning_trace", []),
+            "steps_taken":       result.get("steps_taken", 0),
+            "agent_status":      result.get("agent_status", "unknown"),
+        })
+
+        return idx, result, elapsed
 
     tasks = [run_query(q, i) for i, q in enumerate(queries)]
     # Note: all_embeddings computed above is no longer used by the ReAct path
@@ -484,11 +539,9 @@ async def _process_pdf_and_answer(pdf_path: str, queries: List[str]) -> JSONResp
     query_time = time.time() - t2
     per_query_timings = [r[2] for r in raw_results]
 
-    # Step 5: Clean up Pinecone index (chunks stay in module cache)
-    try:
-        pc.Index("policy-index").delete(delete_all=True)
-    except Exception as e:
-        print(f"⚠️ Index cleanup failed: {e}")
+    # Step 5: (intentionally skipped) — Pinecone vectors are left in place so
+    # back-to-back requests don't have to re-index. Redis chunk cache tracks
+    # indexed state; the vector-count check at request start handles stale state.
 
     # Step 6: Build response — include reasoning_trace from ReAct loop
     answers = []
@@ -508,10 +561,10 @@ async def _process_pdf_and_answer(pdf_path: str, queries: List[str]) -> JSONResp
 
     timing = {
         "total_seconds": round(time.time() - total_start_time, 2),
-        "index_seconds": round(index_time, 2) if not cached else 0,
+        "index_seconds": round(index_time, 2) if not cached_doc else 0,
         "embed_seconds": round(embed_time, 2),
         "query_seconds": round(query_time, 2),
-        "cache_hit": bool(cached),
+        "cache_hit": bool(cached_doc),
         "per_query_seconds": per_query_timings,
     }
 
@@ -522,7 +575,7 @@ async def _process_pdf_and_answer(pdf_path: str, queries: List[str]) -> JSONResp
         questions=queries,
         answers=answers,
         timing=timing,
-        cache_hit=bool(cached),
+        cache_hit=bool(cached_doc),
         per_query_timings=per_query_timings,
         chunk_count=len(chunks),
     )

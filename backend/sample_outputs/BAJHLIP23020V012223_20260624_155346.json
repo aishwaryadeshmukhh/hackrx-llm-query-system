@@ -1,0 +1,65 @@
+{
+  "run_id": "BAJHLIP23020V012223_20260624_155346",
+  "timestamp": "2026-06-24T15:53:46.984385",
+  "file": "BAJHLIP23020V012223.pdf",
+  "questions": [
+    "What is covered under accidental death?"
+  ],
+  "answers": [
+    {
+      "decision": "not_covered",
+      "confidence": 0.87,
+      "answer": "The policy does not provide accidental death lump sum as it is not a medical treatment expense. The observation does not mention accidental death benefit, and the policy does not provide life cover, personal accident benefit, disability income, critical illness lump sum, or accidental death lump sum.",
+      "justification": "Observation: search_policy(query='accidental death lump sum', policy_name='Bajaj Allianz Global Health Care') | key clause: UIN- BAJHLIP23020V012223",
+      "relevant_clauses": [
+        {
+          "section": "UIN- BAJHLIP23020V012223",
+          "content": "This cover is subject to the Sum Insured, sub-limits, terms, conditions and definitions, exclusions contained or otherwise expressed in this Policy.",
+          "page": null
+        }
+      ],
+      "query_type": "complex",
+      "reasoning_trace": [
+        {
+          "step": 1,
+          "thought": "The question asks about accidental death, which is not a medical treatment expense, so we need to check if there's a specific benefit clause for accidental death.",
+          "action": "search_policy",
+          "args": {
+            "query": "accidental death benefit",
+            "policy_name": "Bajaj Allianz Global Health Care"
+          },
+          "observation": "[1] BAJHLIP23020V012223.pdf p.19.0 (score=0.813)\n    edures | IMPERIAL PLAN: Up to Sum Insured\nCOVER: Living donor medical costs | IMPERIAL PLAN: USD 30,000 | IMPERIAL PLUS PLAN: USD 50,000\nCOVER: Air Ambulance* | IMPERIAL PLAN: USD 7,500 | IMPERIAL PLUS PLAN: NA | : NA | : NA\nCOVER: Air Ambulance + Medical\nEvacuation* | IMPERIAL PLAN: NA | IMPERIAL PLUS PLAN: Up to In-\npatient Sum\nInsured | : Up to In-\npatient Sum\nInsured | : Up to In-\npatient Sum\nInsured\nCOVER: Mental Illness Treatment | IMPERIAL PLAN: Up To Sum Insured\nCOVER: Rehabilitation | IMPERIAL PLAN: USD 750 | IMPERIAL PLUS PLAN: USD 2,300\nCOVER: Accommodation costs for\none parent staying in\nHospital with an Insured\nchild under 18 years of age | IMPERIAL PLAN: NA | IMPERIAL PLUS PLAN: Up to Sum Insured\nCOVER: Emergency treatment\noutside area of cover | IMPERIAL PLAN: NA | IMPERIAL\n\n[2] BAJHLIP23020V012223.pdf p.1.0 (score=0.816)\n    SECTION B) DEFINITIONS - STANDARD DEFINITIONS \nWords or terms mentioned below have the meaning ascribed to them wherever they appear in this Policy, and \nreferences to the singular or to the masculine, include references to the plural or to the feminine wherever the context \npermits. If any word starts with Capital alphabet but is not defined in the Standard Definitions or Specific Definitions, \nthen such word shall be interpreted as per the headings of the respective clauses/points in these Policy Wordings. 1. Accident:- \nAn Accident means sudden, unforeseen and involuntary event caused by external, visible and violent means. 2. Any one Illness:- \nAny one Illness means continuous Period of Illness and it includes relapse within 45 days from the date of last \nconsultation with the Hospital/Nursing Home where treatment was taken.\n\n[3] BAJHLIP23020V012223.pdf p.37.0 (score=0.810) — UIN- BAJHLIP23020V012223 \n Global Health Care/ Policy Wordings/Page 37 Bajaj Allianz General Insurance Co. Ltd. \nBajaj A…\n\n[4] BAJHLIP23020V012223.pdf p.19.0 (score=0.815) — rs of age | IMPERIAL PLAN: NA | IMPERIAL PLUS PLAN: Up to Sum Insured\nCOVER: Emergency treatment\noutside area of cover |…\n\n[5] BAJHLIP23020V012223.pdf p.17.0 (score=0.811) — 15. In-patient cash benefit (Applicable to Imperial Plus Plan only) \nWe will pay Daily Cash Benefit as specified in the …\n\n[6] BAJHLIP23020V012223.pdf p.23.0 (score=0.814) — We do not cover the following expenses unless indicated otherwise in the Table of Benefits or in any written Policy \nend…"
+        },
+        {
+          "step": 2,
+          "thought": "The observation does not mention accidental death benefit, so we need to check if there's a specific exclusion clause for accidental death.",
+          "action": "search_policy",
+          "args": {
+            "query": "accidental death lump sum",
+            "policy_name": "Bajaj Allianz Global Health Care"
+          },
+          "observation": "[1] BAJHLIP23020V012223.pdf p.39.0 (score=0.807)\n    UIN- BAJHLIP23020V012223 \n Global Health Care/ Policy Wordings/Page 39 Bajaj Allianz General Insurance Co. Ltd. \nBajaj Allianz House, Airport Road, Yerawada, Pune - 411 006. Reg. No.: 113 \nFor more details, log on to: www.bajajallianz.com | E-mail: bagichelp@bajajallianz.co.in or \nCall at: Sales - 1800 209 0144 / Service - 1800 209 5858 (Toll Free No.) \nGLOBAL HEALTH CARE Getting Inpatient treatment Download a Treatment Guarantee Form from Our website: www.allianzcare.com/members (Link provided is subject \nto change. Final version to be communicated to members upon Policy issuance) \nComplete the form and send it to Us at least five working days before treatment. You can send it by email, fax or \npost to the address shown on the form. \nWe contact the Hospital to organise payment of Your bill directly, where possible. \nWe can also take Treatment Guarantee Form details over the phone if treatment is taking place within 72 hours. \nPlease note that We may decline Your claim if pre-approval \n\n[2] BAJHLIP23020V012223.pdf p.17.0 (score=0.803)\n    This cover is subject to the Sum Insured, sub-limits, terms, conditions and definitions, exclusions contained or \notherwise expressed in this Policy. NOTE: This cover is on cashless basis only. You must contact Us on +353 1 630 1301 at the first indication that \nrepatriation is required. From this point onwards We will organise and coordinate all stages of the repatriation until \nYou arrive safely at Your destination of care. If the repatriation is not organised by Us, We reserve the right to \ndecline all costs incurred. 14. Repatriation of mortal remains (Applicable to Imperial Plus Plan only) \nRepatriation of mortal remains is the transportation of the Insured deceased remains from the principal country of \nresidence to the country of burial. We cover costs such as: embalming, a container legally appropriate for \ntransportation, shipping and the necessary government authorisations. Cremation costs will only be covered if the \ncremation is required for legal purposes. We do not cover \n\n[3] BAJHLIP23020V012223.pdf p.19.0 (score=0.809) — edures | IMPERIAL PLAN: Up to Sum Insured\nCOVER: Living donor medical costs | IMPERIAL PLAN: USD 30,000 | IMPERIAL PLUS …\n\n[4] BAJHLIP23020V012223.pdf p.37.0 (score=0.807) — List of Claim documents: \n Claim form with NEFT details & cancelled cheque duly signed by Insured \n Original/Attested …\n\n[5] BAJHLIP23020V012223.pdf p.7.0 (score=0.802) — 20. Limit of Indemnity:- \nLimit of Indemnity represents Our maximum liability to make payment for each and every claim p…\n\n[6] BAJHLIP23020V012223.pdf p.1.0 (score=0.812) — SECTION B) DEFINITIONS - STANDARD DEFINITIONS \nWords or terms mentioned below have the meaning ascribed to them wherever…"
+        },
+        {
+          "step": 3,
+          "thought": "The observation does not mention accidental death benefit, and since it's not a medical treatment expense, we can conclude that the policy does not provide accidental death lump sum.",
+          "action": "final_answer",
+          "args": {},
+          "observation": null
+        }
+      ],
+      "steps_taken": 3,
+      "agent_status": "success"
+    }
+  ],
+  "timing": {
+    "total_seconds": 70.1,
+    "index_seconds": 34.23,
+    "embed_seconds": 0.58,
+    "query_seconds": 31.15,
+    "cache_hit": false,
+    "per_query_seconds": [
+      31.15
+    ]
+  }
+}

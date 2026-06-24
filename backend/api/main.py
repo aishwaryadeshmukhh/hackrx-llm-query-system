@@ -24,7 +24,21 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 
 # Import the existing app and its helpers so all existing routes are included
-from src.backend import app, _chunk_cache, _hash_file  # noqa: F401  (re-exports existing routes)
+from src.backend import app, _hash_file  # noqa: F401  (re-exports existing routes)
+from src import cache
+
+@app.on_event("startup")
+async def _startup():
+    # Initialise Redis connection eagerly so the log line appears at server start
+    cache._get_redis()
+
+# ── Cache management endpoints ───────────────────────────────────────────────
+
+@app.post("/hackrx/cache/flush-queries", tags=["Cache"], summary="Flush all cached query results")
+async def flush_query_cache():
+    """Delete all cached query results so every question re-runs the agent."""
+    cache.flush_all_query_results()
+    return {"status": "ok", "message": "All query result cache entries flushed"}
 
 # ── Streaming endpoint ────────────────────────────────────────────────────────
 
@@ -80,17 +94,37 @@ async def stream_query(request: Request):
             groq_key     = os.getenv("GROQ_API_KEY") or ""
             gemini_key   = os.getenv("GEMINI_API_KEY") or ""
 
-            # ── Index PDF ────────────────────────────────────────────────
-            q.put({"type": "status", "message": "Parsing and indexing PDF…"})
-
             file_hash = _hash_file(pdf_path)
-            cached    = _chunk_cache.get(file_hash)
-            already_indexed = cached and cached.get("indexed_in_pinecone", False)
 
-            if cached:
-                chunks = cached["chunks"]
+            # ── Query result cache (skip everything if same PDF+question seen before) ──
+            cached_result = cache.get_query_result(file_hash, question)
+            if cached_result:
+                q.put({"type": "status", "message": "Returning cached result…"})
+                q.put(cached_result)
+                return
+
+            # ── Chunk cache (skip parse+embed if PDF seen before) ─────────────────────
+            q.put({"type": "status", "message": "Checking document cache…"})
+            cached_doc      = cache.get_chunks(file_hash)
+            already_indexed = cached_doc is not None and cached_doc.get("indexed_in_pinecone", False)
+
+            if cached_doc:
+                chunks = cached_doc["chunks"]
                 if already_indexed:
-                    q.put({"type": "status", "message": f"Document already indexed ({len(chunks)} chunks). Starting analysis…"})
+                    # Verify Pinecone actually has vectors — index may have been wiped
+                    try:
+                        from pinecone import Pinecone as _PC
+                        _stats = _PC(api_key=pinecone_key).Index("policy-index").describe_index_stats()
+                        total_vectors = getattr(_stats, "total_vector_count", None)
+                        if total_vectors is None:
+                            total_vectors = _stats.get("total_vector_count", 0) if isinstance(_stats, dict) else 0
+                        if total_vectors == 0:
+                            q.put({"type": "status", "message": f"Pinecone empty — re-indexing {len(chunks)} chunks…"})
+                            already_indexed = False
+                        else:
+                            q.put({"type": "status", "message": f"Document already indexed ({len(chunks)} chunks). Starting analysis…"})
+                    except Exception:
+                        q.put({"type": "status", "message": f"Document already indexed ({len(chunks)} chunks). Starting analysis…"})
                 else:
                     q.put({"type": "status", "message": "Chunks cached — indexing to Pinecone…"})
             else:
@@ -104,7 +138,7 @@ async def stream_query(request: Request):
                     "ordered_content": d.get("parsed_output", {}).get("ordered_content", []),
                 } for d in parsed]
                 chunks = chunk_documents_optimized(transformed)
-                _chunk_cache[file_hash] = {"chunks": chunks, "indexed_in_pinecone": False}
+                cache.set_chunks(file_hash, chunks, indexed=False)
 
             if not already_indexed:
                 from src.embed_and_index import index_chunks_in_pinecone
@@ -115,10 +149,10 @@ async def stream_query(request: Request):
                     pinecone_env="us-east-1",
                     index_name="policy-index",
                 )
-                _chunk_cache[file_hash]["indexed_in_pinecone"] = True
+                cache.mark_indexed(file_hash)
                 q.put({"type": "status", "message": f"Indexed {len(chunks)} chunks. Starting analysis…"})
 
-            # ── Build processor ──────────────────────────────────────────
+            # ── Build processor ───────────────────────────────────────────────────────
             from src.query_processor import QueryProcessor
             processor = QueryProcessor(
                 pinecone_api_key=pinecone_key,
@@ -128,15 +162,17 @@ async def stream_query(request: Request):
             )
             processor.populate_chunk_cache(chunks)
 
-            # ── Route query ──────────────────────────────────────────────
+            # ── Route query ───────────────────────────────────────────────────────────
             from src.query_router import route_query
             query_type = route_query(question, processor._groq_client, processor._gemini_model)
             q.put({"type": "status", "message": f"Query classified as '{query_type}'. Reasoning…"})
 
+            answer_event = None
+
             if query_type == "simple":
                 result     = processor.process_query_routed_sync(question)
                 evaluation = result.get("evaluation", {})
-                q.put({
+                answer_event = {
                     "type":             "answer",
                     "decision":         evaluation.get("decision", "unclear"),
                     "confidence":       evaluation.get("confidence", 0.0),
@@ -144,7 +180,7 @@ async def stream_query(request: Request):
                     "justification":    evaluation.get("justification", ""),
                     "relevant_clauses": evaluation.get("relevant_clauses", []),
                     "query_type":       "simple",
-                })
+                }
             else:
                 from src.agent_tools import ToolExecutor
                 from src.react_agent import run_react_loop
@@ -163,8 +199,8 @@ async def stream_query(request: Request):
                     on_step=on_step,
                 )
 
-                answer      = loop_result.get("answer", {})
-                raw_scores  = []
+                answer     = loop_result.get("answer", {})
+                raw_scores = []
                 for step in loop_result.get("reasoning_trace", []):
                     raw_scores += [float(s) for s in re.findall(r"score=([\d.]+)", step.get("observation", "") or "")]
                 pseudo_vecs = [{"score": float(s)} for s in raw_scores[:5]]
@@ -172,7 +208,7 @@ async def stream_query(request: Request):
                     float(answer.get("confidence", 0.5)), pseudo_vecs
                 )
 
-                q.put({
+                answer_event = {
                     "type":             "answer",
                     "decision":         answer.get("decision", "unclear"),
                     "confidence":       answer.get("confidence", 0.5),
@@ -180,7 +216,11 @@ async def stream_query(request: Request):
                     "justification":    answer.get("justification", ""),
                     "relevant_clauses": answer.get("relevant_clauses", []),
                     "query_type":       "complex",
-                })
+                }
+
+            # Store in query cache before emitting so repeat questions are instant
+            cache.set_query_result(file_hash, question, answer_event)
+            q.put(answer_event)
 
         except Exception as e:
             q.put({"type": "error", "message": str(e)})

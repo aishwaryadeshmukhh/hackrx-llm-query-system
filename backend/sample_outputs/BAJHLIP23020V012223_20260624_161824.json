@@ -1,0 +1,55 @@
+{
+  "run_id": "BAJHLIP23020V012223_20260624_161824",
+  "timestamp": "2026-06-24T16:18:24.835535",
+  "file": "BAJHLIP23020V012223.pdf",
+  "questions": [
+    "What is covered under accidental death?"
+  ],
+  "answers": [
+    {
+      "decision": "not_covered",
+      "confidence": 0.87,
+      "answer": "The policy does not provide accidental death lump sum, life cover, personal accident benefit, disability income, or critical illness lump sum.",
+      "justification": "Observation [1] BAJHLIP23020V012223.pdf p.19.0 (score=0.828)",
+      "relevant_clauses": [
+        {
+          "section": "edures | IMPERIAL PLAN: Up to Sum Insured",
+          "content": "edures | IMPERIAL PLAN: Up to Sum Insured",
+          "page": "BAJHLIP23020V012223.pdf p.19.0"
+        }
+      ],
+      "query_type": "complex",
+      "reasoning_trace": [
+        {
+          "step": 1,
+          "thought": "The policy does not provide accidental death lump sum, life cover, personal accident benefit, disability income, or critical illness lump sum.",
+          "action": "search_policy",
+          "args": {
+            "query": "accidental death lump sum coverage",
+            "policy_name": "Bajaj Allianz Global Health Care"
+          },
+          "observation": "[1] BAJHLIP23020V012223.pdf p.19.0 (score=0.828)\n    edures | IMPERIAL PLAN: Up to Sum Insured\nCOVER: Living donor medical costs | IMPERIAL PLAN: USD 30,000 | IMPERIAL PLUS PLAN: USD 50,000\nCOVER: Air Ambulance* | IMPERIAL PLAN: USD 7,500 | IMPERIAL PLUS PLAN: NA | : NA | : NA\nCOVER: Air Ambulance + Medical\nEvacuation* | IMPERIAL PLAN: NA | IMPERIAL PLUS PLAN: Up to In-\npatient Sum\nInsured | : Up to In-\npatient Sum\nInsured | : Up to In-\npatient Sum\nInsured\nCOVER: Mental Illness Treatment | IMPERIAL PLAN: Up To Sum Insured\nCOVER: Rehabilitation | IMPERIAL PLAN: USD 750 | IMPERIAL PLUS PLAN: USD 2,300\nCOVER: Accommodation costs for\none parent staying in\nHospital with an Insured\nchild under 18 years of age | IMPERIAL PLAN: NA | IMPERIAL PLUS PLAN: Up to Sum Insured\nCOVER: Emergency treatment\noutside area of cover | IMPERIAL PLAN: NA | IMPERIAL\n\n[2] BAJHLIP23020V012223.pdf p.19.0 (score=0.824)\n    rs of age | IMPERIAL PLAN: NA | IMPERIAL PLUS PLAN: Up to Sum Insured\nCOVER: Emergency treatment\noutside area of cover | IMPERIAL PLAN: NA | IMPERIAL PLUS PLAN: Up to Sum Insured for maximum 6 Weeks\nper trip\nCOVER: Medical repatriation* | IMPERIAL PLAN: NA | IMPERIAL PLUS PLAN: Up to Sum Insured\nCOVER: Repatriation of mortal\nremains* | IMPERIAL PLAN: NA | IMPERIAL PLUS PLAN: USD 13,500\nCOVER: Inpatient cash Benefit | IMPERIAL PLAN: NA | IMPERIAL PLUS PLAN: USD 175 Per night up to max 25 nights\nCOVER: Palliative care | IMPERIAL PLAN: NA | IMPERIAL PLUS PLAN: Up to Sum Insured\nCOVER: Modern Treatment Methods\nand Advancement in\nTechnologies | IMPERIAL PLAN: Up to Sum Insured\n\n[3] BAJHLIP23020V012223.pdf p.17.0 (score=0.823) — This cover is subject to the Sum Insured, sub-limits, terms, conditions and definitions, exclusions contained or \notherw…\n\n[4] BAJHLIP23020V012223.pdf p.1.0 (score=0.822) — SECTION B) DEFINITIONS - STANDARD DEFINITIONS \nWords or terms mentioned below have the meaning ascribed to them wherever…\n\n[5] BAJHLIP23020V012223.pdf p.14.0 (score=0.822) — This cover is subject to the Sum Insured, sub-limits, terms, conditions and definitions, exclusions contained or \notherw…\n\n[6] BAJHLIP23020V012223.pdf p.16.0 (score=0.821) — 12. Emergency treatment outside area of cover (Applicable to Imperial Plus Plan only if “Excluding USA” cover \nis opted)…"
+        },
+        {
+          "step": 2,
+          "thought": "The policy does not provide accidental death lump sum, life cover, personal accident benefit, disability income, or critical illness lump sum, but it does mention some accidental-related benefits.",
+          "action": "final_answer",
+          "args": {},
+          "observation": null
+        }
+      ],
+      "steps_taken": 2,
+      "agent_status": "cache_hit"
+    }
+  ],
+  "timing": {
+    "total_seconds": 21.18,
+    "index_seconds": 0,
+    "embed_seconds": 0.43,
+    "query_seconds": 0.22,
+    "cache_hit": true,
+    "per_query_seconds": [
+      0.0
+    ]
+  }
+}

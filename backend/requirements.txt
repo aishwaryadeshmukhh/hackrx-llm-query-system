@@ -36,3 +36,4 @@ python-dotenv>=1.0.0
 fastapi
 uvicorn
 uvloop; platform_system != "Windows"
+upstash-redis>=1.0.0

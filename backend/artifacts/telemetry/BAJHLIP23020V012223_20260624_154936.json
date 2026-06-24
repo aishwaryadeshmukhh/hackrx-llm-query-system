@@ -1,0 +1,50 @@
+{
+  "run_id": "BAJHLIP23020V012223_20260624_154936",
+  "timestamp": "2026-06-24T15:49:36.450893",
+  "endpoint": "/hackrx/upload",
+  "request": {
+    "filename": "BAJHLIP23020V012223.pdf",
+    "file_hash": "36284129c3989ce94f8c6e81cf7e29d6",
+    "question_count": 1,
+    "questions": [
+      "What is covered under accidental death?"
+    ],
+    "cache_hit": false,
+    "chunk_count": 223
+  },
+  "timing": {
+    "total_s": 143.32,
+    "index_s": 33.14,
+    "embed_s": 0.48,
+    "query_s": 105.07,
+    "cache_hit": false
+  },
+  "per_query": [
+    {
+      "index": 0,
+      "question": "What is covered under accidental death?",
+      "time_s": 105.07,
+      "decision": "covered",
+      "confidence": 0.81
+    }
+  ],
+  "throughput": {
+    "questions_per_second": 0.01,
+    "chunks_per_second": 6.7
+  },
+  "model": {
+    "embedding": "multilingual-e5-large",
+    "llm": "gemini-2.5-flash",
+    "embedding_dims": 1024
+  },
+  "quality": {
+    "decisions": [
+      "covered"
+    ],
+    "confidences": [
+      0.81
+    ],
+    "mean_confidence": 0.81,
+    "unclear_count": 0
+  }
+}
